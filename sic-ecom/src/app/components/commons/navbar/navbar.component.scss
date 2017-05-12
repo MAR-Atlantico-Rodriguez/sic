@@ -14,6 +14,16 @@ md-toolbar-row {
   }
 }
 
+
+md-sidenav {
+  margin-top: 56px;
+  width: 80%;
+  padding:20px;
+  box-shadow: -10px 3px 20px #888;
+
+  
+}
+
 .mat-sidenav-content {
     display: block;
     height: 100%;
@@ -35,9 +45,9 @@ md-toolbar-row {
   padding:10px;
   color:#fff;
   font-size: 17px;
-  border-radius: 10px 0px 0px 10px;
-  -moz-border-radius: 10px 0px 0px 10px;
   -webkit-border-radius: 10px 0px 0px 10px;
+  -moz-border-radius: 10px 0px 0px 10px;
+  border-radius: 10px 0px 0px 10px;
 }
 
 
@@ -45,8 +55,7 @@ md-toolbar-row {
   background: #e03906;
   padding:10px;
   font-size: 25px;
-
-  border-radius: 0px 10px 10px 0px;
-  -moz-border-radius: 0px 10px 10px 10px;
   -webkit-border-radius: 0px 10px 10px 0px;
+  -moz-border-radius: 0px 10px 10px 0px;
+  border-radius: 0px 10px 10px 0px;
 }
