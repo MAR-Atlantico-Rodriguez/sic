@@ -35,6 +35,9 @@ md-toolbar-row {
   padding:10px;
   color:#fff;
   font-size: 17px;
+  border-radius: 10px 0px 0px 10px;
+  -moz-border-radius: 10px 0px 0px 10px;
+  -webkit-border-radius: 10px 0px 0px 10px;
 }
 
 
@@ -42,4 +45,8 @@ md-toolbar-row {
   background: #e03906;
   padding:10px;
   font-size: 25px;
+
+  border-radius: 0px 10px 10px 0px;
+  -moz-border-radius: 0px 10px 10px 10px;
+  -webkit-border-radius: 0px 10px 10px 0px;
 }
