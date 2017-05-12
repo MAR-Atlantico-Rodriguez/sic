@@ -65,11 +65,11 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
                 throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                         .getString("mensaje_cds_firmante_vacio"));
             }
-            if (cds.getNroPuntoDeVentaAfip() < 0) {
+            if (cds.getNroPuntoDeVentaAfip() <= 0) {
                 throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_cds_firmante_vacio"));
+                        .getString("mensaje_cds_punto_venta_incorrecto"));
             }
-            if (cds.getPasswordCertificadoAfip().isEmpty()) {
+            if (cds.getPasswordCertificadoAfip() == null || cds.getPasswordCertificadoAfip().isEmpty()) {
                 throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                         .getString("mensaje_cds_password_vacio"));
             }

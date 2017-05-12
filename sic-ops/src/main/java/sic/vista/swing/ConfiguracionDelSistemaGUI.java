@@ -46,7 +46,7 @@ public class ConfiguracionDelSistemaGUI extends JDialog {
     private void cargarConfiguracionParaModificar() {
         chk_PreImpresas.setSelected(cdsModificar.isUsarFacturaVentaPreImpresa());
         txt_CantMaximaRenglones.setValue(cdsModificar.getCantidadMaximaDeRenglonesEnFactura());
-        if (cdsModificar.isFacturaElectronicaHabilitada()) {
+        if (cdsModificar.isFacturaElectronicaHabilitada() && (cdsModificar.getCertificadoAfip() != null)) {
               chk_UsarFE.setSelected(true);
               lbl_certEstado.setText("Cargado");
               lbl_certEstado.setForeground(Color.GREEN);
@@ -59,9 +59,14 @@ public class ConfiguracionDelSistemaGUI extends JDialog {
         cdsModificar.setUsarFacturaVentaPreImpresa(chk_PreImpresas.isSelected());
         cdsModificar.setCantidadMaximaDeRenglonesEnFactura(
                 Integer.parseInt(txt_CantMaximaRenglones.getValue().toString()));
+        cdsModificar.setFacturaElectronicaHabilitada(cdsModificar.getCertificadoAfip() != null);
         cdsModificar.setFirmanteCertificadoAfip(txt_FirmanteCert.getText());
         cdsModificar.setPasswordCertificadoAfip(new String(txt_contraseniaCert.getPassword()));
-        cdsModificar.setNroPuntoDeVentaAfip(Integer.parseInt(txt_PuntoDeVentaNro.getText()));
+        if (!txt_PuntoDeVentaNro.getText().equals("")) {
+            cdsModificar.setNroPuntoDeVentaAfip(Integer.parseInt(txt_PuntoDeVentaNro.getText().trim()));
+        } else {
+            cdsModificar.setNroPuntoDeVentaAfip(0);
+        }
         return cdsModificar;
     }
 
