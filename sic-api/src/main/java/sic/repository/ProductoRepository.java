@@ -16,5 +16,5 @@ public interface ProductoRepository extends PagingAndSortingRepository<Producto,
     Producto findByCodigoAndEmpresaAndEliminado(String codigo, Empresa empresa, boolean eliminado);
 
     Producto findByDescripcionAndEmpresaAndEliminado(String descripcion, Empresa empresa, boolean eliminado);
-
+    
 }

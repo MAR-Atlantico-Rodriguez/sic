@@ -7,6 +7,7 @@ import sic.modelo.Empresa;
 import sic.modelo.Factura;
 import sic.modelo.Medida;
 import sic.modelo.Producto;
+import sic.modelo.ProductoDato;
 import sic.modelo.Proveedor;
 import sic.modelo.Rubro;
 
@@ -16,7 +17,7 @@ public interface IProductoService {
 
     void actualizarStock(Factura factura, TipoDeOperacion operacion);
 
-    List<Producto> buscarProductos(BusquedaProductoCriteria criteria);
+    ProductoDato buscarProductos(BusquedaProductoCriteria criteria);
 
     double calcularGanancia_Neto(double precioCosto, double ganancia_porcentaje);
 

@@ -18,7 +18,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sic.modelo.Empresa;
@@ -27,6 +27,7 @@ import sic.modelo.FacturaCompra;
 import sic.modelo.FacturaVenta;
 import sic.modelo.Medida;
 import sic.modelo.Producto;
+import sic.modelo.ProductoDato;
 import sic.modelo.Proveedor;
 import sic.modelo.QProducto;
 import sic.modelo.RenglonFactura;
@@ -140,7 +141,7 @@ public class ProductoServiceImpl implements IProductoService {
     }
 
     @Override
-    public List<Producto> buscarProductos(BusquedaProductoCriteria criteria) {
+    public ProductoDato buscarProductos(BusquedaProductoCriteria criteria) {
         //Empresa
         if (criteria.getEmpresa() == null) {
             throw new EntityNotFoundException(ResourceBundle.getBundle("Mensajes")
@@ -180,8 +181,12 @@ public class ProductoServiceImpl implements IProductoService {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
         List<Producto> list = new ArrayList<>();
-        productoRepository.findAll(builder, new Sort(Sort.Direction.ASC, "descripcion")).iterator().forEachRemaining(list::add);
-        return list;
+        Page pagina = productoRepository.findAll(builder, criteria.getPageable());
+        ProductoDato productoDato = new ProductoDato();
+        list = (List<Producto>) pagina.getContent();
+        productoDato.setProductos(list);
+        productoDato.setCantidadDeProductos(pagina.getTotalElements());
+        return productoDato;
     }
 
     private BooleanBuilder buildPredicadoDescripcion(String descripcion, QProducto qproducto) {
