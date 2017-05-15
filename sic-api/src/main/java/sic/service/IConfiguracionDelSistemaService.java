@@ -2,6 +2,7 @@ package sic.service;
 
 import sic.modelo.ConfiguracionDelSistema;
 import sic.modelo.Empresa;
+import sic.modelo.TipoDeOperacion;
 
 public interface IConfiguracionDelSistemaService {
 
@@ -13,6 +14,6 @@ public interface IConfiguracionDelSistemaService {
 
     ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds);
     
-    void validarCds(ConfiguracionDelSistema cds);
+    void validarCds(TipoDeOperacion tipoOperacion, ConfiguracionDelSistema cds);
     
 }

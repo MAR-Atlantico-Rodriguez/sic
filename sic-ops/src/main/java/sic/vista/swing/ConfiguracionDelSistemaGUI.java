@@ -59,12 +59,20 @@ public class ConfiguracionDelSistemaGUI extends JDialog {
         cdsModificar.setUsarFacturaVentaPreImpresa(chk_PreImpresas.isSelected());
         cdsModificar.setCantidadMaximaDeRenglonesEnFactura(
                 Integer.parseInt(txt_CantMaximaRenglones.getValue().toString()));
-        cdsModificar.setFacturaElectronicaHabilitada(cdsModificar.getCertificadoAfip() != null);
-        cdsModificar.setFirmanteCertificadoAfip(txt_FirmanteCert.getText());
-        cdsModificar.setPasswordCertificadoAfip(new String(txt_contraseniaCert.getPassword()));
-        if (!txt_PuntoDeVentaNro.getText().equals("")) {
-            cdsModificar.setNroPuntoDeVentaAfip(Integer.parseInt(txt_PuntoDeVentaNro.getText().trim()));
+        if (chk_UsarFE.isSelected()) {
+            cdsModificar.setFacturaElectronicaHabilitada(cdsModificar.getCertificadoAfip() != null);
+            cdsModificar.setFirmanteCertificadoAfip(txt_FirmanteCert.getText());
+            cdsModificar.setPasswordCertificadoAfip(new String(txt_contraseniaCert.getPassword()));
+            if (!txt_PuntoDeVentaNro.getText().equals("")) {
+                cdsModificar.setNroPuntoDeVentaAfip(Integer.parseInt(txt_PuntoDeVentaNro.getText().trim()));
+            } else {
+                cdsModificar.setNroPuntoDeVentaAfip(0);
+            }
         } else {
+            cdsModificar.setFacturaElectronicaHabilitada(false);
+            cdsModificar.setCertificadoAfip(null);
+            cdsModificar.setFirmanteCertificadoAfip(null);
+            cdsModificar.setPasswordCertificadoAfip(null);
             cdsModificar.setNroPuntoDeVentaAfip(0);
         }
         return cdsModificar;

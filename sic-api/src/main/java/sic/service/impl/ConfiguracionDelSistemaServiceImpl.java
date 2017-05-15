@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sic.modelo.ConfiguracionDelSistema;
 import sic.modelo.Empresa;
+import sic.modelo.TipoDeOperacion;
 import sic.service.IConfiguracionDelSistemaService;
 import sic.repository.ConfiguracionDelSistemaRepository;
 import sic.service.BusinessServiceException;
@@ -41,7 +42,7 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     @Override
     @Transactional
     public ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds) {    
-        this.validarCds(cds);
+        this.validarCds(TipoDeOperacion.ALTA, cds);
         cds = configuracionRepository.save(cds);        
         LOGGER.warn("La Configuracion del Sistema " + cds + " se guardó correctamente." );
         return cds;
@@ -50,29 +51,39 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     @Override
     @Transactional
     public void actualizar(ConfiguracionDelSistema cds) {    
-        this.validarCds(cds);
+        this.validarCds(TipoDeOperacion.ACTUALIZACION, cds);
         configuracionRepository.save(cds);        
     }
     
     @Override
-    public void validarCds(ConfiguracionDelSistema cds) {
-        if (cds.isFacturaElectronicaHabilitada()) {
-            if (cds.getCertificadoAfip() == null) {
-                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_cds_certificado_vacio"));
+    public void validarCds(TipoDeOperacion tipoOperacion, ConfiguracionDelSistema cds) {
+        if (tipoOperacion.equals(TipoDeOperacion.ALTA) && cds.isFacturaElectronicaHabilitada()) {
+            this.validarAfip(cds);
+        } else if (tipoOperacion.equals(TipoDeOperacion.ACTUALIZACION) && cds.isFacturaElectronicaHabilitada()) {
+            ConfiguracionDelSistema cdsActualizar = this.getConfiguracionDelSistemaPorId(cds.getId_ConfiguracionDelSistema());
+            if (cds.getPasswordCertificadoAfip().equals("")) {
+                cds.setPasswordCertificadoAfip(cdsActualizar.getPasswordCertificadoAfip());
             }
-            if (cds.getFirmanteCertificadoAfip().isEmpty()) {
-                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_cds_firmante_vacio"));
-            }
-            if (cds.getNroPuntoDeVentaAfip() <= 0) {
-                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_cds_punto_venta_incorrecto"));
-            }
-            if (cds.getPasswordCertificadoAfip() == null || cds.getPasswordCertificadoAfip().isEmpty()) {
-                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_cds_password_vacio"));
-            }
+            this.validarAfip(cds);
+        }
+    }
+
+    private void validarAfip(ConfiguracionDelSistema cds) {
+        if (cds.getCertificadoAfip() == null) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_cds_certificado_vacio"));
+        }
+        if (cds.getFirmanteCertificadoAfip().isEmpty()) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_cds_firmante_vacio"));
+        }
+        if (cds.getNroPuntoDeVentaAfip() <= 0) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_cds_punto_venta_incorrecto"));
+        }
+        if (cds.getPasswordCertificadoAfip() == null || cds.getPasswordCertificadoAfip().isEmpty()) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_cds_password_vacio"));
         }
     }
 }
