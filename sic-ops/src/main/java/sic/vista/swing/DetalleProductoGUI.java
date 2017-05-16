@@ -34,7 +34,6 @@ public class DetalleProductoGUI extends JDialog {
     private double gananciaNeto;
     private double pvp;
     private double IVANeto;
-    private double ImpInternoNeto;
     private double precioDeLista;    
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -85,15 +84,12 @@ public class DetalleProductoGUI extends JDialog {
         lbl_PrecioCosto = new javax.swing.JLabel();
         lbl_Ganancia = new javax.swing.JLabel();
         lbl_PrecioLista = new javax.swing.JLabel();
-        lbl_ImpuestoInterno = new javax.swing.JLabel();
         txt_PrecioCosto = new javax.swing.JFormattedTextField();
         txt_Ganancia_Porcentaje = new javax.swing.JFormattedTextField();
         txt_PrecioLista = new javax.swing.JFormattedTextField();
-        txt_ImpuestoInterno_Porcentaje = new javax.swing.JFormattedTextField();
         lbl_IVA = new javax.swing.JLabel();
         txt_IVA_Neto = new javax.swing.JFormattedTextField();
         txt_Ganancia_Neto = new javax.swing.JFormattedTextField();
-        txt_ImpuestoInterno_Neto = new javax.swing.JFormattedTextField();
         lbl_PVP = new javax.swing.JLabel();
         txt_PVP = new javax.swing.JFormattedTextField();
         cmb_IVA_Porcentaje = new javax.swing.JComboBox();
@@ -252,9 +248,6 @@ public class DetalleProductoGUI extends JDialog {
         lbl_PrecioLista.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_PrecioLista.setText("Precio de Lista:");
 
-        lbl_ImpuestoInterno.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lbl_ImpuestoInterno.setText("Impuesto Interno (%):");
-
         txt_PrecioCosto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
         txt_PrecioCosto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txt_PrecioCosto.setText("0");
@@ -306,23 +299,6 @@ public class DetalleProductoGUI extends JDialog {
             }
         });
 
-        txt_ImpuestoInterno_Porcentaje.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.##"))));
-        txt_ImpuestoInterno_Porcentaje.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txt_ImpuestoInterno_Porcentaje.setText("0");
-        txt_ImpuestoInterno_Porcentaje.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txt_ImpuestoInterno_PorcentajeFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txt_ImpuestoInterno_PorcentajeFocusLost(evt);
-            }
-        });
-        txt_ImpuestoInterno_Porcentaje.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_ImpuestoInterno_PorcentajeActionPerformed(evt);
-            }
-        });
-
         lbl_IVA.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_IVA.setText("I.V.A. (%):");
 
@@ -337,12 +313,6 @@ public class DetalleProductoGUI extends JDialog {
         txt_Ganancia_Neto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txt_Ganancia_Neto.setText("0");
         txt_Ganancia_Neto.setFocusable(false);
-
-        txt_ImpuestoInterno_Neto.setEditable(false);
-        txt_ImpuestoInterno_Neto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
-        txt_ImpuestoInterno_Neto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txt_ImpuestoInterno_Neto.setText("0");
-        txt_ImpuestoInterno_Neto.setFocusable(false);
 
         lbl_PVP.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbl_PVP.setText("Precio Venta Público:");
@@ -377,8 +347,7 @@ public class DetalleProductoGUI extends JDialog {
             .addGroup(panel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_PVP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbl_ImpuestoInterno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_PVP, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
                     .addComponent(lbl_IVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbl_Ganancia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbl_PrecioCosto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -386,7 +355,6 @@ public class DetalleProductoGUI extends JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cmb_IVA_Porcentaje, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txt_ImpuestoInterno_Porcentaje)
                     .addComponent(txt_Ganancia_Porcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -395,7 +363,6 @@ public class DetalleProductoGUI extends JDialog {
                             .addComponent(txt_IVA_Neto, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txt_Ganancia_Neto)
                             .addComponent(txt_PrecioCosto)
-                            .addComponent(txt_ImpuestoInterno_Neto)
                             .addComponent(txt_PVP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(txt_PrecioLista))
@@ -422,12 +389,7 @@ public class DetalleProductoGUI extends JDialog {
                     .addComponent(lbl_IVA)
                     .addComponent(cmb_IVA_Porcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_IVA_Neto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lbl_ImpuestoInterno)
-                    .addComponent(txt_ImpuestoInterno_Porcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_ImpuestoInterno_Neto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(31, 31, 31)
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lbl_PrecioLista)
                     .addComponent(txt_PrecioLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -698,9 +660,6 @@ public class DetalleProductoGUI extends JDialog {
         cmb_IVA_Porcentaje.setSelectedItem(productoModificar.getIva_porcentaje());
         IVANeto = productoModificar.getIva_neto();
         txt_IVA_Neto.setValue(IVANeto);
-        txt_ImpuestoInterno_Porcentaje.setValue(productoModificar.getImpuestoInterno_porcentaje());
-        ImpInternoNeto = productoModificar.getImpuestoInterno_neto();
-        txt_ImpuestoInterno_Neto.setValue(ImpInternoNeto);
         precioDeLista = productoModificar.getPrecioLista();
         txt_PrecioLista.setValue(precioDeLista);
     }
@@ -711,8 +670,6 @@ public class DetalleProductoGUI extends JDialog {
         txt_PrecioCosto.setValue(0.0);
         txt_PVP.setValue(0.0);
         txt_IVA_Neto.setValue(0.0);
-        txt_ImpuestoInterno_Porcentaje.setValue(0.0);
-        txt_ImpuestoInterno_Neto.setValue(0.0);
         txt_Ganancia_Porcentaje.setValue(0.0);
         txt_Ganancia_Neto.setValue(0.0);
         txt_PrecioLista.setValue(0.0);
@@ -791,8 +748,6 @@ public class DetalleProductoGUI extends JDialog {
         txt_PrecioCosto.setValue(0.0);
         txt_PVP.setValue(0.0);
         txt_IVA_Neto.setValue(0.0);
-        txt_ImpuestoInterno_Porcentaje.setValue(0.0);
-        txt_ImpuestoInterno_Neto.setValue(0.0);
         txt_Ganancia_Porcentaje.setValue(0.0);
         txt_Ganancia_Neto.setValue(0.0);
         txt_PrecioLista.setValue(0.0);
@@ -807,8 +762,6 @@ public class DetalleProductoGUI extends JDialog {
             txt_PrecioCosto.commitEdit();
             txt_PVP.commitEdit();
             txt_IVA_Neto.commitEdit();
-            txt_ImpuestoInterno_Porcentaje.commitEdit();
-            txt_ImpuestoInterno_Neto.commitEdit();
             txt_Ganancia_Porcentaje.commitEdit();
             txt_Ganancia_Neto.commitEdit();
             txt_PrecioLista.commitEdit();
@@ -854,21 +807,12 @@ public class DetalleProductoGUI extends JDialog {
         txt_IVA_Neto.setValue(IVANeto);
     }
     
-    private void calcularImpInternoNeto() {
-        ImpInternoNeto = RestClient.getRestTemplate()
-                .getForObject("/productos/imp-interno-neto?"
-                        + "pvp=" + pvp
-                        + "&impInternoPorcentaje= " + Double.parseDouble(txt_ImpuestoInterno_Porcentaje.getValue().toString()),
-                        double.class);
-        txt_ImpuestoInterno_Neto.setValue(ImpInternoNeto);
-    }
-    
     private void calcularPrecioLista() {
         precioDeLista = RestClient.getRestTemplate()
                 .getForObject("/productos/precio-lista?"
                         + "pvp=" + pvp
                         + "&ivaPorcentaje=" + Double.parseDouble(cmb_IVA_Porcentaje.getSelectedItem().toString())
-                        + "&impInternoPorcentaje=" + Double.parseDouble(txt_ImpuestoInterno_Porcentaje.getValue().toString()),
+                        + "&impInternoPorcentaje=0",
                         double.class);
         txt_PrecioLista.setValue(precioDeLista);
     }
@@ -880,7 +824,7 @@ public class DetalleProductoGUI extends JDialog {
                         + "&precioDeListaAnterior=" + precioDeLista
                         + "&pvp=" + pvp
                         + "&ivaPorcentaje=" + Double.parseDouble(cmb_IVA_Porcentaje.getSelectedItem().toString())
-                        + "&impInternoPorcentaje=" + Double.parseDouble(txt_ImpuestoInterno_Porcentaje.getValue().toString())
+                        + "&impInternoPorcentaje=0"
                         + "&precioCosto=" + precioDeCosto,
                         double.class);
         txt_Ganancia_Porcentaje.setValue(gananciaPorcentaje);
@@ -901,8 +845,6 @@ public class DetalleProductoGUI extends JDialog {
                 producto.setPrecioVentaPublico(Double.parseDouble(txt_PVP.getValue().toString()));
                 producto.setIva_porcentaje(Double.parseDouble(cmb_IVA_Porcentaje.getSelectedItem().toString()));
                 producto.setIva_neto(Double.parseDouble(txt_IVA_Neto.getValue().toString()));
-                producto.setImpuestoInterno_porcentaje(Double.parseDouble(txt_ImpuestoInterno_Porcentaje.getValue().toString()));
-                producto.setImpuestoInterno_neto(Double.parseDouble(txt_ImpuestoInterno_Neto.getValue().toString()));
                 producto.setPrecioLista(Double.parseDouble(txt_PrecioLista.getValue().toString()));
                 producto.setRubro((Rubro) cmb_Rubro.getSelectedItem());
                 producto.setIlimitado(chk_Ilimitado.isSelected());
@@ -940,8 +882,6 @@ public class DetalleProductoGUI extends JDialog {
                 productoModificar.setPrecioVentaPublico(Double.parseDouble(txt_PVP.getValue().toString()));
                 productoModificar.setIva_porcentaje(Double.parseDouble(cmb_IVA_Porcentaje.getSelectedItem().toString()));
                 productoModificar.setIva_neto(Double.parseDouble(txt_IVA_Neto.getValue().toString()));
-                productoModificar.setImpuestoInterno_porcentaje(Double.parseDouble(txt_ImpuestoInterno_Porcentaje.getValue().toString()));
-                productoModificar.setImpuestoInterno_neto(Double.parseDouble(txt_ImpuestoInterno_Neto.getValue().toString()));
                 productoModificar.setPrecioLista(Double.parseDouble(txt_PrecioLista.getValue().toString()));
                 productoModificar.setRubro((Rubro) cmb_Rubro.getSelectedItem());
                 productoModificar.setIlimitado(chk_Ilimitado.isSelected());
@@ -1030,7 +970,6 @@ public class DetalleProductoGUI extends JDialog {
             this.calcularGananciaPorcentaje();
             this.calcularGananciaNeto();
             this.calcularIVANeto();
-            this.calcularImpInternoNeto();
             this.calcularPrecioLista();
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1052,31 +991,6 @@ public class DetalleProductoGUI extends JDialog {
         });
     }//GEN-LAST:event_txt_PVPFocusGained
 
-    private void txt_ImpuestoInterno_PorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_ImpuestoInterno_PorcentajeActionPerformed
-        this.validarComponentesDePrecios();
-        try {
-            this.calcularImpInternoNeto();
-            this.calcularPrecioLista();            
-        } catch (RestClientResponseException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        } catch (ResourceAccessException ex) {
-            LOGGER.error(ex.getMessage());
-            JOptionPane.showMessageDialog(this,
-                    ResourceBundle.getBundle("Mensajes").getString("mensaje_error_conexion"),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_txt_ImpuestoInterno_PorcentajeActionPerformed
-
-    private void txt_ImpuestoInterno_PorcentajeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_ImpuestoInterno_PorcentajeFocusLost
-        this.txt_ImpuestoInterno_PorcentajeActionPerformed(null);
-    }//GEN-LAST:event_txt_ImpuestoInterno_PorcentajeFocusLost
-
-    private void txt_ImpuestoInterno_PorcentajeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_ImpuestoInterno_PorcentajeFocusGained
-        SwingUtilities.invokeLater(() -> {
-            txt_ImpuestoInterno_Porcentaje.selectAll();
-        });
-    }//GEN-LAST:event_txt_ImpuestoInterno_PorcentajeFocusGained
-
     private void txt_Ganancia_PorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_Ganancia_PorcentajeActionPerformed
         this.validarComponentesDePrecios();
         try {
@@ -1084,7 +998,6 @@ public class DetalleProductoGUI extends JDialog {
             this.calcularGananciaNeto();
             this.calcularPVP();
             this.calcularIVANeto();
-            this.calcularImpInternoNeto();
             this.calcularPrecioLista();
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1113,7 +1026,6 @@ public class DetalleProductoGUI extends JDialog {
             this.calcularGananciaNeto();
             this.calcularPVP();
             this.calcularIVANeto();
-            this.calcularImpInternoNeto();
             this.calcularPrecioLista();
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1166,7 +1078,6 @@ public class DetalleProductoGUI extends JDialog {
             this.calcularGananciaNeto();
             this.calcularPVP();
             this.calcularIVANeto();
-            this.calcularImpInternoNeto();
             this.calcularPrecioLista(); 
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -1212,7 +1123,6 @@ public class DetalleProductoGUI extends JDialog {
     private javax.swing.JLabel lbl_FechaUltimaModificacion;
     private javax.swing.JLabel lbl_Ganancia;
     private javax.swing.JLabel lbl_IVA;
-    private javax.swing.JLabel lbl_ImpuestoInterno;
     private javax.swing.JLabel lbl_Medida;
     private javax.swing.JLabel lbl_Nota;
     private javax.swing.JLabel lbl_PVP;
@@ -1237,8 +1147,6 @@ public class DetalleProductoGUI extends JDialog {
     private javax.swing.JFormattedTextField txt_Ganancia_Neto;
     private javax.swing.JFormattedTextField txt_Ganancia_Porcentaje;
     private javax.swing.JFormattedTextField txt_IVA_Neto;
-    private javax.swing.JFormattedTextField txt_ImpuestoInterno_Neto;
-    private javax.swing.JFormattedTextField txt_ImpuestoInterno_Porcentaje;
     private javax.swing.JTextArea txt_Nota;
     private javax.swing.JFormattedTextField txt_PVP;
     private javax.swing.JFormattedTextField txt_PrecioCosto;

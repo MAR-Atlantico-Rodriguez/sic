@@ -323,7 +323,7 @@ public class FacturaController {
                                 @RequestParam double recargoNeto,
                                 @RequestParam double iva105Neto,
                                 @RequestParam double iva21Neto,
-                                @RequestParam double impuestoInternoNeto) {
+                                @RequestParam(required = false) double impuestoInternoNeto) {
         return facturaService.calcularTotal(subTotal, descuentoNeto, recargoNeto,
                 iva105Neto, iva21Neto, impuestoInternoNeto);
     }

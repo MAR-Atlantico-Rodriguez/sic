@@ -313,8 +313,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lbl_PVP" max="32767" attributes="0"/>
-                              <Component id="lbl_ImpuestoInterno" max="32767" attributes="1"/>
+                              <Component id="lbl_PVP" pref="153" max="32767" attributes="0"/>
                               <Component id="lbl_IVA" alignment="0" max="32767" attributes="0"/>
                               <Component id="lbl_Ganancia" alignment="0" max="32767" attributes="1"/>
                               <Component id="lbl_PrecioCosto" max="32767" attributes="1"/>
@@ -323,7 +322,6 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="cmb_IVA_Porcentaje" max="32767" attributes="0"/>
-                              <Component id="txt_ImpuestoInterno_Porcentaje" max="32767" attributes="1"/>
                               <Component id="txt_Ganancia_Porcentaje" min="-2" pref="51" max="-2" attributes="2"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -333,7 +331,6 @@
                                       <Component id="txt_IVA_Neto" alignment="1" max="32767" attributes="2"/>
                                       <Component id="txt_Ganancia_Neto" alignment="0" max="32767" attributes="1"/>
                                       <Component id="txt_PrecioCosto" alignment="0" max="32767" attributes="1"/>
-                                      <Component id="txt_ImpuestoInterno_Neto" alignment="0" max="32767" attributes="1"/>
                                       <Component id="txt_PVP" alignment="1" min="-2" pref="102" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -369,13 +366,7 @@
                               <Component id="cmb_IVA_Porcentaje" linkSize="3" alignment="2" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_IVA_Neto" linkSize="3" alignment="2" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="2" attributes="0">
-                              <Component id="lbl_ImpuestoInterno" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="txt_ImpuestoInterno_Porcentaje" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="txt_ImpuestoInterno_Neto" alignment="2" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="2" attributes="0">
                               <Component id="lbl_PrecioLista" alignment="2" min="-2" max="-2" attributes="0"/>
                               <Component id="txt_PrecioLista" alignment="2" min="-2" max="-2" attributes="0"/>
@@ -402,12 +393,6 @@
                   <Properties>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" value="Precio de Lista:"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JLabel" name="lbl_ImpuestoInterno">
-                  <Properties>
-                    <Property name="horizontalAlignment" type="int" value="4"/>
-                    <Property name="text" type="java.lang.String" value="Impuesto Interno (%):"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JFormattedTextField" name="txt_PrecioCosto">
@@ -452,20 +437,6 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_PrecioListaActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JFormattedTextField" name="txt_ImpuestoInterno_Porcentaje">
-                  <Properties>
-                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-                      <Format format="#,##0.##" subtype="-1" type="0"/>
-                    </Property>
-                    <Property name="horizontalAlignment" type="int" value="4"/>
-                    <Property name="text" type="java.lang.String" value="0"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txt_ImpuestoInterno_PorcentajeFocusGained"/>
-                    <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txt_ImpuestoInterno_PorcentajeFocusLost"/>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_ImpuestoInterno_PorcentajeActionPerformed"/>
-                  </Events>
-                </Component>
                 <Component class="javax.swing.JLabel" name="lbl_IVA">
                   <Properties>
                     <Property name="horizontalAlignment" type="int" value="4"/>
@@ -484,17 +455,6 @@
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JFormattedTextField" name="txt_Ganancia_Neto">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-                      <Format subtype="0" type="4"/>
-                    </Property>
-                    <Property name="horizontalAlignment" type="int" value="4"/>
-                    <Property name="text" type="java.lang.String" value="0"/>
-                    <Property name="focusable" type="boolean" value="false"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JFormattedTextField" name="txt_ImpuestoInterno_Neto">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">

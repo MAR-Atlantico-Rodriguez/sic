@@ -41,7 +41,7 @@ public class FacturasCompraGUI extends JInternalFrame {
         tbl_Resultados.setAutoCreateRowSorter(true);
 
         //nombres de columnas
-        String[] encabezados = new String[15];
+        String[] encabezados = new String[16];
         encabezados[0] = "Fecha Factura";
         encabezados[1] = "Tipo";
         encabezados[2] = "Nº Factura";
@@ -52,11 +52,12 @@ public class FacturasCompraGUI extends JInternalFrame {
         encabezados[7] = "SubTotal";
         encabezados[8] = "% Descuento";
         encabezados[9] = "Descuento neto";
-        encabezados[10] = "SubTotal neto";
-        encabezados[11] = "IVA 10.5% neto";
-        encabezados[12] = "IVA 21% neto";
-        encabezados[13] = "Imp. Interno neto";
-        encabezados[14] = "Total";
+        encabezados[10] = "% Recargo";
+        encabezados[11] = "Recargo neto";
+        encabezados[12] = "SubTotal neto";
+        encabezados[13] = "IVA 10.5% neto";
+        encabezados[14] = "IVA 21% neto";
+        encabezados[15] = "Total";
         modeloTablaFacturas.setColumnIdentifiers(encabezados);
         tbl_Resultados.setModel(modeloTablaFacturas);
 
@@ -77,6 +78,7 @@ public class FacturasCompraGUI extends JInternalFrame {
         tipos[12] = Double.class;
         tipos[13] = Double.class;
         tipos[14] = Double.class;
+        tipos[15] = Double.class;
         modeloTablaFacturas.setClaseColumnas(tipos);
         tbl_Resultados.getTableHeader().setReorderingAllowed(false);
         tbl_Resultados.getTableHeader().setResizingAllowed(true);
@@ -100,6 +102,7 @@ public class FacturasCompraGUI extends JInternalFrame {
         tbl_Resultados.getColumnModel().getColumn(12).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(13).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(120);
+        tbl_Resultados.getColumnModel().getColumn(15).setPreferredWidth(120);
     }
 
     private void cambiarEstadoEnabled(boolean status) {
@@ -216,7 +219,7 @@ public class FacturasCompraGUI extends JInternalFrame {
     private void cargarResultadosAlTable() {
         this.limpiarJTable();
         facturas.stream().map((factura) -> {
-            Object[] fila = new Object[15];
+            Object[] fila = new Object[16];
             fila[0] = factura.getFecha();
             fila[1] = factura.getTipoComprobante();
             fila[2] = factura.getNumSerie() + " - " + factura.getNumFactura();
@@ -226,12 +229,13 @@ public class FacturasCompraGUI extends JInternalFrame {
             fila[6] = factura.isPagada();
             fila[7] = factura.getSubTotal();
             fila[8] = factura.getDescuento_porcentaje();
-            fila[9] = factura.getDescuento_neto();
-            fila[10] = factura.getSubTotal_neto();
-            fila[11] = factura.getIva_105_neto();
-            fila[12] = factura.getIva_21_neto();
-            fila[13] = factura.getImpuestoInterno_neto();
-            fila[14] = factura.getTotal();
+            fila[9] = factura.getDescuento_neto();            
+            fila[10] = factura.getRecargo_porcentaje();
+            fila[11] = factura.getRecargo_neto();                        
+            fila[12] = factura.getSubTotal_neto();
+            fila[13] = factura.getIva_105_neto();
+            fila[14] = factura.getIva_21_neto();
+            fila[15] = factura.getTotal();
             return fila;
         }).forEach((fila) -> {
             modeloTablaFacturas.addRow(fila);
