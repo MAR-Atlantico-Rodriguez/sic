@@ -52,38 +52,48 @@ public class AfipServiceImpl implements IAfipService {
 
     @Override
     public AfipWSAACredencial getAfipWSAACredencial(String afipNombreServicio, Empresa empresa) {
-        AfipWSAACredencial afipCred = new AfipWSAACredencial();
+        AfipWSAACredencial afipCredencial = new AfipWSAACredencial();
         String loginTicketResponse = "";
-        //String p12file = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa).getPathCertificadoAfip();
+        byte[] p12file = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa).getCertificadoAfip();
+        if (p12file.length == 0) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_cds_certificado_vacio"));
+        }
         String p12signer = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa).getFirmanteCertificadoAfip();
         String p12pass = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa).getPasswordCertificadoAfip();
-        Long ticketTime = 3600000L; //siempre devuelve por 12hs
-        byte[] loginTicketRequest_xml_cms = afipWebServiceSOAPClient.crearCMS(configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa).getCertificadoAfip()
-                , p12pass, p12signer, afipNombreServicio, ticketTime);
+        long ticketTime = 3600000L; //siempre devuelve por 12hs
+        byte[] loginTicketRequest_xml_cms = afipWebServiceSOAPClient.crearCMS(p12file, p12pass, p12signer, afipNombreServicio, ticketTime);
         LoginCms loginCms = new LoginCms();
         loginCms.setIn0(Base64.getEncoder().encodeToString(loginTicketRequest_xml_cms));
         try {
             loginTicketResponse = afipWebServiceSOAPClient.loginCMS(loginCms);        
         } catch (WebServiceClientException | XmlMappingException ex) {
-            LOGGER.error(ex.getMessage());
-            throw new BusinessServiceException("Error obteniendo token en WSAA");            
+            LOGGER.error(ex.getMessage());            
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_token_wsaa_error"));
         }
         try {
             Reader tokenReader = new StringReader(loginTicketResponse);
             Document tokenDoc = new SAXReader(false).read(tokenReader);
-            afipCred.setToken(tokenDoc.valueOf("/loginTicketResponse/credentials/token"));
-            afipCred.setSign(tokenDoc.valueOf("/loginTicketResponse/credentials/sign"));
-            afipCred.setCuit(empresa.getCuip());
+            afipCredencial.setToken(tokenDoc.valueOf("/loginTicketResponse/credentials/token"));
+            afipCredencial.setSign(tokenDoc.valueOf("/loginTicketResponse/credentials/sign"));
+            afipCredencial.setCuit(empresa.getCuip());
         } catch (DocumentException ex) {
             LOGGER.error(ex.getMessage());
-            throw new BusinessServiceException("Error procesando el XML de la respuesta");
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_error_procesando_xml"));
         }
-        return afipCred;
+        return afipCredencial;
     }
 
     @Override
     public FacturaVenta autorizarFacturaVenta(FacturaVenta factura) {
-        if (factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_A) || factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_B)) {
+        if (configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).isFacturaElectronicaHabilitada() == false) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_cds_fe_habilitada"));
+        }
+        if (factura.getTipoComprobante() == TipoDeComprobante.FACTURA_A
+                || factura.getTipoComprobante() == TipoDeComprobante.FACTURA_B
+                || factura.getTipoComprobante() == TipoDeComprobante.FACTURA_C) {
+            if (factura.getCAE() != 0) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_ya_autorizada"));
+            }
             AfipWSAACredencial afipCredencial = this.getAfipWSAACredencial("wsfe", factura.getEmpresa());
             FEAuthRequest feAuthRequest = new FEAuthRequest();
             feAuthRequest.setCuit(afipCredencial.getCuit());
@@ -108,7 +118,8 @@ public class AfipServiceImpl implements IAfipService {
             response.getFeDetResp().getFECAEDetResponse().get(0).getCAE();
             response.getFeDetResp().getFECAEDetResponse().get(0).getCAEFchVto();
         } else {
-            throw new BusinessServiceException( ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_tipo_no_valido"));
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_factura_tipo_no_valido"));
         }
         return null;
     }
