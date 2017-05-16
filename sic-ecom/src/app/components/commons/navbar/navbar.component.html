@@ -57,6 +57,12 @@
           <md-icon> keyboard_arrow_left </md-icon><span> Herrajes</span>
         </md-list-item>
       </md-nav-list>
+      <md-divider></md-divider>
+   
+	    <button md-icon-button [routerLink]="['/login']" >
+	        <span> Salir</span>
+	        <i class="material-icons">power_settings_new</i>
+	    </button>
     </md-list>
   </md-sidenav>
   
@@ -80,15 +86,21 @@
 	</span>
 
 	<span fxFlex="10" fxLayoutAlign.lt-md="end" fxLayoutAlign.gt-md="center">
-	  <div fxHide.lt-sm>
+	  <div fxHide.lt-md>
 		<button md-icon-button (click)="sidenav.open()">
 		  <md-icon>shopping_cart</md-icon>
 		</button>
 	  </div>
 	  
-	  <div fxHide.gt-md>
+	  <div fxHide.gt-sm>
 		<button md-icon-button (click)="sidenav.toggle()">
 		  <md-icon>more_vert</md-icon>
+		</button>	  
+	  </div>
+
+	  <div fxHide.lt-md>
+		<button md-icon-button [routerLink]="['/login']" >
+		  <i class="material-icons">power_settings_new</i>
 		</button>	  
 	  </div>
 

@@ -18,14 +18,14 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
     this.products = this._productService.getProducts();
-    this.getUsers();
+    //this.getUsers();
   }
 
-  getUsers() {
+  /*getUsers() {
     this._productService.getUsers()
       .subscribe(
         users => this.users = users,
         error => this.errorMessage = <any>error
       );
-  }
+  }*/
 }

@@ -19,9 +19,9 @@ import { ProductService } from './services/product.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AlertService } from './services/alert.service';
 
-const appRoutes = [
-  //{ path: '', component: AppComponent, canActivate: [AuthGuard] },
-];
+import {routing} from './app.routing';
+import { HomeComponent } from './home/home.component';
+import { AuthModule } from './login/auth.module';
 
 @NgModule({
   declarations: [
@@ -31,6 +31,7 @@ const appRoutes = [
     AlertComponent,
     SidebarComponent,
     ProductsComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +40,9 @@ const appRoutes = [
     MaterialModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(appRoutes)
+    AuthModule,
+    //RouterModule.forRoot(appRoutes)
+    routing
   ],
   providers: [
     AuthGuard,

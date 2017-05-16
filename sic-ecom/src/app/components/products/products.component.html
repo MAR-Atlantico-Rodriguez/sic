@@ -17,6 +17,7 @@
 
 <br>-->
 <div fxFlex class="products-derecha">
+
   <md-list>
     <div *ngFor="let product of products">
       <md-nav-list>
@@ -24,8 +25,8 @@
           <img md-list-avatar src="{{product.imageUrl}}" style="width: 75px; height: 75px">
           <h3 md-line class="descripcion-products-list">
             <strong>
-              <span *ngIf="product.descripcion.length <= 34">{{product.descripcion}}</span>
-              <span *ngIf="product.descripcion.length > 34">{{product.descripcion | slice:0:34}}...</span>
+              
+              <span style="word-wrap: break-word;">{{product.descripcion}}</span>
             </strong>
           </h3>
           <p md-line>{{product.cantidad}} / {{product.medida}} </p>
