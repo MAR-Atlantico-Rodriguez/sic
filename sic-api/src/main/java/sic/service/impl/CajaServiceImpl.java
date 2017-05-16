@@ -243,7 +243,7 @@ public class CajaServiceImpl implements ICajaService {
         return cajaACerrar;
     }    
 
-    @Scheduled(cron = "0 5 0 * * *") // Todos los dias a las 00:05:00
+    @Scheduled(cron = "30 0 0 * * *") // Todos los dias a las 00:00:30
     public void cerrarCajas() {
         LOGGER.warn("Cierre automático de Cajas." + LocalDateTime.now());
         List<Empresa> empresas = this.empresaService.getEmpresas();
