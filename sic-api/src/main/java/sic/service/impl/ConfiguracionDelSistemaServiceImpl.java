@@ -57,33 +57,29 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     
     @Override
     public void validarCds(TipoDeOperacion tipoOperacion, ConfiguracionDelSistema cds) {
-        if (tipoOperacion.equals(TipoDeOperacion.ALTA) && cds.isFacturaElectronicaHabilitada()) {
-            this.validarAfip(cds);
-        } else if (tipoOperacion.equals(TipoDeOperacion.ACTUALIZACION) && cds.isFacturaElectronicaHabilitada()) {
-            ConfiguracionDelSistema cdsActualizar = this.getConfiguracionDelSistemaPorId(cds.getId_ConfiguracionDelSistema());
+        if (tipoOperacion.equals(TipoDeOperacion.ACTUALIZACION) && cds.isFacturaElectronicaHabilitada()) {
             if (cds.getPasswordCertificadoAfip().equals("")) {
-                cds.setPasswordCertificadoAfip(cdsActualizar.getPasswordCertificadoAfip());
+                cds.setPasswordCertificadoAfip(this.getConfiguracionDelSistemaPorId(
+                        cds.getId_ConfiguracionDelSistema()).getPasswordCertificadoAfip());
             }
-            this.validarAfip(cds);
         }
-    }
-
-    private void validarAfip(ConfiguracionDelSistema cds) {
-        if (cds.getCertificadoAfip() == null) {
-            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                    .getString("mensaje_cds_certificado_vacio"));
-        }
-        if (cds.getFirmanteCertificadoAfip().isEmpty()) {
-            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                    .getString("mensaje_cds_firmante_vacio"));
-        }
-        if (cds.getNroPuntoDeVentaAfip() <= 0) {
-            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                    .getString("mensaje_cds_punto_venta_incorrecto"));
-        }
-        if (cds.getPasswordCertificadoAfip() == null || cds.getPasswordCertificadoAfip().isEmpty()) {
-            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                    .getString("mensaje_cds_password_vacio"));
+        if (cds.isFacturaElectronicaHabilitada()) {
+            if (cds.getCertificadoAfip() == null) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_certificado_vacio"));
+            }
+            if (cds.getFirmanteCertificadoAfip().isEmpty()) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_firmante_vacio"));
+            }
+            if (cds.getPasswordCertificadoAfip() == null || cds.getPasswordCertificadoAfip().isEmpty()) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_password_vacio"));
+            }
+            if (cds.getNroPuntoDeVentaAfip() <= 0) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_punto_venta_incorrecto"));
+            }            
         }
     }
 }
