@@ -558,7 +558,7 @@ public class FacturaServiceImpl implements IFacturaService {
 
         double resultado = 0;
         int indice = importes.length;
-        if (tipoDeComprobante.equals(tipoDeComprobante.FACTURA_A)) {
+        if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_A)) {
             for (int i = 0 ; i < indice; i++) {
                 double descuento = 0;
                 if (descuento_porcentaje != 0) {                    

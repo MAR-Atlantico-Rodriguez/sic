@@ -276,12 +276,10 @@ public class DetalleFacturaCompraGUI extends JDialog {
         //subtotal        
         double[] importe = new double[renglones.size()];
         double[] ivaRenglones = new double[renglones.size()];
-        double[] impuestoPorcentaje = new double[renglones.size()];
         int indice = 0;
         for (RenglonFactura renglon : renglones) {
             importe[indice] = renglon.getImporte();
             ivaRenglones[indice] = renglon.getIva_porcentaje();
-            impuestoPorcentaje[indice] = renglon.getImpuesto_porcentaje();
             indice++;
         }
         try {
@@ -340,8 +338,7 @@ public class DetalleFacturaCompraGUI extends JDialog {
                     + "&descuentoNeto=" + descuento_neto
                     + "&recargoNeto=" + recargo_neto
                     + "&iva105Neto=" + iva105_neto
-                    + "&iva21Neto=" + iva21_neto
-                    + "&impuestoInternoNeto=0",
+                    + "&iva21Neto=" + iva21_neto,
                     double.class);
             txt_Total.setValue(total);
         } catch (RestClientResponseException ex) {

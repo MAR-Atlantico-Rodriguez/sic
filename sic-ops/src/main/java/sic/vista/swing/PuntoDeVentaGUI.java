@@ -545,8 +545,7 @@ public class PuntoDeVentaGUI extends JDialog {
                     + "&descuentoNeto=" + descuento_neto
                     + "&recargoNeto=" + recargo_neto
                     + "&iva105Neto=" + iva_105_neto
-                    + "&iva21Neto=" + iva_21_neto
-                    + "&impuestoInternoNeto=0", double.class);
+                    + "&iva21Neto=" + iva_21_neto, double.class);
             txt_Total.setValue(total);
             this.totalComprobante = total;
         } catch (RestClientResponseException ex) {
