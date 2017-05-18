@@ -1,24 +1,22 @@
-#body{
- background: #f05724;
-}
-
 .formulario{
 	background: #fff;
 	border: 1px solid #d03906;
-	padding: 40px;
-	position: absolute;
-	top:17%;
-	box-shadow: 0px 0px 15px #5e1a03;
-	width: 25%;
+	padding: 40px;	
+	box-shadow: 0px 0px 15px #5e1a03;	
 }
 
 .form-group{
 	margin-top: 10px;
+	width: 100%;
 }
 
 .form-control{
 	font-size: 20px;
 	color:#e03906;
+}
+
+.example-full-width{
+	width: 100%;
 }
 
 .btn-login{

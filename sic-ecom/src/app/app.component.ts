@@ -1,21 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component } from '@angular/core';
 
 @Component({
-  moduleId: module.id,
-  selector: 'app-root',
+  selector: 'app',
   templateUrl: './app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent implements OnInit {
-
-  stateCtrl: FormControl;
-  filteredStates: any;
-  
-  constructor() {
-    this.stateCtrl = new FormControl();
-  }
-
-  ngOnInit() {
-  }
-}
+export class AppComponent {}

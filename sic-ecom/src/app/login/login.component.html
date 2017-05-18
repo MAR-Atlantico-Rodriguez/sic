@@ -1,15 +1,16 @@
-<div fxLayout="row" fxLayoutAlign="center center" > 
-    <div class="formulario">
-        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate fxLayout="column" fxLayoutAlign="center center" >
-        <img md-list-avatar src="assets/placeholderProducto.png" id="img">
-            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+<div fxFlex fxLayout="row" fxLayoutAlign="center center"> 
 
+    <div class="formulario" fxFlex.md="35" fxFlex.lg="35">
+        <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate fxLayout="column" fxLayoutAlign="center center" >
+        <img md-list-avatar src="assets/loginLogo.png" id="img">
+            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">                
                 <md-input-container class="example-full-width">
                   <input mdInput placeholder="Usuario" type="text" 
                     class="form-control" 
                     name="username" 
                     [(ngModel)]="model.username" #username="ngModel" 
-                    required>
+                    required
+                    autofocus>
                 </md-input-container>
 
                 <div *ngIf="f.submitted && !username.valid" class="help-block">Se requiere nombre de usuario</div>
@@ -17,8 +18,9 @@
 
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
                 
+
                 <md-input-container class="example-full-width">
-                  <input mdInput placeholder="Clave" type="password" 
+                  <input mdInput placeholder="Contraseña" type="password" 
                     class="form-control" 
                     name="password" 
                     [(ngModel)]="model.password" #password="ngModel" 
@@ -27,9 +29,13 @@
 
                 <div *ngIf="f.submitted && !password.valid" class="help-block">Se requiere password</div>
             </div>
-            <div class="form-group">
-                <button [disabled]="loading" md-raised-button class="btn-login">
-                    <i class="material-icons">input</i> Login
+            <div class="form-group" 
+                        fxLayoutAlign="end">
+                <button [disabled]="loading" 
+                        md-raised-button 
+                        class="btn-login" 
+                        color="primary">
+                    Ingresar
                 </button>
 
                 <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />

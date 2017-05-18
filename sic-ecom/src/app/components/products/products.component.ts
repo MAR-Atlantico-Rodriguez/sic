@@ -3,7 +3,7 @@ import {ProductService} from '../../services/product.service';
 
 @Component({
   selector: 'app-products',
-  encapsulation: ViewEncapsulation.None,
+  //encapsulation: ViewEncapsulation.None,
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })

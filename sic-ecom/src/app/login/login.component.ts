@@ -4,9 +4,8 @@ import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
-    moduleId: module.id,
     templateUrl: 'login.component.html',
-    encapsulation: ViewEncapsulation.None,
+    //encapsulation: ViewEncapsulation.None,
     styleUrls: ['login.component.css']
 })
 
@@ -20,7 +19,7 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private authenticationService: AuthenticationService,
         private alertService: AlertService) { 
-
+        
     }
 
     ngOnInit() {
@@ -32,16 +31,18 @@ export class LoginComponent implements OnInit {
         this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
-     login() {
+    login() {
         this.loading = true;
         this.authenticationService.login(this.model.username, this.model.password)
             .subscribe(result => {
-                this.loading = false;  
+                this.loading = false;
                 if (result === true) {
                     this.router.navigate(['/']);
-                } else {                    
-                    this.loading = false;
                 }
+            },
+            err => {
+                this.loading = false;
+                alert(err['_body']);
             });
     }
 }
