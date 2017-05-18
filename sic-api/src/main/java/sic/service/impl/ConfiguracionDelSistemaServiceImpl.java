@@ -44,7 +44,6 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     @Transactional
     public ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds) {    
         this.validarCds(TipoDeOperacion.ALTA, cds);
-        cds.setPasswordCertificadoAfip(Utilidades.encriptarConMD5(cds.getPasswordCertificadoAfip()));
         cds = configuracionRepository.save(cds);        
         LOGGER.warn("La Configuracion del Sistema " + cds + " se guardó correctamente." );
         return cds;

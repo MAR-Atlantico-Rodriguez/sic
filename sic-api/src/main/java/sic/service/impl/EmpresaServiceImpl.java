@@ -111,7 +111,7 @@ public class EmpresaServiceImpl implements IEmpresaService {
         cds.setUsarFacturaVentaPreImpresa(false);
         cds.setCantidadMaximaDeRenglonesEnFactura(28);
         cds.setFacturaElectronicaHabilitada(false);
-        cds.setEmpresa(getEmpresaPorId(empresa.getId_Empresa()));
+        cds.setEmpresa(empresa);
         configuracionDelSistemaService.guardar(cds);
     }
 
