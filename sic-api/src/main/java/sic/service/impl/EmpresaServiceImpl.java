@@ -14,21 +14,21 @@ import sic.service.BusinessServiceException;
 import sic.modelo.TipoDeOperacion;
 import sic.util.Validator;
 import sic.repository.EmpresaRepository;
-import sic.repository.ConfiguracionDelSistemaRepository;
+import sic.service.IConfiguracionDelSistemaService;
 
 @Service
 public class EmpresaServiceImpl implements IEmpresaService {
 
     private final EmpresaRepository empresaRepository;
-    private final ConfiguracionDelSistemaRepository configuracionDelSistemaRepository;    
+    private final IConfiguracionDelSistemaService configuracionDelSistemaService;    
     private static final Logger LOGGER = Logger.getLogger(EmpresaServiceImpl.class.getPackage().getName());
 
     @Autowired
     public EmpresaServiceImpl(EmpresaRepository empresaRepository,
-            ConfiguracionDelSistemaRepository configuracionDelSistemaRepository) {
+            IConfiguracionDelSistemaService configuracionDelSistemaService) {
 
         this.empresaRepository = empresaRepository;
-        this.configuracionDelSistemaRepository = configuracionDelSistemaRepository;
+        this.configuracionDelSistemaService = configuracionDelSistemaService;
     }
     
     @Override
@@ -111,8 +111,8 @@ public class EmpresaServiceImpl implements IEmpresaService {
         cds.setUsarFacturaVentaPreImpresa(false);
         cds.setCantidadMaximaDeRenglonesEnFactura(28);
         cds.setFacturaElectronicaHabilitada(false);
-        cds.setEmpresa(getEmpresaPorNombre(empresa.getNombre()));
-        configuracionDelSistemaRepository.save(cds);
+        cds.setEmpresa(empresa);
+        configuracionDelSistemaService.guardar(cds);
     }
 
     @Override
@@ -141,6 +141,7 @@ public class EmpresaServiceImpl implements IEmpresaService {
                     .getString("mensaje_empresa_no_existente"));
         }
         empresa.setEliminada(true);
+        configuracionDelSistemaService.eliminar(configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa));
         empresaRepository.save(empresa);
     }
 }

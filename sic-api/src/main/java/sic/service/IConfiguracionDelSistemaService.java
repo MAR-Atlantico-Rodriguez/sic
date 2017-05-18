@@ -14,6 +14,8 @@ public interface IConfiguracionDelSistemaService {
 
     ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds);
     
+    void eliminar(ConfiguracionDelSistema cds);
+    
     void validarCds(TipoDeOperacion tipoOperacion, ConfiguracionDelSistema cds);
     
 }
