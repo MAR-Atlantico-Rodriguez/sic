@@ -4,6 +4,12 @@ import { AuthHttp, AuthConfig } from 'angular2-jwt';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig(), http, options);
+
+  /*return new AuthHttp(new AuthConfig({
+    tokenName: 'token',
+		tokenGetter: (() => sessionStorage.getItem('currentUser')),
+		globalHeaders: [{'Content-Type':'application/json'}],
+	}), http, options);*/
 }
 
 @NgModule({

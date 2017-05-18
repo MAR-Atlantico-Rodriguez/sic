@@ -41,4 +41,8 @@ export class AuthenticationService {
         this.token = null;
         localStorage.removeItem('currentUser');
     }
+
+    getToken(): string{
+        return this.token;
+    }
 }

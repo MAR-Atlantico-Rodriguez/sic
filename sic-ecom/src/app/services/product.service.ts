@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Http, Headers, RequestOptions, Response} from '@angular/http';
+import {AuthenticationService} from './authentication.service';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
@@ -9,7 +10,7 @@ import 'rxjs/add/operator/do';
 @Injectable()
 export class ProductService {
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private authenticationService: AuthenticationService) {
   }
 
   private productsJson: any[] = [
@@ -63,12 +64,19 @@ export class ProductService {
     }
   ]
 
-  getUsers(): Observable<any> {
-    return this.http
-      .get('https://jsonplaceholder.typicode.com/users')
-      .map((response: Response) => response.json())
-      .do(data => console.log(data))
-      .catch(this.handleError);
+  getProducts() {
+    let url = 'https://sic-api.herokuapp.com/api/v1/productos/busqueda/criteria?idEmpresa=1&rubro=ferreteria&descripcion=termica';
+    // add authorization header with jwt token
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic '+this.authenticationService.getToken());
+    headers.append('Access-Control-Allow-Origin', '*');
+    headers.append('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+    const options = new RequestOptions({ headers });
+
+    // get users from api
+    return this.http.get(url, options)
+        .map((response: Response) => response.json());
   }
 
   handleError(error: Response) {
@@ -77,7 +85,7 @@ export class ProductService {
     return Observable.throw(message);
   }
 
-  getProducts() {
+  /*getProducts() {
     return this.productsJson;
-  }
+  }*/
 }

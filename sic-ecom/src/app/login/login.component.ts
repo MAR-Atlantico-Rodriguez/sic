@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { AuthenticationService } from '../services/authentication.service';
 
+
 @Component({
     templateUrl: 'login.component.html',
     //encapsulation: ViewEncapsulation.None,

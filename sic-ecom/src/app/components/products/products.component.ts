@@ -1,6 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ProductService} from '../../services/product.service';
 
+
+
 @Component({
   selector: 'app-products',
   //encapsulation: ViewEncapsulation.None,
@@ -9,23 +11,23 @@ import {ProductService} from '../../services/product.service';
 })
 export class ProductsComponent implements OnInit {
 
-  products: any[] = [];
-  users: any[];
+  products: any[];
+  
   errorMessage: string;
 
   constructor(private _productService: ProductService) {
   }
 
-  ngOnInit() {
-    this.products = this._productService.getProducts();
-    //this.getUsers();
+  ngOnInit() {    
+    this.getProducts();
   }
 
-  /*getUsers() {
-    this._productService.getUsers()
-      .subscribe(
-        users => this.users = users,
+  getProducts() {
+    this._productService.getProducts().subscribe(
+        products => this.products = products,
         error => this.errorMessage = <any>error
       );
-  }*/
+  }
+
+  
 }
