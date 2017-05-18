@@ -60,7 +60,7 @@ public class ConfiguracionDelSistemaGUI extends JDialog {
         cdsModificar.setCantidadMaximaDeRenglonesEnFactura(
                 Integer.parseInt(txt_CantMaximaRenglones.getValue().toString()));
         if (chk_UsarFE.isSelected()) {
-            cdsModificar.setFacturaElectronicaHabilitada(cdsModificar.getCertificadoAfip() != null);
+            cdsModificar.setFacturaElectronicaHabilitada(chk_UsarFE.isSelected());
             cdsModificar.setFirmanteCertificadoAfip(txt_FirmanteCert.getText());
             cdsModificar.setPasswordCertificadoAfip(new String(txt_contraseniaCert.getPassword()));
             if (!txt_PuntoDeVentaNro.getText().equals("")) {

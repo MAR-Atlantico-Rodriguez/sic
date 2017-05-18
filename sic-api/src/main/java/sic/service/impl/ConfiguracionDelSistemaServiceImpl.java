@@ -12,6 +12,7 @@ import sic.modelo.TipoDeOperacion;
 import sic.service.IConfiguracionDelSistemaService;
 import sic.repository.ConfiguracionDelSistemaRepository;
 import sic.service.BusinessServiceException;
+import sic.util.Utilidades;
 
 @Service
 public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSistemaService {
@@ -43,6 +44,7 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     @Transactional
     public ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds) {    
         this.validarCds(TipoDeOperacion.ALTA, cds);
+        cds.setPasswordCertificadoAfip(Utilidades.encriptarConMD5(cds.getPasswordCertificadoAfip()));
         cds = configuracionRepository.save(cds);        
         LOGGER.warn("La Configuracion del Sistema " + cds + " se guardó correctamente." );
         return cds;
@@ -50,11 +52,20 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
 
     @Override
     @Transactional
-    public void actualizar(ConfiguracionDelSistema cds) {    
+    public void actualizar(ConfiguracionDelSistema cds) {
         this.validarCds(TipoDeOperacion.ACTUALIZACION, cds);
-        configuracionRepository.save(cds);        
+        if (cds.getPasswordCertificadoAfip() != null) {
+            cds.setPasswordCertificadoAfip(Utilidades.encriptarConMD5(cds.getPasswordCertificadoAfip()));
+        }
+        configuracionRepository.save(cds);
     }
     
+    @Override
+    @Transactional
+    public void eliminar(ConfiguracionDelSistema cds) {
+        configuracionRepository.delete(cds);
+    }
+
     @Override
     public void validarCds(TipoDeOperacion tipoOperacion, ConfiguracionDelSistema cds) {
         if (tipoOperacion.equals(TipoDeOperacion.ACTUALIZACION) && cds.isFacturaElectronicaHabilitada()) {
@@ -78,8 +89,8 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
             }
             if (cds.getNroPuntoDeVentaAfip() <= 0) {
                 throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_cds_punto_venta_incorrecto"));
-            }            
+                        .getString("mensaje_cds_punto_venta_invalido"));
+            }
         }
     }
 }
