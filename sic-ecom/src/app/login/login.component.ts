@@ -14,6 +14,9 @@ export class LoginComponent implements OnInit {
     loading = false;
     returnUrl: string;
 
+    msjError: string = '';
+    nroTransaccionError: string = '';
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -42,7 +45,9 @@ export class LoginComponent implements OnInit {
             },
             err => {
                 this.loading = false;
-                alert(err['_body']);
+                let error = err['_body'].split('.',2);
+                this.msjError = error[0];//Mensaje
+                this.nroTransaccionError = error[1];//nro de la transaccion
             });
     }
 }
