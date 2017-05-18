@@ -16,6 +16,8 @@ import afip.wsfe.wsdl.FECompUltimoAutorizado;
 import afip.wsfe.wsdl.FERecuperaLastCbteResponse;
 import java.io.Reader;
 import java.io.StringReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.ResourceBundle;
 import org.dom4j.Document;
@@ -24,8 +26,8 @@ import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.oxm.XmlMappingException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ws.client.WebServiceClientException;
 import sic.modelo.AfipWSAACredencial;
 import sic.modelo.Empresa;
@@ -37,6 +39,7 @@ import sic.util.FormatterFechaHora;
 import sic.util.Utilidades;
 
 @Service
+@Transactional
 public class AfipServiceImpl implements IAfipService {
 
     private final AfipWebServiceSOAPClient afipWebServiceSOAPClient;
@@ -66,7 +69,7 @@ public class AfipServiceImpl implements IAfipService {
         loginCms.setIn0(Base64.getEncoder().encodeToString(loginTicketRequest_xml_cms));
         try {
             loginTicketResponse = afipWebServiceSOAPClient.loginCMS(loginCms);        
-        } catch (WebServiceClientException | XmlMappingException ex) {
+        } catch (WebServiceClientException ex) {
             LOGGER.error(ex.getMessage());            
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_token_wsaa_error"));
         }
@@ -83,56 +86,58 @@ public class AfipServiceImpl implements IAfipService {
         return afipCredencial;
     }
 
-    @Override
+    @Override    
     public FacturaVenta autorizarFacturaVenta(FacturaVenta factura) {
         if (configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).isFacturaElectronicaHabilitada() == false) {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_cds_fe_habilitada"));
         }
-        if (factura.getTipoComprobante() == TipoDeComprobante.FACTURA_A
-                || factura.getTipoComprobante() == TipoDeComprobante.FACTURA_B
-                || factura.getTipoComprobante() == TipoDeComprobante.FACTURA_C) {
-            if (factura.getCAE() != 0) {
-                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_ya_autorizada"));
-            }
-            AfipWSAACredencial afipCredencial = this.getAfipWSAACredencial("wsfe", factura.getEmpresa());
-            FEAuthRequest feAuthRequest = new FEAuthRequest();
-            feAuthRequest.setCuit(afipCredencial.getCuit());
-            feAuthRequest.setSign(afipCredencial.getSign());
-            feAuthRequest.setToken(afipCredencial.getToken());
-            FECAESolicitar fecaeSolicitud = new FECAESolicitar();
-            fecaeSolicitud.setAuth(feAuthRequest);
-            int nroPuntoDeVentaAfip = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).getNroPuntoDeVentaAfip();
-            int siguienteNroComprobante = this.getSiguienteNroComprobante(afipCredencial, factura.getTipoComprobante(), nroPuntoDeVentaAfip);
-            fecaeSolicitud.setFeCAEReq(this.transformFacturaVentaToFECAERequest(factura, siguienteNroComprobante));
+        if (factura.getTipoComprobante() != TipoDeComprobante.FACTURA_A
+                && factura.getTipoComprobante() != TipoDeComprobante.FACTURA_B
+                && factura.getTipoComprobante() != TipoDeComprobante.FACTURA_C) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_tipo_no_valido"));
+        }
+        if (factura.getCAE() != 0) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_ya_autorizada"));
+        }
+        AfipWSAACredencial afipCredencial = this.getAfipWSAACredencial("wsfe", factura.getEmpresa());
+        FEAuthRequest feAuthRequest = new FEAuthRequest();
+        feAuthRequest.setCuit(afipCredencial.getCuit());
+        feAuthRequest.setSign(afipCredencial.getSign());
+        feAuthRequest.setToken(afipCredencial.getToken());
+        FECAESolicitar fecaeSolicitud = new FECAESolicitar();
+        fecaeSolicitud.setAuth(feAuthRequest);
+        int nroPuntoDeVentaAfip = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).getNroPuntoDeVentaAfip();
+        int siguienteNroComprobante = this.getSiguienteNroComprobante(feAuthRequest, factura.getTipoComprobante(), nroPuntoDeVentaAfip);
+        fecaeSolicitud.setFeCAEReq(this.transformFacturaVentaToFECAERequest(factura, siguienteNroComprobante));
+        try {
             FECAEResponse response = afipWebServiceSOAPClient.FECAESolicitar(fecaeSolicitud);
             ArrayOfErr errores = response.getErrors();
             if (errores != null) {
-                errores.getErr().stream().forEach((err) -> {
-                    LOGGER.error(err.getCode() + " - " + err.getMsg());
-                });
+                errores.getErr().stream().forEach(err -> LOGGER.error(err.getCode() + " - " + err.getMsg()));
                 throw new BusinessServiceException("Con errores!");
             }
             if (response.getFeDetResp().getFECAEDetResponse().get(0).getResultado().equals("R")) {
                 throw new BusinessServiceException("Rechazada!");
             }
-            response.getFeDetResp().getFECAEDetResponse().get(0).getCAE();
-            response.getFeDetResp().getFECAEDetResponse().get(0).getCAEFchVto();
-        } else {
-            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                    .getString("mensaje_factura_tipo_no_valido"));
+            long cae = Long.valueOf(response.getFeDetResp().getFECAEDetResponse().get(0).getCAE());
+            factura.setCAE(cae);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");            
+            factura.setVencimientoCAE(formatter.parse(response.getFeDetResp().getFECAEDetResponse().get(0).getCAEFchVto()));
+            return factura;
+        } catch (WebServiceClientException ex) {
+            LOGGER.error(ex.getMessage());
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_autorizacion_error"));
+        } catch (ParseException ex) {
+            LOGGER.error(ex.getMessage());
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_error_procesando_fecha"));
         }
-        return null;
     }
     
     @Override
-    public int getSiguienteNroComprobante(AfipWSAACredencial afipCredencial, TipoDeComprobante tipo, int nroPuntoDeVentaAfip) {
-        FECompUltimoAutorizado solicitud = new FECompUltimoAutorizado();
-        FEAuthRequest feAuthRequest = new FEAuthRequest();
-        feAuthRequest.setCuit(afipCredencial.getCuit());
-        feAuthRequest.setSign(afipCredencial.getSign());
-        feAuthRequest.setToken(afipCredencial.getToken());
-        // 1: Factura A, 2: Nota de Débito A, 3: Nota de Crédito A, 6: Factura B, 7: Nota de Débito B, 8: Nota de Crédito B. 11: Factura C
+    public int getSiguienteNroComprobante(FEAuthRequest feAuthRequest, TipoDeComprobante tipo, int nroPuntoDeVentaAfip) {
+        FECompUltimoAutorizado solicitud = new FECompUltimoAutorizado();                
         solicitud.setAuth(feAuthRequest);
+        // 1: Factura A, 2: Nota de Débito A, 3: Nota de Crédito A, 6: Factura B, 7: Nota de Débito B, 8: Nota de Crédito B. 11: Factura C
         switch (tipo) {
             case FACTURA_A:
                 solicitud.setCbteTipo(1);
@@ -145,8 +150,13 @@ public class AfipServiceImpl implements IAfipService {
                 break;
         }
         solicitud.setPtoVta(nroPuntoDeVentaAfip);
-        FERecuperaLastCbteResponse response = afipWebServiceSOAPClient.FECompUltimoAutorizado(solicitud);
-        return response.getCbteNro() + 1;
+        try {
+            FERecuperaLastCbteResponse response = afipWebServiceSOAPClient.FECompUltimoAutorizado(solicitud);
+            return response.getCbteNro() + 1;
+        } catch (WebServiceClientException ex) {
+            LOGGER.error(ex.getMessage());            
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_siguiente_nro_comprobante_error"));
+        }
     }
     
     @Override
@@ -154,7 +164,8 @@ public class AfipServiceImpl implements IAfipService {
         FECAERequest fecaeRequest = new FECAERequest();        
         FECAECabRequest cabecera = new FECAECabRequest();
         FECAEDetRequest detalle = new FECAEDetRequest();        
-        // 1: Factura A, 2: Nota de Débito A, 3: Nota de Crédito A, 6: Factura B, 7: Nota de Débito B, 8: Nota de Crédito B. 11: Factura C
+        // CbteTipo = 1: Factura A, 2: Nota de Débito A, 3: Nota de Crédito A, 6: Factura B, 7: Nota de Débito B, 8: Nota de Crédito B. 11: Factura C
+        // DocTipo = 80: CUIT, 86: CUIL, 96: DNI, 99: Doc.(Otro)
         switch (factura.getTipoComprobante()) {
             case FACTURA_A:
                 cabecera.setCbteTipo(1);
@@ -162,10 +173,18 @@ public class AfipServiceImpl implements IAfipService {
                 detalle.setDocNro(Long.valueOf(factura.getCliente().getIdFiscal().replace("-", "")));
                 break;
             case FACTURA_B:
-                // menor a $1000, si DocTipo = 99 DocNro debe ser igual a 0
                 cabecera.setCbteTipo(6);
-                detalle.setDocTipo(80); // 80: CUIT, 86: CUIL, 96: DNI, 99: Doc.(Otro)
-                detalle.setDocNro(Long.valueOf(factura.getCliente().getIdFiscal().replace("-", "")));
+                // menor a $1000, si DocTipo = 99 DocNro debe ser igual a 0 (simula un consumidor final ???)
+                if (factura.getTotal() < 1000) {
+                    detalle.setDocTipo(99);
+                    detalle.setDocNro(0);
+                } else {
+                    if (factura.getCliente().getIdFiscal().equals("")) {
+                        throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_cliente_sin_idFiscal_error"));
+                    }
+                    detalle.setDocTipo(80);
+                    detalle.setDocNro(Long.valueOf(factura.getCliente().getIdFiscal().replace("-", "")));
+                }
                 break;
             case FACTURA_C:
                 cabecera.setCbteTipo(11);
@@ -199,12 +218,10 @@ public class AfipServiceImpl implements IAfipService {
         detalle.setIva(arrayIVA); // Array para informar las alícuotas y sus importes asociados a un comprobante <AlicIva>. Para comprobantes tipo C y Bienes Usados – Emisor Monotributista no debe informar el array.
         detalle.setImpIVA(Utilidades.round(factura.getIva_105_neto() + factura.getIva_21_neto(), 2)); // Suma de los importes del array de IVA. Para comprobantes tipo C debe ser igual a cero (0).
         detalle.setImpNeto(Utilidades.round(factura.getSubTotal_bruto(), 2)); // Importe neto gravado. Debe ser menor o igual a Importe total y no puede ser menor a cero. Para comprobantes tipo C este campo corresponde al Importe del Sub Total                
-        detalle.setImpTotal(Utilidades.round(factura.getTotal(), 2)); // Importe total del comprobante, Debe ser igual a Importe neto no gravado + Importe exento + Importe neto gravado + todos los campos de IVA al XX% + Importe de tributos                
-        detalle.setImpTrib(0); // Suma de los importes del array de tributos
+        detalle.setImpTotal(Utilidades.round(factura.getTotal(), 2)); // Importe total del comprobante, Debe ser igual a Importe neto no gravado + Importe exento + Importe neto gravado + todos los campos de IVA al XX% + Importe de tributos                        
         detalle.setMonId("PES"); // Código de moneda del comprobante. Consultar método FEParamGetTiposMonedas para valores posibles
         detalle.setMonCotiz(1); // Cotización de la moneda informada. Para PES, pesos argentinos la misma debe ser 1
-        arrayDetalle.getFECAEDetRequest().add(detalle);                       
-        // FALTA AGREGAR TRIBUTOS PARA IMP. INTERNO
+        arrayDetalle.getFECAEDetRequest().add(detalle);                               
         fecaeRequest.setFeDetReq(arrayDetalle);
         return fecaeRequest;
     }

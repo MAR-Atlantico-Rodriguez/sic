@@ -1,5 +1,6 @@
 package sic.service;
 
+import afip.wsfe.wsdl.FEAuthRequest;
 import afip.wsfe.wsdl.FECAERequest;
 import sic.modelo.AfipWSAACredencial;
 import sic.modelo.Empresa;
@@ -12,7 +13,7 @@ public interface IAfipService {
     
     FacturaVenta autorizarFacturaVenta(FacturaVenta factura);
     
-    int getSiguienteNroComprobante(AfipWSAACredencial afipCredencial, TipoDeComprobante tipo, int nroPuntoDeVentaAfip);
+    int getSiguienteNroComprobante(FEAuthRequest feAuthRequest, TipoDeComprobante tipo, int nroPuntoDeVentaAfip);
     
     FECAERequest transformFacturaVentaToFECAERequest(FacturaVenta factura, int siguienteNroComprobante);
     

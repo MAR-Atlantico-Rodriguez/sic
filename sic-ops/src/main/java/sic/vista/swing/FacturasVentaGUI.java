@@ -1166,6 +1166,7 @@ public class FacturasVentaGUI extends JInternalFrame {
             try {
                 RestClient.getRestTemplate().postForObject("/facturas/" + idFacturaSeleccionada + "/autorizacion",
                         null, FacturaVenta.class);
+                this.buscar();
             } catch (RestClientResponseException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } catch (ResourceAccessException ex) {
