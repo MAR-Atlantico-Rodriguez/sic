@@ -890,6 +890,7 @@ public class FacturaServiceImpl implements IFacturaService {
                                   .reduce(formasDePago, String::concat);
         params.put("formasDePago", formasDePago);
         if (factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_B)) {
+            factura.setSubTotal_bruto(factura.getSubTotal());
             factura.setIva_105_neto(0);
             factura.setIva_21_neto(0);
         }
