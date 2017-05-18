@@ -57,6 +57,7 @@ public class PuntoDeVentaGUI extends JDialog {
     private double totalComprobante;    
     private double iva_105_netoFactura;
     private double iva_21_netoFactura;
+    private double subTotalBruto;
 
     public PuntoDeVentaGUI() {
         this.initComponents();        
@@ -149,7 +150,7 @@ public class PuntoDeVentaGUI extends JDialog {
         factura.setDescuento_neto(Double.parseDouble(txt_Decuento_neto.getValue().toString()));
         factura.setRecargo_porcentaje(Double.parseDouble(txt_Recargo_porcentaje.getValue().toString()));
         factura.setRecargo_neto(Double.parseDouble(txt_Recargo_neto.getValue().toString()));
-        factura.setSubTotal_bruto(Double.parseDouble(txt_SubTotalNeto.getValue().toString()));
+        factura.setSubTotal_bruto(subTotalBruto);
         factura.setIva_105_neto(iva_105_netoFactura);
         factura.setIva_21_neto(iva_21_netoFactura);
         factura.setTotal(Double.parseDouble(txt_Total.getValue().toString()));                                             
@@ -474,8 +475,7 @@ public class PuntoDeVentaGUI extends JDialog {
         double descuento_porcentaje;
         double descuento_neto;
         double recargo_porcentaje;
-        double recargo_neto;
-        double subTotalBruto;        
+        double recargo_neto;     
         double total;
         this.validarComponentesDeResultados();
         //SubTotal  
@@ -512,7 +512,7 @@ public class PuntoDeVentaGUI extends JDialog {
             //iva 10,5% neto - IVA 21% neto
             iva_105_netoFactura = 0;
             iva_21_netoFactura = 0;
-            if (!tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B)) {
+            if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B) || tipoDeComprobante.equals(TipoDeComprobante.FACTURA_A)) {
                 iva_105_netoFactura = RestClient.getRestTemplate().getForObject("/facturas/iva-neto?"
                         + "tipoDeComprobante=" + this.tipoDeComprobante.name()
                         + "&cantidades=" + Arrays.toString(cantidades).substring(1, Arrays.toString(cantidades).length() - 1)
@@ -532,8 +532,13 @@ public class PuntoDeVentaGUI extends JDialog {
                         + "&recargoPorcentaje=" + recargo_porcentaje,
                         double.class);
             }
-            txt_IVA105_neto.setValue(iva_105_netoFactura);
-            txt_IVA21_neto.setValue(iva_21_netoFactura);
+            if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B)) {
+                txt_IVA105_neto.setValue(0);
+                txt_IVA21_neto.setValue(0);
+            } else {
+                txt_IVA105_neto.setValue(iva_105_netoFactura);
+                txt_IVA21_neto.setValue(iva_21_netoFactura);
+            }
             //subtotal bruto
             subTotalBruto = RestClient.getRestTemplate().getForObject("/facturas/subtotal-bruto?"
                     + "tipoDeComprobante=" + tipoDeComprobante.name()
@@ -543,13 +548,20 @@ public class PuntoDeVentaGUI extends JDialog {
                     + "&iva105Neto=" + iva_105_netoFactura
                     + "&iva21Neto=" + iva_21_netoFactura,
                     double.class);
-            txt_SubTotalNeto.setValue(subTotalBruto);            
+            
+            if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B)) {
+                txt_SubTotalBruto.setValue(subTotal);
+            } else {
+                txt_SubTotalBruto.setValue(subTotalBruto);
+            }        
             //total
             total = RestClient.getRestTemplate().getForObject("/facturas/total?"
                     + "subTotalBruto=" + subTotalBruto                    
                     + "&iva105Neto=" + iva_105_netoFactura
                     + "&iva21Neto=" + iva_21_netoFactura, double.class);
             txt_Total.setValue(total);
+
+
             this.totalComprobante = total;
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -808,7 +820,7 @@ public class PuntoDeVentaGUI extends JDialog {
         txt_Decuento_porcentaje = new javax.swing.JFormattedTextField();
         txt_Decuento_neto = new javax.swing.JFormattedTextField();
         lbl_DescuentoRecargo = new javax.swing.JLabel();
-        txt_SubTotalNeto = new javax.swing.JFormattedTextField();
+        txt_SubTotalBruto = new javax.swing.JFormattedTextField();
         lbl_SubTotalBruto = new javax.swing.JLabel();
         txt_IVA105_neto = new javax.swing.JFormattedTextField();
         lbl_IVA105 = new javax.swing.JLabel();
@@ -1129,13 +1141,13 @@ public class PuntoDeVentaGUI extends JDialog {
         lbl_DescuentoRecargo.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lbl_DescuentoRecargo.setText("Descuento (%)");
 
-        txt_SubTotalNeto.setEditable(false);
-        txt_SubTotalNeto.setForeground(new java.awt.Color(29, 156, 37));
-        txt_SubTotalNeto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
-        txt_SubTotalNeto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txt_SubTotalNeto.setText("0");
-        txt_SubTotalNeto.setFocusable(false);
-        txt_SubTotalNeto.setFont(new java.awt.Font("DejaVu Sans", 0, 17)); // NOI18N
+        txt_SubTotalBruto.setEditable(false);
+        txt_SubTotalBruto.setForeground(new java.awt.Color(29, 156, 37));
+        txt_SubTotalBruto.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        txt_SubTotalBruto.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txt_SubTotalBruto.setText("0");
+        txt_SubTotalBruto.setFocusable(false);
+        txt_SubTotalBruto.setFont(new java.awt.Font("DejaVu Sans", 0, 17)); // NOI18N
 
         lbl_SubTotalBruto.setText("SubTotal Bruto");
 
@@ -1208,7 +1220,7 @@ public class PuntoDeVentaGUI extends JDialog {
                     .addComponent(lbl_recargoPorcentaje, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_SubTotalNeto)
+                    .addComponent(txt_SubTotalBruto)
                     .addComponent(lbl_SubTotalBruto, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelResultadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1251,7 +1263,7 @@ public class PuntoDeVentaGUI extends JDialog {
                             .addComponent(txt_Subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_Decuento_neto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_Recargo_neto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_SubTotalNeto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_SubTotalBruto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_IVA105_neto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_IVA21_neto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -1259,7 +1271,7 @@ public class PuntoDeVentaGUI extends JDialog {
                 .addContainerGap())
         );
 
-        panelResultadosLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lbl_105, lbl_21, txt_Decuento_neto, txt_Decuento_porcentaje, txt_IVA105_neto, txt_IVA21_neto, txt_Recargo_neto, txt_Recargo_porcentaje, txt_SubTotalNeto, txt_Subtotal});
+        panelResultadosLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lbl_105, lbl_21, txt_Decuento_neto, txt_Decuento_porcentaje, txt_IVA105_neto, txt_IVA21_neto, txt_Recargo_neto, txt_Recargo_porcentaje, txt_SubTotalBruto, txt_Subtotal});
 
         btn_Continuar.setForeground(java.awt.Color.blue);
         btn_Continuar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sic/icons/22x22_FlechaGO.png"))); // NOI18N
@@ -1730,7 +1742,7 @@ public class PuntoDeVentaGUI extends JDialog {
     private javax.swing.JTextField txt_NombreCliente;
     private javax.swing.JFormattedTextField txt_Recargo_neto;
     private javax.swing.JFormattedTextField txt_Recargo_porcentaje;
-    private javax.swing.JFormattedTextField txt_SubTotalNeto;
+    private javax.swing.JFormattedTextField txt_SubTotalBruto;
     private javax.swing.JFormattedTextField txt_Subtotal;
     private javax.swing.JFormattedTextField txt_Total;
     private javax.swing.JTextArea txta_Observaciones;

@@ -474,7 +474,7 @@
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txt_SubTotalNeto" max="32767" attributes="0"/>
+                          <Component id="txt_SubTotalBruto" max="32767" attributes="0"/>
                           <Component id="lbl_SubTotalBruto" pref="120" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -525,7 +525,7 @@
                                   <Component id="txt_Subtotal" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_Decuento_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_Recargo_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txt_SubTotalNeto" linkSize="7" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="txt_SubTotalBruto" linkSize="7" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                                   <Component id="txt_IVA105_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_IVA21_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -655,7 +655,7 @@
                 <Property name="text" type="java.lang.String" value="Descuento (%)"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JFormattedTextField" name="txt_SubTotalNeto">
+            <Component class="javax.swing.JFormattedTextField" name="txt_SubTotalBruto">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
