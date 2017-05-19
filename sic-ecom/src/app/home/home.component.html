@@ -1,22 +1,11 @@
 <md-sidenav-container>
-  <!-- MENU -->
-
-    <app-navbar></app-navbar>
-
-
+  <app-navbar></app-navbar>
   <div fxLayout="column" fxLayoutAlign="space-between stretch" fxFlexFill>
-    <header>
-      
-    </header>
-
+    <header></header>
     <article fxFlex fxFlexOffset.gt-md="16">
       	<app-products class="container" fxFlex></app-products>
     	  <app-sidebar fxFlex="30" fxHide.lt-md></app-sidebar>
     </article>
-
-    <footer>
-     {{token.token}}
-
-    </footer>
+    <footer>{{token}}</footer>
   </div>
 </md-sidenav-container>

@@ -1,54 +1,35 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '../services/alert.service';
-import { AuthenticationService } from '../services/authentication.service';
-
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {AuthService} from '../services/auth.service';
 
 @Component({
-    templateUrl: 'login.component.html',
-    //encapsulation: ViewEncapsulation.None,
-    styleUrls: ['login.component.css']
+  templateUrl: 'login.component.html',
+  styleUrls: ['login.component.css']
 })
-
 export class LoginComponent implements OnInit {
-    model: any = {};
-    loading = false;
-    returnUrl: string;
+  model: any = {};
+  loading = false;
+  msjError: string;
 
-    msjError: string = '';
-    nroTransaccionError: string = '';
+  constructor(private router: Router, private authService: AuthService) {}
 
-    constructor(
-        private route: ActivatedRoute,
-        private router: Router,
-        private authenticationService: AuthenticationService,
-        private alertService: AlertService) { 
-        
-    }
+  ngOnInit() {
+    this.authService.logout();
+  }
 
-    ngOnInit() {
-        // Reiniciamos el estado del Login
-        //debugger
-        this.authenticationService.logout();
-
-        // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    }
-
-    login() {
-        this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(result => {
-                this.loading = false;
-                if (result === true) {
-                    this.router.navigate(['/']);
-                }
-            },
-            err => {
-                this.loading = false;
-                let error = err['_body'].split('.',2);
-                this.msjError = error[0];//Mensaje
-                this.nroTransaccionError = error[1];//nro de la transaccion
-            });
-    }
+  login() {
+    this.loading = true;
+    this.authService.login(this.model.username, this.model.password)
+      .subscribe(
+        data => {
+          this.loading = false;
+          if (data === true) {
+            this.router.navigate(['/']);
+          }
+        },
+        err => {
+          this.loading = false;
+          this.msjError = err.text();
+        });
+  }
 }

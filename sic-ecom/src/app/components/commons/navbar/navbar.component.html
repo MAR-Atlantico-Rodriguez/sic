@@ -1,107 +1,68 @@
-<!--<md-toolbar color="warn">
-  <span>
-	<md-nav-list>
-	  <md-list-item>
-		<img src="assets/header.png" width="50%">
-	  </md-list-item>
-	</md-nav-list>
-  </span>
+<md-sidenav #sidenav mode="side" opened="false" align="end" fxHide.gt-md>
+  <md-list>
+    <md-nav-list>
+      <md-list-item>
+        Rubros
+      </md-list-item>
+      <md-list-item>
+        <md-icon> keyboard_arrow_left</md-icon>
+        <span> Electricidad</span>
+      </md-list-item>
+      <md-list-item>
+        <md-icon> keyboard_arrow_left</md-icon>
+        <span> Sanitarios</span>
+      </md-list-item>
+      <md-list-item>
+        <md-icon> keyboard_arrow_left</md-icon>
+        <span> Pinturas</span>
+      </md-list-item>
+      <md-list-item>
+        <md-icon> keyboard_arrow_left</md-icon>
+        <span> Herrajes</span>
+      </md-list-item>
+    </md-nav-list>
+    <md-divider></md-divider>
 
-  <span class="navbar-search">
-	<md-input-container class="input-field">
-	  <input mdInput placeholder="Buscar" type="text" value="">
-	  <md-icon>search</md-icon>
-	</md-input-container>
-  </span>
+    <button md-icon-button [routerLink]="['/login']">
+      <span> Salir</span>
+      <i class="material-icons">power_settings_new</i>
+    </button>
+  </md-list>
+</md-sidenav>
 
-  <span>
-	<div fxHide.xs fxHide.sm>
-	  <button md-icon-button (click)="sidenav.open()">
-		<md-icon>shopping_cart</md-icon>
-	  </button>
-	</div>
-	<div fxHide.lg fxHide.md>
-	  <button md-icon-button [mdMenuTriggerFor]="appMenu">
-		<md-icon>more_vert</md-icon>
-	  </button>
-	  <md-menu #appMenu="mdMenu">
-		<button md-menu-item disabled>Rubros</button>
-		<button md-menu-item><md-icon> keyboard_arrow_left </md-icon><span> Electricidad </span></button>
-		<button md-menu-item><md-icon> keyboard_arrow_left </md-icon><span> Sanitarios </span></button>
-		<button md-menu-item><md-icon> keyboard_arrow_left </md-icon><span> Pinturas </span></button>
-		<button md-menu-item><md-icon> keyboard_arrow_left </md-icon><span> Herrajes </span></button>
-	  </md-menu>
-	</div>
-  </span>
-</md-toolbar>-->
+<md-toolbar class="md-toolbar">
 
-
-
-
-  <md-sidenav #sidenav mode="side" opened="false" align="end" fxHide.gt-md>
-	<md-list>
-      <md-nav-list>
-        <md-list-item>
-          Rubros
-        </md-list-item>
-        <md-list-item>
-          <md-icon> keyboard_arrow_left </md-icon><span> Electricidad</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon> keyboard_arrow_left </md-icon><span> Sanitarios</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon> keyboard_arrow_left </md-icon><span> Pinturas</span>
-        </md-list-item>
-        <md-list-item>
-          <md-icon> keyboard_arrow_left </md-icon><span> Herrajes</span>
-        </md-list-item>
-      </md-nav-list>
-      <md-divider></md-divider>
-   
-	    <button md-icon-button [routerLink]="['/login']" >
-	        <span> Salir</span>
-	        <i class="material-icons">power_settings_new</i>
-	    </button>
-    </md-list>
-  </md-sidenav>
-  
-
-
-
-  <md-toolbar class="md-toolbar">
-
-	<span fxFlex="15">      
+	<span fxFlex="15">
 		<img fxHide.xs fxHide.sm src="assets/header.png" fxFlex.gt-md="60%" fxLayoutAlign.gt-md="center">
-		<img fxHide.md fxHide.lg src="assets/header_movile.png" fxFlex.lt-md="70%" fxLayoutAlign.lt-md="start">      
+		<img fxHide.md fxHide.lg src="assets/header_movile.png" fxFlex.lt-md="70%" fxLayoutAlign.lt-md="start">
 	</span>
 
-	<span class="navbar-search" fxFlex fxLayoutAlign="center">
+  <span class="navbar-search" fxFlex fxLayoutAlign="center">
 	  <!--<md-input-container>-->
-	  	
+
 			<input class="inputSearch" placeholder="Buscar producto" type="search" value="">
 			<md-icon class="searchs">search</md-icon>
-		
-	  <!--</md-input-container>-->
+
+    <!--</md-input-container>-->
 	</span>
 
-	<span fxFlex="10" fxLayoutAlign.lt-md="end" fxLayoutAlign.gt-md="center">
+  <span fxFlex="10" fxLayoutAlign.lt-md="end" fxLayoutAlign.gt-md="center">
 	  <div fxHide.lt-md>
 		<button md-icon-button (click)="sidenav.open()">
 		  <md-icon>shopping_cart</md-icon>
 		</button>
 	  </div>
-	  
+
 	  <div fxHide.gt-sm>
 		<button md-icon-button (click)="sidenav.toggle()">
 		  <md-icon>more_vert</md-icon>
-		</button>	  
+		</button>
 	  </div>
 
 	  <div fxHide.lt-md>
-		<button md-icon-button [routerLink]="['/login']" >
+		<button md-icon-button [routerLink]="['/login']">
 		  <i class="material-icons">power_settings_new</i>
-		</button>	  
+		</button>
 	  </div>
 
 	</span>

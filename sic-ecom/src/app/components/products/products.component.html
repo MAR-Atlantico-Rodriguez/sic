@@ -1,23 +1,5 @@
-<!--<md-card *ngFor="let product of products">
-   <md-card-title-group>
-      <img md-card-avatar class="product-image" src="{{product.imageUrl}}">
-      <md-card-title>
-        {{product.descripcion}}
-      </md-card-title>
-      <md-card-subtitle>
-        <p>
-          <span>Medida: </span>
-          {{product.medida}}
-          <span>Precio: </span>
-          {{product.precio}}
-        </p>
-      </md-card-subtitle>
-   </md-card-title-group>
-</md-card>
-
-<br>-->
 <div fxFlex class="products-derecha">
----{{products}}
+  {{products}}
   <md-list>
     <div *ngFor="let product of products">
       <md-nav-list>
@@ -25,7 +7,7 @@
           <img md-list-avatar src="{{product.imageUrl}}" style="width: 75px; height: 75px">
           <h3 md-line class="descripcion-products-list">
             <strong>
-              
+
               <span style="word-wrap: break-word;">{{product.descripcion}}</span>
             </strong>
           </h3>
@@ -37,3 +19,4 @@
       <md-divider></md-divider>
     </div>
   </md-list>
+</div>
