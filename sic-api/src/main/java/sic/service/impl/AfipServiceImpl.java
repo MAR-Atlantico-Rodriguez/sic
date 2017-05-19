@@ -6,6 +6,7 @@ import afip.wsfe.wsdl.AlicIva;
 import afip.wsfe.wsdl.ArrayOfAlicIva;
 import afip.wsfe.wsdl.ArrayOfErr;
 import afip.wsfe.wsdl.ArrayOfFECAEDetRequest;
+import afip.wsfe.wsdl.Err;
 import afip.wsfe.wsdl.FEAuthRequest;
 import afip.wsfe.wsdl.FECAECabRequest;
 import afip.wsfe.wsdl.FECAEDetRequest;
@@ -110,12 +111,20 @@ public class AfipServiceImpl implements IAfipService {
         int siguienteNroComprobante = this.getSiguienteNroComprobante(feAuthRequest, factura.getTipoComprobante(), nroPuntoDeVentaAfip);
         fecaeSolicitud.setFeCAEReq(this.transformFacturaVentaToFECAERequest(factura, siguienteNroComprobante));
         try {
-            FECAEResponse response = afipWebServiceSOAPClient.FECAESolicitar(fecaeSolicitud);
-            ArrayOfErr errores = response.getErrors();
-            if (errores != null) {
-                errores.getErr().stream().forEach(err -> LOGGER.error(err.getCode() + " - " + err.getMsg()));
-                throw new BusinessServiceException("Con errores!");
+            FECAEResponse response = afipWebServiceSOAPClient.FECAESolicitar(fecaeSolicitud);            
+            String msjError = "";
+            // errores generales de la request
+            msjError = response.getErrors().getErr().stream()
+                    .map(err -> err.getCode() + " - " + err.getMsg() + "\n")
+                    .map(detalleError -> {
+                        LOGGER.error(detalleError);
+                        return detalleError;
+                    }).map(detalleError -> detalleError)
+                    .reduce(msjError, String::concat);
+            if (!msjError.isEmpty()) {
+                throw new BusinessServiceException(msjError);
             }
+            // errores particulares de cada comprobante
             if (response.getFeDetResp().getFECAEDetResponse().get(0).getResultado().equals("R")) {
                 throw new BusinessServiceException("Rechazada!");
             }
