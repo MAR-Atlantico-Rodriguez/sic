@@ -291,6 +291,7 @@ public class FacturacionIntegrationTest {
         facturaVentaB.setRenglones(renglones);
         facturaVentaB.setSubTotal(subTotal);
         facturaVentaB.setRecargo_neto(recargo_neto);
+        facturaVentaB.setDescuento_neto(descuento_neto);
         facturaVentaB.setSubTotal_bruto(subTotalBruto);
         facturaVentaB.setIva_105_neto(iva_105_netoFactura);
         facturaVentaB.setIva_21_neto(iva_21_netoFactura);        

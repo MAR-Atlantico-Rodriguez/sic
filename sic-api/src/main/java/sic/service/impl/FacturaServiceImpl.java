@@ -410,7 +410,7 @@ public class FacturaServiceImpl implements IFacturaService {
         double importes = 0.0;
         importes = factura.getRenglones().stream().map((renglonFactura) -> 
                 renglonFactura.getImporte()).reduce(importes, (accumulator, _item) -> accumulator + _item);
-        if (importes != factura.getSubTotal()) { // urmar un array para usar el metodo que hace el calculo
+        if (importes != factura.getSubTotal()) { 
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_factura_sub_total_no_valido"));
         }
