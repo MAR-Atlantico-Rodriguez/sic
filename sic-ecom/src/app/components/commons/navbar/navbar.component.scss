@@ -16,12 +16,10 @@ md-toolbar-row {
 
 
 md-sidenav {
-  margin-top: 56px;
+  margin-top: 65px;
   width: 80%;
   padding:20px;
-  box-shadow: -10px 3px 20px #888;
-
-  
+  box-shadow: -10px 3px 20px #888;  
 }
 
 .mat-sidenav-content {
@@ -37,13 +35,12 @@ md-sidenav {
   color:#fff
 }
 
-
 .inputSearch{
   width:100%;
   border:none;
-  background:#e03906;
+  /*background:#e03906;*/
   padding:10px;
-  color:#fff;
+  color:#000;
   font-size: 17px;
   -webkit-border-radius: 10px 0px 0px 10px;
   -moz-border-radius: 10px 0px 0px 10px;
@@ -58,4 +55,16 @@ md-sidenav {
   -webkit-border-radius: 0px 10px 10px 0px;
   -moz-border-radius: 0px 10px 10px 0px;
   border-radius: 0px 10px 10px 0px;
+}
+
+
+
+.logoImg{
+  width:150px;
+  height:50px;
+}
+
+.logoImgCelular{
+  width:45px;
+  height:40px;
 }

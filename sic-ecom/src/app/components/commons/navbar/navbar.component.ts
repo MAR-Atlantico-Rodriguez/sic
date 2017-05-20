@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {ProductService} from '../../../services/product.service';
 
 @Component({
   selector: 'app-navbar',
@@ -6,6 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
+	private productos: any[];
+  	constructor(private productService:ProductService) {}
 
-  constructor() {}
+  	buscadorProductos(search: string){
+  		console.log(search);
+  		this.productService.getProductos(search)
+  		.subscribe(data => this.productos = data);
+
+  		console.log(this.productos);
+  	}
 }

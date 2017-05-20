@@ -10,9 +10,14 @@ md-card {
 }
 
 .products-derecha{
-	border-right:1px solid #e5e5e5;
+	/*border-right:1px solid #e5e5e5;*/
 }
 
 .descripcion-products-list{
 	color:#f05724;
+}
+
+.mat-list .mat-list-item .mat-list-avatar, .mat-nav-list .mat-list-item .mat-list-avatar{
+	height: 75px;
+  	width: 75px;	
 }
