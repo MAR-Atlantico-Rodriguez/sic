@@ -41,6 +41,8 @@ public class FacturaVentaBuilder {
     private boolean pagada = false;
     private Empresa empresa = new EmpresaBuilder().build();
     private boolean eliminada = false;
+    private long CAE = 21064126523746l;
+    private Date vencimientoCAE = null;
       
     public FacturaVenta build() {
         if (renglones == null) {
@@ -61,7 +63,7 @@ public class FacturaVentaBuilder {
                 tipoFactura, numSerie, numFactura, fechaVencimiento, pedido, transportista,
                 renglones, pagos, subTotal, recargo_porcentaje, recargo_neto, descuento_porcentaje, 
                 descuento_neto, subTotal_neto, iva_105_neto, iva_21_neto, impuestoInterno_neto, total, 
-                observaciones, pagada, empresa, eliminada);
+                observaciones, pagada, empresa, eliminada, CAE, vencimientoCAE);
         return factura;
     }
     
@@ -192,6 +194,16 @@ public class FacturaVentaBuilder {
 
     public FacturaVentaBuilder withEliminada(boolean eliminada) {
         this.eliminada = eliminada;
+        return this;
+    }
+    
+    public FacturaVentaBuilder withCAE(long CAE) {
+        this.CAE = CAE;
+        return this;
+    }
+    
+    public FacturaVentaBuilder withVencimientoCAE(Date vencimientoCAE) {
+        this.vencimientoCAE = vencimientoCAE;
         return this;
     }
     

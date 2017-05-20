@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sic.modelo.ConfiguracionDelSistema;
 import sic.modelo.Empresa;
+import sic.modelo.TipoDeOperacion;
 import sic.service.IConfiguracionDelSistemaService;
 import sic.repository.ConfiguracionDelSistemaRepository;
+import sic.service.BusinessServiceException;
+import sic.util.Utilidades;
 
 @Service
 public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSistemaService {
@@ -39,7 +42,8 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
 
     @Override
     @Transactional
-    public ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds) {        
+    public ConfiguracionDelSistema guardar(ConfiguracionDelSistema cds) {    
+        this.validarCds(TipoDeOperacion.ALTA, cds);
         cds = configuracionRepository.save(cds);        
         LOGGER.warn("La Configuracion del Sistema " + cds + " se guardó correctamente." );
         return cds;
@@ -47,7 +51,45 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
 
     @Override
     @Transactional
-    public void actualizar(ConfiguracionDelSistema cds) {        
-        configuracionRepository.save(cds);        
+    public void actualizar(ConfiguracionDelSistema cds) {
+        this.validarCds(TipoDeOperacion.ACTUALIZACION, cds);
+        if (cds.getPasswordCertificadoAfip() != null) {
+            cds.setPasswordCertificadoAfip(Utilidades.encriptarConMD5(cds.getPasswordCertificadoAfip()));
+        }
+        configuracionRepository.save(cds);
+    }
+    
+    @Override
+    @Transactional
+    public void eliminar(ConfiguracionDelSistema cds) {
+        configuracionRepository.delete(cds);
+    }
+
+    @Override
+    public void validarCds(TipoDeOperacion tipoOperacion, ConfiguracionDelSistema cds) {
+        if (tipoOperacion.equals(TipoDeOperacion.ACTUALIZACION) && cds.isFacturaElectronicaHabilitada()) {
+            if (cds.getPasswordCertificadoAfip().equals("")) {
+                cds.setPasswordCertificadoAfip(this.getConfiguracionDelSistemaPorId(
+                        cds.getId_ConfiguracionDelSistema()).getPasswordCertificadoAfip());
+            }
+        }
+        if (cds.isFacturaElectronicaHabilitada()) {
+            if (cds.getCertificadoAfip() == null) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_certificado_vacio"));
+            }
+            if (cds.getFirmanteCertificadoAfip().isEmpty()) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_firmante_vacio"));
+            }
+            if (cds.getPasswordCertificadoAfip() == null || cds.getPasswordCertificadoAfip().isEmpty()) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_password_vacio"));
+            }
+            if (cds.getNroPuntoDeVentaAfip() <= 0) {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                        .getString("mensaje_cds_punto_venta_invalido"));
+            }
+        }
     }
 }

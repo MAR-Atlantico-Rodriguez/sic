@@ -70,6 +70,19 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcmail-jdk16</artifactId>
+            <version>1.46</version>
+        </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>            
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+        </dependency>
         <dependency> 
             <groupId>com.h2database</groupId> 
             <artifactId>h2</artifactId> 
@@ -108,9 +121,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>                                  
-    </dependencies>
-    
+	</dependency>    
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-core</artifactId>
+        </dependency>                      
+    </dependencies>                  
+
     <build>
         <plugins>
             <plugin>
@@ -137,6 +154,43 @@
                         <configuration>
                             <outputDirectory>target/generated-sources/java</outputDirectory>
                             <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.13.1</version>                               
+                <executions>
+                    <execution>
+                        <id>afip-wsaa</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaLanguage>WSDL</schemaLanguage>
+                            <generatePackage>afip.wsaa.wsdl</generatePackage>                            
+                            <schemas>
+                                <schema>
+                                    <url>https://wsaahomo.afip.gov.ar/ws/services/LoginCms?WSDL</url>
+                                </schema>
+                            </schemas>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>afip-wsfe</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaLanguage>WSDL</schemaLanguage>
+                            <generatePackage>afip.wsfe.wsdl</generatePackage>                            
+                            <schemas>
+                                <schema>
+                                    <url>https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL</url>                                    
+                                </schema>
+                            </schemas>
                         </configuration>
                     </execution>
                 </executions>
