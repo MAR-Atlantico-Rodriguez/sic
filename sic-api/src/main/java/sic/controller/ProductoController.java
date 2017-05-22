@@ -191,7 +191,7 @@ public class ProductoController {
     @GetMapping("/productos/imp-interno-neto")
     @ResponseStatus(HttpStatus.OK)
     public double calcularImpInterno_Neto(@RequestParam double pvp, 
-                                          @RequestParam double impInternoPorcentaje){
+                                          @RequestParam(defaultValue = "0",required = false) double impInternoPorcentaje){
         return productoService.calcularImpInterno_Neto(pvp, impInternoPorcentaje);
     }
     
@@ -206,7 +206,7 @@ public class ProductoController {
     @ResponseStatus(HttpStatus.OK)
     public double calcularPrecioLista(@RequestParam double pvp, 
                                       @RequestParam double ivaPorcentaje, 
-                                      @RequestParam double impInternoPorcentaje) {
+                                      @RequestParam(defaultValue = "0",required = false) double impInternoPorcentaje) {
         return productoService.calcularPrecioLista(pvp, ivaPorcentaje, impInternoPorcentaje);
     }
 
@@ -254,8 +254,8 @@ public class ProductoController {
                                             @RequestParam(required = false) Long idProveedor,
                                             @RequestParam(required = false) Double gananciaNeto,
                                             @RequestParam(required = false) Double gananciaPorcentaje,
-                                            @RequestParam(required = false) Double impuestoInternoNeto,
-                                            @RequestParam(required = false) Double impuestoInternoPorcentaje,
+                                            @RequestParam(defaultValue = "0",required = false) Double impuestoInternoNeto,
+                                            @RequestParam(defaultValue = "0",required = false) Double impuestoInternoPorcentaje,
                                             @RequestParam(required = false) Double IVANeto,
                                             @RequestParam(required = false) Double IVAPorcentaje,
                                             @RequestParam(required = false) Double precioCosto,
