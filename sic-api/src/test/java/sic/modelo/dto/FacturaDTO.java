@@ -43,7 +43,7 @@ public abstract class FacturaDTO implements Serializable {
     private double recargo_neto = 0.0;
     private double descuento_porcentaje = 0.0;
     private double descuento_neto = 0.0;
-    private double subTotal_neto = 6500;
+    private double subTotal_bruto = 6500;
     private double iva_105_neto = 0.0;
     private double iva_21_neto = 1365;
     private double impuestoInterno_neto = 0.0;

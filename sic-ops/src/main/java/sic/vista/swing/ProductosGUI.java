@@ -87,7 +87,7 @@ public class ProductosGUI extends JInternalFrame {
         tbl_Resultados.setAutoCreateRowSorter(true);
 
         //nombres de columnas
-        String[] encabezados = new String[23];
+        String[] encabezados = new String[21];
         encabezados[0] = "Codigo";
         encabezados[1] = "Descripcion";
         encabezados[2] = "Cantidad";
@@ -100,17 +100,15 @@ public class ProductosGUI extends JInternalFrame {
         encabezados[9] = "PVP";
         encabezados[10] = "% IVA";
         encabezados[11] = "IVA";
-        encabezados[12] = "% Imp.Interno";
-        encabezados[13] = "Imp.Interno";
-        encabezados[14] = "Precio Lista";
-        encabezados[15] = "Rubro";
-        encabezados[16] = "Fecha U. Modificacion";
-        encabezados[17] = "Estanteria";
-        encabezados[18] = "Estante";
-        encabezados[19] = "Proveedor";
-        encabezados[20] = "Fecha Alta";
-        encabezados[21] = "Fecha Vencimiento";
-        encabezados[22] = "Nota";
+        encabezados[12] = "Precio Lista";
+        encabezados[13] = "Rubro";
+        encabezados[14] = "Fecha U. Modificacion";
+        encabezados[15] = "Estanteria";
+        encabezados[16] = "Estante";
+        encabezados[17] = "Proveedor";
+        encabezados[18] = "Fecha Alta";
+        encabezados[19] = "Fecha Vencimiento";
+        encabezados[20] = "Nota";
         modeloTablaResultados.setColumnIdentifiers(encabezados);
         tbl_Resultados.setModel(modeloTablaResultados);
 
@@ -129,16 +127,14 @@ public class ProductosGUI extends JInternalFrame {
         tipos[10] = Double.class;
         tipos[11] = Double.class;
         tipos[12] = Double.class;
-        tipos[13] = Double.class;
-        tipos[14] = Double.class;
+        tipos[13] = String.class;
+        tipos[14] = Date.class;
         tipos[15] = String.class;
-        tipos[16] = Date.class;
+        tipos[16] = String.class;
         tipos[17] = String.class;
-        tipos[18] = String.class;
-        tipos[19] = String.class;
-        tipos[20] = Date.class;
-        tipos[21] = Date.class;
-        tipos[22] = String.class;
+        tipos[18] = Date.class;
+        tipos[19] = Date.class;
+        tipos[20] = String.class;
         modeloTablaResultados.setClaseColumnas(tipos);
         tbl_Resultados.getTableHeader().setReorderingAllowed(false);
         tbl_Resultados.getTableHeader().setResizingAllowed(true);
@@ -161,21 +157,20 @@ public class ProductosGUI extends JInternalFrame {
         tbl_Resultados.getColumnModel().getColumn(11).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(12).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(13).setPreferredWidth(100);
-        tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(100);
+        tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(150);
         tbl_Resultados.getColumnModel().getColumn(15).setPreferredWidth(200);
         tbl_Resultados.getColumnModel().getColumn(16).setPreferredWidth(200);
         tbl_Resultados.getColumnModel().getColumn(17).setPreferredWidth(200);
-        tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(200);
-        tbl_Resultados.getColumnModel().getColumn(19).setPreferredWidth(450);
-        tbl_Resultados.getColumnModel().getColumn(20).setPreferredWidth(150);
-        tbl_Resultados.getColumnModel().getColumn(21).setPreferredWidth(150);
-        tbl_Resultados.getColumnModel().getColumn(22).setPreferredWidth(1000);
+        tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(125);
+        tbl_Resultados.getColumnModel().getColumn(19).setPreferredWidth(125);
+        tbl_Resultados.getColumnModel().getColumn(20).setPreferredWidth(400);
+
     }
 
     private void cargarResultadosAlTable() {
         this.limpiarJTable();
         productos.stream().map((producto) -> {
-            Object[] fila = new Object[23];
+            Object[] fila = new Object[21];
             fila[0] = producto.getCodigo();
             fila[1] = producto.getDescripcion();
             fila[2] = producto.getCantidad();
@@ -188,17 +183,15 @@ public class ProductosGUI extends JInternalFrame {
             fila[9] = producto.getPrecioVentaPublico();
             fila[10] = producto.getIva_porcentaje();
             fila[11] = producto.getIva_neto();
-            fila[12] = producto.getImpuestoInterno_porcentaje();
-            fila[13] = producto.getImpuestoInterno_neto();
-            fila[14] = producto.getPrecioLista();
-            fila[15] = producto.getRubro().getNombre();
-            fila[16] = producto.getFechaUltimaModificacion();
-            fila[17] = producto.getEstanteria();
-            fila[18] = producto.getEstante();
-            fila[19] = producto.getProveedor().getRazonSocial();
-            fila[20] = producto.getFechaAlta();
-            fila[21] = producto.getFechaVencimiento();
-            fila[22] = producto.getNota();
+            fila[12] = producto.getPrecioLista();
+            fila[13] = producto.getRubro().getNombre();
+            fila[14] = producto.getFechaUltimaModificacion();
+            fila[15] = producto.getEstanteria();
+            fila[16] = producto.getEstante();
+            fila[17] = producto.getProveedor().getRazonSocial();
+            fila[18] = producto.getFechaAlta();
+            fila[19] = producto.getFechaVencimiento();
+            fila[20] = producto.getNota();
             return fila;
         }).forEach((fila) -> {
             modeloTablaResultados.addRow(fila);

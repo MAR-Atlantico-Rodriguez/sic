@@ -1,6 +1,7 @@
 package sic.util;
 
 import java.awt.Image;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -85,6 +86,10 @@ public class Utilidades {
         fileInputStream.read(bArchivo);
         fileInputStream.close();
         return bArchivo;
+    }
+    
+    public static ByteArrayInputStream convertirByteArrayToInputStream(byte[] byteArray) {
+     return new ByteArrayInputStream(byteArray);
     }
     
     /**

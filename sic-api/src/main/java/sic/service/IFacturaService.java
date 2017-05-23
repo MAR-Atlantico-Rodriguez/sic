@@ -28,9 +28,7 @@ public interface IFacturaService {
     TipoDeComprobante[] getTiposFacturaSegunEmpresa(Empresa empresa);
 
     List<RenglonFactura> getRenglonesDeLaFactura(Long id_Factura);
-
-    Movimiento getTipoMovimiento(Factura factura);
-
+ 
     List<FacturaCompra> buscarFacturaCompra(BusquedaFacturaCompraCriteria criteria);
 
     List<FacturaVenta> buscarFacturaVenta(BusquedaFacturaVentaCriteria criteria);
@@ -41,7 +39,7 @@ public interface IFacturaService {
 
     void eliminar(long[] idFactura);
     
-    Factura actualizarFacturaEstadoPagada(Factura factura);
+    Factura actualizarFacturaEstadoPago(Factura factura);
     
     double getTotalPagado(Factura factura);
 
@@ -57,31 +55,32 @@ public interface IFacturaService {
 
     double calcularSubTotal(double[] importes);
 
-    double calcularDescuento_neto(double subtotal, double descuento_porcentaje);
+    double calcularDescuentoNeto(double subtotal, double descuento_porcentaje);
 
-    double calcularRecargo_neto(double subtotal, double recargo_porcentaje);
+    double calcularRecargoNeto(double subtotal, double recargo_porcentaje);
 
-    double calcularSubTotal_neto(double subtotal, double recargo_neto, double descuento_neto);
+    double calcularSubTotalBruto(TipoDeComprobante tipoDeComprobante, double subTotal, double recargoNeto, double descuentoNeto, double iva105Neto, double iva21Neto);
 
-    double calcularIva_neto(TipoDeComprobante tipoDeComprobante, double descuento_porcentaje, double recargo_porcentaje, double[] importe, double[] ivaPorcentaje, double iva_porcentaje);
+    double calcularIvaNetoFactura(TipoDeComprobante tipo, double[] cantidades, double[] ivaPorcentajeRenglones,
+            double[] ivaNetoRenglones, double ivaPorcentaje, double porcentajeDescuento, double porcentajeRecargo);
 
-    double calcularImpInterno_neto(TipoDeComprobante tipoDeComprobante, double descuento_porcentaje, double recargo_porcentaje, double[] importes, double [] impuestoPorcentajes);
+    double calcularImpInternoNeto(TipoDeComprobante tipoDeComprobante, double descuento_porcentaje, double recargo_porcentaje, double[] importes, double [] impuestoPorcentajes);
 
-    double calcularImpInterno_neto(Movimiento movimiento, Producto producto, double descuento_neto);
+    double calcularImpInternoNeto(Movimiento movimiento, Producto producto, double descuento_neto);
 
-    double calcularTotal(double subTotal, double descuento_neto, double recargo_neto, double iva105_neto, double iva21_neto, double impInterno_neto);
+    public double calcularTotal(double subTotal_bruto, double iva105_neto, double iva21_neto);
 
     double calcularTotalFacturadoVenta(BusquedaFacturaVentaCriteria criteria);
 
     double calcularTotalFacturadoCompra(BusquedaFacturaCompraCriteria criteria);
 
-    double calcularIVA_Venta(BusquedaFacturaVentaCriteria criteria);
+    double calcularIvaVenta(BusquedaFacturaVentaCriteria criteria);
 
-    double calcularIVA_Compra(BusquedaFacturaCompraCriteria criteria);
+    double calcularIvaCompra(BusquedaFacturaCompraCriteria criteria);
 
     double calcularGananciaTotal(BusquedaFacturaVentaCriteria criteria);
 
-    double calcularIVA_neto(Movimiento movimiento, Producto producto, double descuento_neto);
+    double calcularIVANetoRenglon(Movimiento movimiento, TipoDeComprobante tipo, Producto producto, double descuento_porcentaje);
 
     double calcularPrecioUnitario(Movimiento movimiento, TipoDeComprobante tipoDeComprobante, Producto producto);
 

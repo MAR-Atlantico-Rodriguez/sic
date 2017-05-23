@@ -263,50 +263,64 @@ public class FacturaServiceImplTest {
     @Test
     public void shouldCacularDescuentoNeto() {
         Double resultadoEsperado = 11.773464749999999;
-        Double resultadoObtenido = facturaService.calcularDescuento_neto(78.255, 15.045);
+        Double resultadoObtenido = facturaService.calcularDescuentoNeto(78.255, 15.045);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
     @Test
     public void shouldCalcularRecargoNeto() {
         double resultadoEsperado = 12.11047244;
-        double resultadoObtenido = facturaService.calcularRecargo_neto(78.122, 15.502);
+        double resultadoObtenido = facturaService.calcularRecargoNeto(78.122, 15.502);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
     @Test
-    public void shouldCalcularSubTotal_neto() {
+    public void shouldCalcularSubTotalBrutoFacturaA() {
         double resultadoEsperado = 220.477;
-        double resultadoObtenido = facturaService.calcularSubTotal_neto(225.025, 10.454, 15.002);
+        double resultadoObtenido = facturaService.calcularSubTotalBruto(TipoDeComprobante.FACTURA_A, 225.025, 10.454, 15.002, 0, 0);
+        assertEquals(resultadoEsperado, resultadoObtenido, 0);
+    }
+    
+    @Test
+    public void shouldCalcularSubTotalBrutoFacturaB() {
+        double resultadoEsperado = 795.2175;
+        double resultadoObtenido = facturaService.calcularSubTotalBruto(TipoDeComprobante.FACTURA_B, 1205.5, 80.5, 111.05, 253.155, 126.5775);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
     @Test
     public void shouldCalcularIva_netoWhenLaFacturaEsA() {
         RenglonFactura renglon1 = new RenglonFactura();
-        renglon1.setImporte(5.601);
+        renglon1.setCantidad(12);
         renglon1.setIva_porcentaje(21);
+        renglon1.setIva_neto(125.5);
         RenglonFactura renglon2 = new RenglonFactura();
-        renglon2.setImporte(18.052);
+        renglon2.setCantidad(8);
         renglon2.setIva_porcentaje(21);
+        renglon2.setIva_neto(240.2);
         RenglonFactura renglon3 = new RenglonFactura();
-        renglon3.setImporte(10.011);
+        renglon3.setCantidad(4);
         renglon3.setIva_porcentaje(10.5);
+        renglon3.setIva_neto(110.5);
         List<RenglonFactura> renglones = new ArrayList<>();
         renglones.add(renglon1);
         renglones.add(renglon2);
         renglones.add(renglon3);
         //El renglon3 no lo deberia tener en cuenta para el calculo ya que NO es 21% de IVA
-        double resultadoEsperado = 5.7066859857;
-        double[] importes = new double[renglones.size()];
-        double[] ivaPorcentaje = new double[renglones.size()];
+        double resultadoEsperado = 3427.6;
+        int size = renglones.size();
+        double[] cantidades = new double[size];        
+        double[] ivaPorcentajes = new double[size];
+        double[] ivaNetos = new double[size];
         int i = 0;
         for (RenglonFactura r : renglones) {
-            importes[i] = r.getImporte();
-            ivaPorcentaje[i] = r.getIva_porcentaje();
+            cantidades[i] = r.getCantidad();            
+            ivaPorcentajes[i] = r.getIva_porcentaje();
+            ivaNetos[i] = r.getIva_neto();
             i++;
         }       
-        double resultadoObtenido = facturaService.calcularIva_neto(TipoDeComprobante.FACTURA_A, 10.201, 25.09, importes, ivaPorcentaje, 21);
+        double resultadoObtenido = facturaService.calcularIvaNetoFactura(TipoDeComprobante.FACTURA_A,
+                cantidades, ivaPorcentajes, ivaNetos, 21, 0, 0);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
@@ -326,15 +340,19 @@ public class FacturaServiceImplTest {
         renglones.add(renglon2);
         renglones.add(renglon3);
         double resultadoEsperado = 0;
-        double[] importes = new double[renglones.size()];
-        double[] ivaPorcentaje = new double[renglones.size()];
+        int size = renglones.size();
+        double[] cantidades = new double[size];        
+        double[] ivaPorcentajes = new double[size];
+        double[] ivaNetos = new double[size];
         int i = 0;
         for (RenglonFactura r : renglones) {
-            importes[i] = r.getImporte();
-            ivaPorcentaje[i] = r.getIva_porcentaje();
+            cantidades[i] = r.getCantidad();            
+            ivaPorcentajes[i] = r.getIva_porcentaje();
+            ivaNetos[i] = r.getIva_neto();
             i++;
         } 
-        double resultadoObtenido = facturaService.calcularIva_neto(TipoDeComprobante.FACTURA_X, 10, 25, importes, ivaPorcentaje, 21);
+        double resultadoObtenido = facturaService.calcularIvaNetoFactura(TipoDeComprobante.FACTURA_X, 
+                cantidades, ivaPorcentajes, ivaNetos, 21, 0, 0);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
@@ -362,96 +380,16 @@ public class FacturaServiceImplTest {
             indice++;
         }
         double resultadoEsperado = 3.3197328185647996;
-        double resultadoObtenido = facturaService.calcularImpInterno_neto(TipoDeComprobante.FACTURA_A, 9.104, 22.008, importes, impuestoPorcentajes);
+        double resultadoObtenido = facturaService.calcularImpInternoNeto(TipoDeComprobante.FACTURA_A, 9.104, 22.008, importes, impuestoPorcentajes);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
     @Test
     public void shouldCalcularTotal() {
-        double resultadoEsperado = 460.8830000000001;
-        double resultadoObtenido = facturaService.calcularTotal(350.451, 10.753, 25.159, 1.451, 84.525, 10.050);
+        double resultadoEsperado = 386.363;
+        double resultadoObtenido = facturaService.calcularTotal(350.451, 10.753, 25.159);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
-  
-//    @Test
-//    public void shouldCalcularTotalFacturadoVenta() {
-//        List<FacturaVenta> facturasDeVenta = new ArrayList<>();
-//        FacturaVenta factura1 = new FacturaVentaBuilder()
-//                               .withTotal(3424.08)
-//                               .build();
-//        FacturaVenta factura2 = new FacturaVentaBuilder()
-//                               .withTotal(3424.08)
-//                               .build();
-//        FacturaVenta factura3 = new FacturaVentaBuilder()
-//                               .withTotal(21124.50)
-//                               .build();
-//        facturasDeVenta.add(factura1);
-//        facturasDeVenta.add(factura2);
-//        facturasDeVenta.add(factura3);
-//        double resultadoEsperado = 27972.66;
-//        double resultadoObtenido = facturaService.calcularTotalFacturadoVenta(facturasDeVenta);
-//        assertEquals(resultadoEsperado, resultadoObtenido, 0);
-//    }
-
-//    @Test
-//    public void shouldCalcularTotalFacturadoCompra() {
-//        List<FacturaCompra> facturasDeCompra = new ArrayList<>();
-//        FacturaCompra factura1 = new FacturaCompra();
-//        factura1.setTotal(1024.759);
-//        FacturaCompra factura2 = new FacturaCompra();
-//        factura2.setTotal(3424.089);
-//        FacturaCompra factura3 = new FacturaCompra();
-//        factura3.setTotal(21124.504);
-//        facturasDeCompra.add(factura1);
-//        facturasDeCompra.add(factura2);
-//        facturasDeCompra.add(factura3);
-//        double resultadoEsperado = 25573.352;
-//        double resultadoObtenido = facturaService.calcularTotalFacturadoCompra(facturasDeCompra);
-//        assertEquals(resultadoEsperado, resultadoObtenido, 0);
-//    }
-
-//    @Test
-//    public void shouldCalcularIvaVenta() {
-//        List<FacturaVenta> facturasDeVenta = new ArrayList<>();
-//        FacturaVenta factura1 = new FacturaVentaBuilder()
-//                               .withIva_105_neto(0)
-//                               .withIva_21_neto(35)
-//                               .build();
-//        FacturaVenta factura2 = new FacturaVentaBuilder()
-//                               .withIva_105_neto(0)
-//                               .withIva_21_neto(30)
-//                               .build();
-//        FacturaVenta factura3 = new FacturaVentaBuilder()
-//                               .withIva_105_neto(25)
-//                               .withIva_21_neto(0)
-//                               .build();
-//        facturasDeVenta.add(factura1);
-//        facturasDeVenta.add(factura2);
-//        facturasDeVenta.add(factura3);
-//        double resultadoEsperado = 90;
-//        double resultadoObtenido = facturaService.calcularIVA_Venta(facturasDeVenta);
-//        assertEquals(resultadoEsperado, resultadoObtenido, 0);
-//    }
-
-//    @Test
-//    public void shouldCalcularIvaCompra() {
-//        List<FacturaCompra> facturasDeCompra = new ArrayList<>();
-//        FacturaCompra factura1 = new FacturaCompra();
-//        factura1.setIva_105_neto(0);
-//        factura1.setIva_21_neto(35);
-//        FacturaCompra factura2 = new FacturaCompra();
-//        factura2.setIva_105_neto(0);
-//        factura2.setIva_21_neto(30);
-//        FacturaCompra factura3 = new FacturaCompra();
-//        factura3.setIva_105_neto(25);
-//        factura3.setIva_21_neto(0);
-//        facturasDeCompra.add(factura1);
-//        facturasDeCompra.add(factura2);
-//        facturasDeCompra.add(factura3);
-//        double resultadoEsperado = 90;
-//        double resultadoObtenido = facturaService.calcularIVA_Compra(facturasDeCompra);
-//        assertEquals(resultadoEsperado, resultadoObtenido, 0);
-//    }
 
     @Test
     public void shouldCalcularImporte() {
@@ -464,26 +402,43 @@ public class FacturaServiceImplTest {
     }
 
     @Test
-    public void shouldCalcularIVANetoWhenCompra() {
+    public void shouldCalcularIVANetoWhenCompraConFacturaA() {
         Producto producto = new ProductoBuilder()
                             .withPrecioCosto(100)
-                            .withPrecioVentaPublico(121)
-                            .withImpuestoInterno_neto(0.0)
+                            .withPrecioVentaPublico(121)                            
                             .withIva_porcentaje(21).build();
         double resultadoEsperado = 21;
-        double resultadoObtenido = facturaService.calcularIVA_neto(Movimiento.COMPRA, producto, 0.0);
+        double resultadoObtenido = facturaService.calcularIVANetoRenglon(Movimiento.COMPRA, TipoDeComprobante.FACTURA_A, producto, 0.0);
+        assertEquals(resultadoEsperado, resultadoObtenido, 0);
+    }
+    
+    @Test
+    public void shouldCalcularIVANetoWhenCompraConFacturaB() {
+        Producto producto = new ProductoBuilder()
+                            .withPrecioCosto(200)
+                            .withPrecioVentaPublico(1000)                            
+                            .withIva_porcentaje(21).build();
+        double resultadoEsperado = 42;
+        double resultadoObtenido = facturaService.calcularIVANetoRenglon(Movimiento.COMPRA, TipoDeComprobante.FACTURA_B, producto, 0.0);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
     @Test
-    public void shouldCalcularIVANetoWhenVenta() {
-        Producto producto = new ProductoBuilder()
-                            .withPrecioCosto(100)
-                            .withPrecioVentaPublico(121)
-                            .withImpuestoInterno_neto(0.0)
+    public void shouldCalcularIVANetoWhenVentaConFacturaA() {
+        Producto producto = new ProductoBuilder()                            
+                            .withPrecioVentaPublico(121)                            
                             .withIva_porcentaje(21).build();
         double resultadoEsperado = 25.41;
-        double resultadoObtenido = facturaService.calcularIVA_neto(Movimiento.VENTA, producto, 0.0);
+        double resultadoObtenido = facturaService.calcularIVANetoRenglon(Movimiento.VENTA, TipoDeComprobante.FACTURA_A, producto, 0.0);
+        assertEquals(resultadoEsperado, resultadoObtenido, 0);
+    }
+    
+    public void shouldCalcularIVANetoWhenVentaConFacturaB() {
+        Producto producto = new ProductoBuilder()                            
+                            .withPrecioVentaPublico(1000)                            
+                            .withIva_porcentaje(21).build();
+        double resultadoEsperado = 210;
+        double resultadoObtenido = facturaService.calcularIVANetoRenglon(Movimiento.VENTA, TipoDeComprobante.FACTURA_B, producto, 0.0);
         assertEquals(resultadoEsperado, resultadoObtenido, 0);
     }
 
