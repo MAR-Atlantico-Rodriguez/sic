@@ -406,57 +406,56 @@ public class FacturaServiceImpl implements IFacturaService {
                         .getString("mensaje_factura_usuario_vacio"));
             }
         }
-        //Validacion de Valores
+        //Calculos
+        //SubTotal
         double[] importes = new double[factura.getRenglones().size()];
         int i = 0;
         for (RenglonFactura renglon : factura.getRenglones()) {
             importes[i] = renglon.getImporte();
             i++;
-        }
-        //Validacion SubTotal
-        if (factura.getSubTotal() != this.calcularSubTotal(importes)) { 
+        }        
+        if (factura.getSubTotal() != this.calcularSubTotal(importes)) {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_factura_sub_total_no_valido"));
         }
-        //Validacion SubTotalBruto
+        //SubTotalBruto
         double subTotalBruto = this.calcularSubTotalBruto(factura.getTipoComprobante(),
-                factura.getSubTotal(), factura.getRecargo_neto(), factura.getDescuento_neto(), factura.getIva_105_neto(), factura.getIva_21_neto());
+                factura.getSubTotal(), factura.getRecargo_neto(), factura.getDescuento_neto(),
+                factura.getIva_105_neto(), factura.getIva_21_neto());
         if (factura.getSubTotal_bruto() != subTotalBruto) {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_factura_sub_total_bruto_no_valido"));
         }
-        //Validacion Iva
+        //IVA
         i = 0;
         if (factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_A) || factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_B)) {
             double[] ivaPorcentajes = new double[factura.getRenglones().size()];
-            double[] ivasNetos = new double[factura.getRenglones().size()];
+            double[] ivaNetos = new double[factura.getRenglones().size()];
             double[] cantidades = new double[factura.getRenglones().size()];
-            for(RenglonFactura renglon : factura.getRenglones()){
+            for (RenglonFactura renglon : factura.getRenglones()) {
                 ivaPorcentajes[i] = renglon.getIva_porcentaje();
-                ivasNetos[i] = renglon.getIva_neto();
+                ivaNetos[i] = renglon.getIva_neto();
                 cantidades[i] = renglon.getCantidad();
                 i++;
             }
-            double ivaNeto21 = this.calcularIvaNetoFactura(factura.getTipoComprobante(), cantidades, ivaPorcentajes, ivasNetos, 21,
-                    factura.getDescuento_porcentaje(), factura.getRecargo_porcentaje());
-            double ivaNeto105 = this.calcularIvaNetoFactura(factura.getTipoComprobante(), cantidades, ivaPorcentajes, ivasNetos, 10.5,
-                    factura.getDescuento_porcentaje(), factura.getRecargo_porcentaje());
-            //Validacion Iva21
+            double ivaNeto21 = this.calcularIvaNetoFactura(factura.getTipoComprobante(), cantidades, ivaPorcentajes, ivaNetos,
+                    21, factura.getDescuento_porcentaje(), factura.getRecargo_porcentaje());
+            double ivaNeto105 = this.calcularIvaNetoFactura(factura.getTipoComprobante(), cantidades, ivaPorcentajes, ivaNetos,
+                    10.5, factura.getDescuento_porcentaje(), factura.getRecargo_porcentaje());            
             if (factura.getIva_21_neto() != ivaNeto21) {
                 throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                         .getString("mensaje_factura_iva21_no_valido"));
-            }
-            //Validacion Iva105
+            }            
             if (factura.getIva_105_neto() != ivaNeto105) {
                 throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                         .getString("mensaje_factura_iva105_no_valido"));
             }
         }
-        //Validacion Total
+        //Total
         double total = this.calcularTotal(factura.getSubTotal_bruto(), factura.getIva_105_neto(), factura.getIva_21_neto());
         if (factura.getTotal() != total) {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
-                        .getString("mensaje_factura_total_no_valido"));
+                    .getString("mensaje_factura_total_no_valido"));
         }
     }
 
