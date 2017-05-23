@@ -173,7 +173,7 @@ public class ProductoController {
                                               @RequestParam double precioCosto,
                                               @RequestParam double pvp, 
                                               @RequestParam(required = false) Double ivaPorcentaje, 
-                                              @RequestParam(required = false) Double impInternoPorcentaje,                                              
+                                              @RequestParam(defaultValue = "0", required = false) Double impInternoPorcentaje,                                              
                                               @RequestParam(required = false) Double precioDeLista, 
                                               @RequestParam(required = false) Double precioDeListaAnterior){
         return productoService.calcularGanancia_Porcentaje(precioDeLista, precioDeListaAnterior,
