@@ -2,12 +2,12 @@ package sic.service;
 
 import sic.modelo.TipoDeOperacion;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import sic.modelo.BusquedaProductoCriteria;
 import sic.modelo.Empresa;
 import sic.modelo.Factura;
 import sic.modelo.Medida;
 import sic.modelo.Producto;
-import sic.modelo.ProductoDato;
 import sic.modelo.Proveedor;
 import sic.modelo.Rubro;
 
@@ -17,7 +17,7 @@ public interface IProductoService {
 
     void actualizarStock(Factura factura, TipoDeOperacion operacion);
 
-    ProductoDato buscarProductos(BusquedaProductoCriteria criteria);
+    Page<Producto> buscarProductos(BusquedaProductoCriteria criteria);
 
     double calcularGanancia_Neto(double precioCosto, double ganancia_porcentaje);
 
@@ -63,5 +63,5 @@ public interface IProductoService {
                                                boolean checkMedida, Medida medida,
                                                boolean checkRubro, Rubro rubro,
                                                boolean checkProveedor, Proveedor proveedor);
-
+    
 }

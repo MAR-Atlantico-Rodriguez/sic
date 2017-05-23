@@ -1,11 +1,15 @@
 package sic.vista.swing;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -22,7 +26,6 @@ import sic.RestClient;
 import sic.modelo.EmpresaActiva;
 import sic.modelo.Movimiento;
 import sic.modelo.Producto;
-import sic.modelo.ProductoDato;
 import sic.modelo.RenglonFactura;
 import sic.modelo.TipoDeComprobante;
 import sic.util.RenderTabla;
@@ -32,16 +35,17 @@ public class BuscarProductosGUI extends JDialog {
 
     private final TipoDeComprobante tipoComprobante;
     private ModeloTabla modeloTablaResultados = new ModeloTabla();
-    private List<Producto> productos;
-    private ProductoDato productoDato;
+    private List<Producto> productos = new ArrayList<>();
+    private List<Producto> productosAux;
     private final List<RenglonFactura> renglonesFactura;
     private Producto prodSeleccionado;
     private RenglonFactura renglon;
     private boolean debeCargarRenglon;    
     private final Movimiento tipoMovimiento;
     private final HotKeysHandler keyHandler = new HotKeysHandler();
+    private final ObjectMapper mapper = new ObjectMapper();
     private static final int CANTIDAD_RESULTADOS = 200;
-    private static int PAGINA_INICIAL = 100;
+    private static int PAGINA_INICIAL = 0;
     private static int TAMANIO = 100;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
@@ -78,9 +82,11 @@ public class BuscarProductosGUI extends JDialog {
                 task = new TimerTask() {
                     @Override
                     public void run() {
-                        TAMANIO = PAGINA_INICIAL;
+                        PAGINA_INICIAL = 0;
+                        productos = new ArrayList<>();
                         buscar();
                         actualizarProductosCargadosEnFactura();
+                        limpiarJTable();
                         cargarResultadosAlTable();
                     }
                 };
@@ -93,11 +99,16 @@ public class BuscarProductosGUI extends JDialog {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent ae) {
                 int extent = sp_Resultado.getVerticalScrollBar().getModel().getExtent();
-                if (extent != 0 && ((sp_Resultado.getVerticalScrollBar().getValue() + extent) == sp_Resultado.getVerticalScrollBar().getMaximum())) {
-                    TAMANIO = TAMANIO + PAGINA_INICIAL;
-                    buscar();
-                    actualizarProductosCargadosEnFactura();
-                    cargarResultadosAlTable();
+                int tamanioActual = sp_Resultado.getVerticalScrollBar().getValue();
+                int tamanioMaximo = sp_Resultado.getVerticalScrollBar().getMaximum();
+                extent += 250;
+                if (extent != 0 && tamanioMaximo != 0 && ((tamanioActual + extent) >= tamanioMaximo)) {
+                    if (productos.size() >= 100) {
+                        PAGINA_INICIAL+=1;
+                        buscar();
+                        actualizarProductosCargadosEnFactura();
+                        cargarResultadosAlTable();
+                    }
                 }
             }
         });
@@ -132,10 +143,13 @@ public class BuscarProductosGUI extends JDialog {
                     + "&codigo=" + txt_CampoBusqueda.getText().trim()
                     + "&idEmpresa=" + EmpresaActiva.getInstance().getEmpresa().getId_Empresa()
                     + "&cantidadRegistros=" + CANTIDAD_RESULTADOS
-                    + "&pagina=" + 0
+                    + "&pagina=" + PAGINA_INICIAL
                     + "&tamanio=" + TAMANIO;
-            productoDato = RestClient.getRestTemplate().getForObject("/productos/busqueda/criteria?" + uri, ProductoDato.class);
-            productos = new ArrayList(productoDato.getProductos());
+            List<LinkedHashMap> objetos = new ArrayList(Arrays.asList(RestClient.getRestTemplate()
+                     .getForObject("/productos/busqueda/criteria?" + uri, Object.class)));
+            productosAux = new ArrayList<>();
+            productosAux = mapper.convertValue(objetos.get(0).get("content"), new TypeReference<List<Producto>>() {});
+            productos.addAll(productosAux);
             prodSeleccionado = null;
             txt_UnidadMedida.setText("");
         } catch (RestClientResponseException ex) {
@@ -218,8 +232,7 @@ public class BuscarProductosGUI extends JDialog {
     }
 
     private void cargarResultadosAlTable() {
-        this.limpiarJTable();
-        productos.stream().map((p) -> {
+        productosAux.stream().map((p) -> {
             Object[] fila = new Object[6];
             fila[0] = p.getCodigo();
             fila[1] = p.getDescripcion();
@@ -523,9 +536,11 @@ public class BuscarProductosGUI extends JDialog {
     }//GEN-LAST:event_btn_AceptarActionPerformed
 
     private void btn_BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BuscarActionPerformed
-        TAMANIO = PAGINA_INICIAL;    
+        PAGINA_INICIAL = 0;
+        productos = new ArrayList<>();
         this.buscar();
         this.actualizarProductosCargadosEnFactura();
+        this.limpiarJTable();
         this.cargarResultadosAlTable();
     }//GEN-LAST:event_btn_BuscarActionPerformed
 
@@ -564,6 +579,7 @@ public class BuscarProductosGUI extends JDialog {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         prodSeleccionado = null;
+        PAGINA_INICIAL = 0;
     }//GEN-LAST:event_formWindowClosing
 
     private void txt_CampoBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_CampoBusquedaKeyTyped
@@ -571,10 +587,13 @@ public class BuscarProductosGUI extends JDialog {
     }//GEN-LAST:event_txt_CampoBusquedaKeyTyped
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-            this.prepararComponentes();
-            this.buscar();
-            this.actualizarProductosCargadosEnFactura();
-            this.cargarResultadosAlTable();
+        PAGINA_INICIAL = 0;
+        productos = new ArrayList<>();
+        this.prepararComponentes();
+        this.buscar();
+        this.actualizarProductosCargadosEnFactura();
+        this.limpiarJTable();
+        this.cargarResultadosAlTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void txt_CantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_CantidadFocusGained

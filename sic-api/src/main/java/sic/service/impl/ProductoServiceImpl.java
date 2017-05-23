@@ -27,7 +27,6 @@ import sic.modelo.FacturaCompra;
 import sic.modelo.FacturaVenta;
 import sic.modelo.Medida;
 import sic.modelo.Producto;
-import sic.modelo.ProductoDato;
 import sic.modelo.Proveedor;
 import sic.modelo.QProducto;
 import sic.modelo.RenglonFactura;
@@ -141,7 +140,7 @@ public class ProductoServiceImpl implements IProductoService {
     }
 
     @Override
-    public ProductoDato buscarProductos(BusquedaProductoCriteria criteria) {
+    public Page<Producto> buscarProductos(BusquedaProductoCriteria criteria) {
         //Empresa
         if (criteria.getEmpresa() == null) {
             throw new EntityNotFoundException(ResourceBundle.getBundle("Mensajes")
@@ -180,15 +179,9 @@ public class ProductoServiceImpl implements IProductoService {
         if (criteria.isListarSoloFaltantes() == true) {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
-        List<Producto> list = new ArrayList<>();
-        Page pagina = productoRepository.findAll(builder, criteria.getPageable());
-        ProductoDato productoDato = new ProductoDato();
-        list = (List<Producto>) pagina.getContent();
-        productoDato.setProductos(list);
-        productoDato.setCantidadDeProductos(pagina.getTotalElements());
-        return productoDato;
+        return productoRepository.findAll(builder, criteria.getPageable());
     }
-
+    
     private BooleanBuilder buildPredicadoDescripcion(String descripcion, QProducto qproducto) {
         String[] terminos = descripcion.split(" ");
         BooleanBuilder descripcionProducto = new BooleanBuilder();

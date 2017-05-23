@@ -1,6 +1,7 @@
 package sic.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import sic.modelo.BusquedaProductoCriteria;
 import sic.modelo.Medida;
 import sic.modelo.Producto;
-import sic.modelo.ProductoDato;
 import sic.modelo.Proveedor;
 import sic.modelo.Rubro;
 import sic.service.IEmpresaService;
@@ -102,15 +102,15 @@ public class ProductoController {
     
     @GetMapping("/productos/busqueda/criteria") 
     @ResponseStatus(HttpStatus.OK)
-    public ProductoDato buscarProductos(@RequestParam long idEmpresa,
+    public Page buscarProductos(@RequestParam long idEmpresa,
                                           @RequestParam(required = false) String codigo,
                                           @RequestParam(required = false) String descripcion,
                                           @RequestParam(required = false) Long idRubro,
                                           @RequestParam(required = false) Long idProveedor,                                          
                                           @RequestParam(required = false) Integer cantidadRegistros,
                                           @RequestParam(required = false) boolean soloFantantes,
-                                          @RequestParam(required = false) int pagina,
-                                          @RequestParam(required = false) int tamanio) {
+                                          @RequestParam(required = false) Integer pagina,
+                                          @RequestParam(required = false) Integer tamanio) {
         Rubro rubro = null;
         if (idRubro != null) {
             rubro = rubroService.getRubroPorId(idRubro);
@@ -122,10 +122,10 @@ public class ProductoController {
         if (cantidadRegistros == null) {
             cantidadRegistros = 0;
         }
-        if (tamanio <= 0) {
+        if (tamanio == null || tamanio <= 0) {
             tamanio = 100;
         }
-        if (pagina < 0) {
+        if (pagina == null || pagina < 0) {
             pagina = 0;
         }
         Pageable pageable = new PageRequest(pagina, tamanio, new Sort(Sort.Direction.ASC, "descripcion"));
@@ -255,7 +255,7 @@ public class ProductoController {
         headers.setContentType(MediaType.APPLICATION_PDF);        
         headers.add("content-disposition", "inline; filename=ListaPrecios.pdf");
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        byte[] reportePDF = productoService.getReporteListaDePreciosPorEmpresa(productoService.buscarProductos(criteria).getProductos(), idEmpresa);
+        byte[] reportePDF = productoService.getReporteListaDePreciosPorEmpresa(productoService.buscarProductos(criteria).getContent(), idEmpresa);
         return new ResponseEntity<>(reportePDF, headers, HttpStatus.OK);
     }
     
