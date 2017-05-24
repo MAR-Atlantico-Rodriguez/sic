@@ -13,7 +13,8 @@
             </strong>
           </p>
           <p md-line>{{p.cantidad}} / {{p.medida.nombre}} </p>
-          <p md-line><strong>${{p.precioLista | number:'1.2'}}</strong></p>
+          <p md-line>Rubro: {{p.rubro.nombre}}</p>
+          <p md-line><strong>{{p.precioLista | currency:'USD':true:'1.2-4'}}</strong></p>
           <md-divider></md-divider>
         </md-list-item>
       </md-nav-list>

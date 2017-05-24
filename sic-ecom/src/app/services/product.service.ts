@@ -17,7 +17,9 @@ export class ProductService {
     constructor(public authHttp: AuthHttp) {}
 
     getProductos(){
-        let url = this.url + this.getCriteria(); /*Conforma la url para la busqueda*/
+        /*Conforma la url para la busqueda*/
+        let url = this.url + this.getCriteria(); 
+        console.log(url);
         return this.authHttp.get(url).map(data => data.json());
     }
 
@@ -26,14 +28,14 @@ export class ProductService {
         this.busquedaDescripcion = palabraBuscar;
         this.getProductos().subscribe(
             data => {
-                this.productosService.next();
                 this.productosService.next(data);
             }
         );
     }
 
     //Rubros SideBar y Menu
-    getRubro(rubroBuscar:string){       
+    getRubro(rubroBuscar:string){
+        this.busquedaRubro = (rubroBuscar != this.busquedaRubro)?rubroBuscar:'';
         this.getProductos().subscribe(
             data => {
                 this.productosService.next(data);
@@ -42,15 +44,15 @@ export class ProductService {
     }
 
     getCriteria():string{
-        let criteria = '&';
-        if(this.busquedaRubro.length > 0){
-            criteria += 'rubro='+this.busquedaRubro;
+        let criteria = '&';            
+        if(String(this.busquedaRubro).length > 0){
+            criteria += 'idRubro='+this.busquedaRubro;
         }
         if(this.busquedaDescripcion.length > 0){            
-            //let ampersan = (criteria.length > 1)?'&':'';
-            //console.log(ampersan);
-            criteria += 'descripcion='+this.busquedaDescripcion;
-        }
+            let ampersan = (String(criteria).length > 1)?'&':'';
+            console.log(ampersan);
+            criteria += ampersan+'descripcion='+this.busquedaDescripcion;
+        }        
         return criteria;        
     }
 }

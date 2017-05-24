@@ -1,23 +1,18 @@
 <div>
   <md-list>
     <md-nav-list>
-      <md-list-item> Rubros</md-list-item>
-      <md-list-item>
-        <md-icon> keyboard_arrow_left</md-icon>
-        <span> Electricidad</span>
+      <md-list-item><h3>Rubros</h3></md-list-item>
+      
+      <md-list-item *ngFor="let r of rubros" 
+                    [ngClass]="{ 'active': r.id_Rubro == rubroActivado }">
+        
+          <md-icon> keyboard_arrow_left</md-icon>
+          <div (click)="getFiltrarRubro(r.id_Rubro)" > 
+            {{r.nombre}}
+          </div>
+        
       </md-list-item>
-      <md-list-item>
-        <md-icon> keyboard_arrow_left</md-icon>
-        <span> Sanitarios</span>
-      </md-list-item>
-      <md-list-item>
-        <md-icon> keyboard_arrow_left</md-icon>
-        <span> Pinturas</span>
-      </md-list-item>
-      <md-list-item>
-        <md-icon> keyboard_arrow_left</md-icon>
-        <span> Herrajes</span>
-      </md-list-item>
+      
     </md-nav-list>
   </md-list>
 </div>

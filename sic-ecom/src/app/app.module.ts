@@ -13,6 +13,7 @@ import {SidebarComponent} from './components/commons/sidebar/sidebar.component';
 import {ProductsComponent} from './components/products/products.component';
 import {ProductService} from './services/product.service';
 import {AuthService} from './services/auth.service';
+import {RubrosService} from './services/rubros.service';
 import {routing} from './app.routing';
 import {HomeComponent} from './home/home.component';
 import {AuthModule} from './auth.module';
@@ -39,7 +40,8 @@ import {AuthModule} from './auth.module';
   providers: [
     AuthGuard,
     AuthService,
-    ProductService
+    ProductService,
+    RubrosService
   ],
   bootstrap: [AppComponent]
 })
