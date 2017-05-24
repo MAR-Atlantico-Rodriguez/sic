@@ -1,6 +1,6 @@
 <div fxFlex fxLayout="row" fxLayoutAlign="center center">
 
-    <div class="formulario" fxFlex.md="35" fxFlex.lg="35">
+    <div class="formulario" fxFlex.gt-sx="40">
         <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate fxLayout="column" fxLayoutAlign="center center" >
         <img md-list-avatar src="assets/loginLogo.png" id="img">
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">

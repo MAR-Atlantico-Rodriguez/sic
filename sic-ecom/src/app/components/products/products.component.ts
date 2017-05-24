@@ -9,14 +9,25 @@ import {Observable} from 'rxjs/Observable';
 })
 export class ProductsComponent{
 
-  productos = [];
-  constructor(private productService: ProductService) {
-  	this.getData();
+  public productos: Array<any>;
+
+  constructor(private productService: ProductService) {}
+
+  ngOnInit(){
+  	this.getProductos();
+  	this.productService.productosService.subscribe(
+  		dataSearch => {
+  			//console.log(dataSearch.length);
+  			this.productos = dataSearch;
+  		},
+  		error => {}
+  	);
   }
 
-  getData(){
-  	this.productService.getProductos('')
-  	.subscribe(data => this.productos = data);
-  	console.log(this.productos);
+  getProductos(){
+  	this.productService.getProductos()
+      .subscribe(data => {      	
+        this.productos = data;
+      });
   }
 }

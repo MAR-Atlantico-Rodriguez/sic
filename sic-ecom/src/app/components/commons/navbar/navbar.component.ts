@@ -7,14 +7,10 @@ import {ProductService} from '../../../services/product.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-	private productos: any[];
-  	constructor(private productService:ProductService) {}
+	
+  	constructor(public productService:ProductService) {}
 
-  	buscadorProductos(search: string){
-  		console.log(search);
-  		this.productService.getProductos(search)
-  		.subscribe(data => this.productos = data);
-
-  		console.log(this.productos);
+  	buscadorProductos(palabraBuscar: string){
+  		this.productService.getBuscador(palabraBuscar);
   	}
 }
