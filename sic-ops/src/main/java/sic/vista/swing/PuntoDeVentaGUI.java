@@ -702,7 +702,7 @@ public class PuntoDeVentaGUI extends JDialog {
                 byte[] reporte = RestClient.getRestTemplate()
                         .getForObject("/pedidos/" + pedido.getId_Pedido() + "/reporte",
                                 byte[].class);
-                File f = new File("Pedido.pdf");
+                File f = new File(System.getProperty("user.home") + "/Pedido.pdf");
                 Files.write(f.toPath(), reporte);
                 Desktop.getDesktop().open(f);
             } catch (IOException ex) {

@@ -283,7 +283,7 @@ public class CajaGUI extends JInternalFrame {
                 byte[] reporte = RestClient.getRestTemplate()
                         .getForObject("/facturas/" + facturaVenta.getId_Factura() + "/reporte",
                                 byte[].class);
-                File f = new File("Factura.pdf");
+                File f = new File(System.getProperty("user.home") + "/Factura.pdf");
                 Files.write(f.toPath(), reporte);
                 Desktop.getDesktop().open(f);
             } catch (IOException ex) {
