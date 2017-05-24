@@ -2,21 +2,10 @@ md-toolbar-row {
   justify-content: space-between;
 }
 
-.navbar-search {
-  width: 40%;
-
-  & md-input-container {
-    width: 100%;
-  }
-
-  & md-icon {
-    vertical-align: middle !important;
-  }
-}
 
 
 md-sidenav {
-  margin-top: 57px;
+  margin-top: 65px;
   width: 80%;
   padding:20px;
   box-shadow: -10px 3px 20px #888;  
@@ -32,8 +21,21 @@ md-sidenav {
 
 .md-toolbar{
   background: #f05724;
-  color:#fff
+  color:#fff;
+  min-height:64px!important;
 }
+
+.mat-toolbar{
+  max-height:64px!important;
+}
+
+@media (max-width: 600px){
+  .mat-toolbar {
+      
+      padding-top: 4px;
+  }
+}
+
 
 .inputSearch{
   width:100%;

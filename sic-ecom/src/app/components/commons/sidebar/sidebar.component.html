@@ -4,10 +4,11 @@
       <md-list-item><h3>Rubros</h3></md-list-item>
       
       <md-list-item *ngFor="let r of rubros" 
-                    [ngClass]="{ 'active': r.id_Rubro == rubroActivado }">
+                    [ngClass]="{ 'active': r.id_Rubro == rubroActivado }"
+                    (click)="getFiltrarRubro(r.id_Rubro)">
         
           <md-icon> keyboard_arrow_left</md-icon>
-          <div (click)="getFiltrarRubro(r.id_Rubro)" > 
+          <div> 
             {{r.nombre}}
           </div>
         

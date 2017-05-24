@@ -25,7 +25,7 @@
 }
 
 #img{
-	width: 150px;
+	width: 120px;
 }
 
 md-spinner{
@@ -45,4 +45,9 @@ md-spinner{
 	margin: 3px 0px;
 	font-weight: bolder;
 	font-size: 12px;
+}
+
+.error{
+	color: red;
+	font-size: 11px;
 }

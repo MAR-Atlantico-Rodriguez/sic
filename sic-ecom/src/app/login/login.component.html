@@ -1,6 +1,6 @@
 <div fxFlex fxLayout="row" fxLayoutAlign="center center">
 
-    <div class="formulario" fxFlex.gt-sx="40">
+    <div class="formulario" fxFlex.gt-sm="40">
         <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate fxLayout="column" fxLayoutAlign="center center" >
         <img md-list-avatar src="assets/loginLogo.png" id="img">
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -13,7 +13,12 @@
                     autofocus>
                 </md-input-container>
 
-                <div *ngIf="f.submitted && !username.valid" class="help-block">Se requiere nombre de usuario</div>
+                <div *ngIf="f.submitted && !username.valid" class="error">
+                    Se requiere nombre de usuario
+                </div>
+
+                <div class="error" *ngIf="msjError">{{msjError}}</div>
+                
             </div>
 
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
@@ -27,15 +32,18 @@
                     required>
                 </md-input-container>
 
-                <div *ngIf="f.submitted && !password.valid" class="help-block">Se requiere password</div>
+                <div *ngIf="f.submitted && !password.valid" class="error">
+                    Se requiere password
+                </div>
+                
+                <div class="error" *ngIf="msjError">{{msjError}}</div>
+                
             </div>
 
-            <div *ngIf="msjError" fxLayoutAlign="start" fxFlex fxLayout="column">
-                <div class="msjError">{{msjError}}</div>
-            </div>
+            
 
             <div class="form-group"
-                        fxLayoutAlign="end">
+                        fxLayoutAlign="center">
 
                 <button [disabled]="loading"
                         md-raised-button

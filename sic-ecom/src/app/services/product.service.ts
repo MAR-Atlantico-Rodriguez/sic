@@ -19,7 +19,6 @@ export class ProductService {
     getProductos(){
         /*Conforma la url para la busqueda*/
         let url = this.url + this.getCriteria(); 
-        console.log(url);
         return this.authHttp.get(url).map(data => data.json());
     }
 
@@ -49,8 +48,7 @@ export class ProductService {
             criteria += 'idRubro='+this.busquedaRubro;
         }
         if(this.busquedaDescripcion.length > 0){            
-            let ampersan = (String(criteria).length > 1)?'&':'';
-            console.log(ampersan);
+            let ampersan = (String(criteria).length > 1)?'&':'';            
             criteria += ampersan+'descripcion='+this.busquedaDescripcion;
         }        
         return criteria;        
