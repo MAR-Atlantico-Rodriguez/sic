@@ -350,7 +350,7 @@ public class ProductosGUI extends JInternalFrame {
                     byte[] reporte = RestClient.getRestTemplate()
                             .getForObject(uriReporteListaProductosCriteria,
                                     byte[].class);
-                    File f = new File("ListaPrecios.pdf");
+                    File f = new File(System.getProperty("user.home") + "/ListaPrecios.pdf");
                     Files.write(f.toPath(), reporte);
                     Desktop.getDesktop().open(f);
                 } catch (IOException ex) {
