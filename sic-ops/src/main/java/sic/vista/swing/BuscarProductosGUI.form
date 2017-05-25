@@ -54,7 +54,7 @@
                           <Component id="btn_Buscar" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="jScrollPane1" pref="420" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="429" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="lbl_Descuento" min="-2" max="-2" attributes="0"/>
@@ -84,7 +84,7 @@
                       <Component id="txt_CampoBusqueda" linkSize="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="sp_Resultado" pref="402" max="32767" attributes="0"/>
+                  <Component id="sp_Resultado" pref="405" max="32767" attributes="0"/>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
