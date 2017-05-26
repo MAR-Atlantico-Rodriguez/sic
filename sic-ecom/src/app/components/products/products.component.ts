@@ -9,25 +9,29 @@ import {Observable} from 'rxjs/Observable';
 })
 export class ProductsComponent{
 
-  public productos: Array<any>;
+    public productos: Array<any>;
+
+    public loadingProducts = false;
 
   constructor(private productService: ProductService) {}
 
   ngOnInit(){
+    
   	this.getProductos();
   	this.productService.productosService.subscribe(
   		dataSearch => {
-  			//console.log(dataSearch.length);
-  			this.productos = dataSearch;
+  			this.productos = dataSearch;            
   		},
   		error => {}
   	);
   }
 
   getProductos(){
+    this.loadingProducts = true;
   	this.productService.getProductos()
       .subscribe(data => {      	
         this.productos = data;
+        this.loadingProducts = false;
       });
   }
 }

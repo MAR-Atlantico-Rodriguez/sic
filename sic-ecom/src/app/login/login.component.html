@@ -1,6 +1,7 @@
 <div fxFlex fxLayout="row" fxLayoutAlign="center center">
 
     <div class="formulario" fxFlex.gt-sm="40">
+
         <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate fxLayout="column" fxLayoutAlign="center center" >
         <img md-list-avatar src="assets/loginLogo.png" id="img">
             <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -53,8 +54,8 @@
                     Ingresar
                 </button>
 
-                <md-spinner *ngIf="loading" strokeWidth='4'></md-spinner>
-
+                <md-progress-bar *ngIf="loading" mode="indeterminate" ></md-progress-bar>
+                
                 <!--<a [routerLink]="['/register']" class="btn btn-link">Register</a>-->
             </div>
         </form>

@@ -1,24 +1,33 @@
-<div fxFlex="86" class="products-derecha">
-
-  <md-list>
-    <div *ngFor="let p of productos">
-      <md-nav-list>
-        <md-list-item>
-          <img class="imgAvatar" md-list-avatar src="../../assets/placeholderProducto.png">
-
-          <h3 md-line >{{p.codigo}}</h3>
-          <p md-line class="descripcion-products-list">
-            <strong>
-              <span style="word-wrap: break-word;">{{p.descripcion}}</span>
-            </strong>
-          </p>
-          <p md-line>{{p.cantidad}} / {{p.medida.nombre}} </p>
-          <p md-line>Rubro: {{p.rubro.nombre}}</p>
-          <p md-line><strong>{{p.precioLista | currency:'USD':true:'1.2-4'}}</strong></p>
-          <md-divider></md-divider>
-        </md-list-item>
-      </md-nav-list>
-      <md-divider></md-divider>
+<div  fxLayout="column">
+    <div fxFlex fxLayoutAlign='center' *ngIf="loadingProducts">
+        <md-progress-bar mode="indeterminate">
+            
+        </md-progress-bar>    
     </div>
-  </md-list>
+
+    <div fxFlex class="products-derecha">
+        <md-list>
+            <div *ngFor="let p of productos">
+                <md-nav-list>
+                    <md-list-item>
+                        <img class="imgAvatar" md-list-avatar src="../../assets/placeholderProducto.png">
+
+                        <h3 md-line >{{p.codigo}}</h3>
+                        <p md-line class="descripcion-products-list">
+                            <strong>
+                                <span style="word-wrap: break-word;">{{p.descripcion}}</span>
+                            </strong>
+                        </p>
+                        <p md-line>{{p.cantidad}} / {{p.medida.nombre}} </p>
+
+                        <p md-line>
+                            <strong>{{p.precioLista | currency:'USD':true:'1.2-4'}}</strong>
+                        </p>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-nav-list>
+                <md-divider></md-divider>
+            </div>
+        </md-list>
+    </div>
 </div>

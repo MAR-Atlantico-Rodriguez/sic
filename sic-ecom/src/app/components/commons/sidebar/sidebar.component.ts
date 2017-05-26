@@ -13,13 +13,19 @@ export class SidebarComponent {
 
 	public rubroActivado: false;
 
+	public loadingSidebar = false;
+
 	constructor(public rubrosService:RubrosService,
 				public productService:ProductService) {
 	}
 
 	ngOnInit(){
+		this.loadingSidebar = true;
 		this.rubrosService.getRubros().subscribe(
-			data => this.rubros = data,
+			data => {
+				this.rubros = data;
+				this.loadingSidebar = false;
+			},
 			error => console.log(error)
 		);
 	}
