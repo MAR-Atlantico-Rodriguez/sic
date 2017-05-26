@@ -106,8 +106,7 @@ public class ProductoController {
                                           @RequestParam(required = false) String codigo,
                                           @RequestParam(required = false) String descripcion,
                                           @RequestParam(required = false) Long idRubro,
-                                          @RequestParam(required = false) Long idProveedor,                                          
-                                          @RequestParam(required = false) Integer cantidadRegistros,
+                                          @RequestParam(required = false) Long idProveedor,
                                           @RequestParam(required = false) boolean soloFantantes,
                                           @RequestParam(required = false) Integer pagina,
                                           @RequestParam(required = false) Integer tamanio) {
@@ -118,9 +117,6 @@ public class ProductoController {
         Proveedor proveedor = null;
         if (idProveedor != null) {
             proveedor = proveedorService.getProveedorPorId(idProveedor);
-        }
-        if (cantidadRegistros == null) {
-            cantidadRegistros = 0;
         }
         if (tamanio == null || tamanio <= 0) {
             tamanio = 100;
@@ -139,7 +135,6 @@ public class ProductoController {
                                             .buscarPorProveedor(proveedor!=null)
                                             .proveedor(proveedor)
                                             .empresa(empresaService.getEmpresaPorId(idEmpresa))
-                                            .cantRegistros(cantidadRegistros)
                                             .listarSoloFaltantes(soloFantantes)
                                             .pageable(pageable)
                                             .build();

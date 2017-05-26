@@ -40,8 +40,7 @@ public class BuscarProductosGUI extends JDialog {
     private RenglonFactura renglon;
     private boolean debeCargarRenglon;    
     private final Movimiento tipoMovimiento;
-    private final HotKeysHandler keyHandler = new HotKeysHandler();        
-    private static final int CANTIDAD_RESULTADOS = 200;
+    private final HotKeysHandler keyHandler = new HotKeysHandler();
     private int NUMERO_PAGINA = 0;
     private static final int TAMANIO_PAGINA = 100;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -131,7 +130,6 @@ public class BuscarProductosGUI extends JDialog {
             String uri = "descripcion=" + txt_CampoBusqueda.getText().trim()
                     + "&codigo=" + txt_CampoBusqueda.getText().trim()
                     + "&idEmpresa=" + EmpresaActiva.getInstance().getEmpresa().getId_Empresa()
-                    + "&cantidadRegistros=" + CANTIDAD_RESULTADOS
                     + "&pagina=" + NUMERO_PAGINA
                     + "&tamanio=" + TAMANIO_PAGINA;                        
             PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()

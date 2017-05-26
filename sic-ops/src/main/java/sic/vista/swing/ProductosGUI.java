@@ -20,10 +20,13 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import sic.RestClient;
 import sic.modelo.EmpresaActiva;
+import sic.modelo.PaginaRespuestaRest;
 import sic.modelo.Producto;
 import sic.modelo.Proveedor;
 import sic.modelo.Rubro;
@@ -37,8 +40,7 @@ public class ProductosGUI extends JInternalFrame {
     private List<Producto> productosAux = new ArrayList<>();
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private final Dimension sizeInternalFrame = new Dimension(880, 600);
-    private final ObjectMapper mapper = new ObjectMapper();
-    private static Long totalBusqueda;
+    private static int totalBusqueda;
     private static int PAGINA_INICIAL = 0;
     private static int TAMANIO = 100;
 
@@ -281,7 +283,7 @@ public class ProductosGUI extends JInternalFrame {
     private void buscar() {
         try {
             
-            cambiarEstadoEnabled(false);
+            cambiarEstadoEnabled(true);
             long idEmpresa = EmpresaActiva.getInstance().getEmpresa().getId_Empresa();
             String criteriaBusqueda = "/productos/busqueda/criteria?idEmpresa=" + idEmpresa;
             String criteriaCosto = "/productos/valor-stock/criteria?idEmpresa=" + idEmpresa;
@@ -307,14 +309,14 @@ public class ProductosGUI extends JInternalFrame {
             }
             criteriaBusqueda += "&pagina=" + PAGINA_INICIAL
                             + "&tamanio=" + TAMANIO;
-            List<LinkedHashMap> objetos = new ArrayList(Arrays.asList(RestClient.getRestTemplate()
-                     .getForObject(criteriaBusqueda, Object.class)));
-            productosAux = new ArrayList<>();
-            productosAux = mapper.convertValue(objetos.get(0).get("content"), new TypeReference<List<Producto>>() {});
-            totalBusqueda = mapper.convertValue(objetos.get(0).get("totalElements"), new TypeReference<Long>() {});
+            PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()
+                    .exchange(criteriaBusqueda, HttpMethod.GET, null,
+                            new ParameterizedTypeReference<PaginaRespuestaRest<Producto>>() {})
+                    .getBody();
+            productosAux = response.getContent();
             productos.addAll(productosAux);
+            totalBusqueda = response.getTotalElements();
             txt_ValorStock.setValue(RestClient.getRestTemplate().getForObject(criteriaCosto, Double.class));
-            cambiarEstadoEnabled(true);
 
             if (productos.isEmpty()) {
                 JOptionPane.showInternalMessageDialog(getParent(),
