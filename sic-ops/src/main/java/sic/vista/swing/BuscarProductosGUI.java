@@ -77,7 +77,7 @@ public class BuscarProductosGUI extends JDialog {
                     @Override
                     public void run() {
                         NUMERO_PAGINA = 0;
-                        productos = new ArrayList<>();
+                        productos.clear();
                         buscar();
                         actualizarProductosCargadosEnFactura();
                         limpiarJTable();
@@ -88,19 +88,18 @@ public class BuscarProductosGUI extends JDialog {
             }
         });        
         sp_Resultado.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
-            int extent = sp_Resultado.getVerticalScrollBar().getModel().getExtent();
+            int extent = sp_Resultado.getVerticalScrollBar().getModel().getExtent() + 250;
             int tamanioActual = sp_Resultado.getVerticalScrollBar().getValue();
             int tamanioMaximo = sp_Resultado.getVerticalScrollBar().getMaximum();
-            extent += 250;
             if (extent != 0 && tamanioMaximo != 0 && ((tamanioActual + extent) >= tamanioMaximo)) {
-                if (productos.size() >= 100) {
+                if (productos.size() >= TAMANIO_PAGINA) {
                     NUMERO_PAGINA += 1;
                     buscar();
                     actualizarProductosCargadosEnFactura();
                     cargarResultadosAlTable();
                 }
             }
-        });        
+        });       
     }
 
     private void setIcon() {
@@ -130,8 +129,7 @@ public class BuscarProductosGUI extends JDialog {
             String uri = "descripcion=" + txt_CampoBusqueda.getText().trim()
                     + "&codigo=" + txt_CampoBusqueda.getText().trim()
                     + "&idEmpresa=" + EmpresaActiva.getInstance().getEmpresa().getId_Empresa()
-                    + "&pagina=" + NUMERO_PAGINA
-                    + "&tamanio=" + TAMANIO_PAGINA;                        
+                    + "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA;                        
             PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()
                     .exchange("/productos/busqueda/criteria?" + uri, HttpMethod.GET, null,
                             new ParameterizedTypeReference<PaginaRespuestaRest<Producto>>() {})
@@ -147,6 +145,7 @@ public class BuscarProductosGUI extends JDialog {
             JOptionPane.showMessageDialog(this,
                     ResourceBundle.getBundle("Mensajes").getString("mensaje_error_conexion"),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
         }
     }
 
@@ -525,7 +524,7 @@ public class BuscarProductosGUI extends JDialog {
 
     private void btn_BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BuscarActionPerformed
         NUMERO_PAGINA = 0;
-        productos = new ArrayList<>();
+        productos.clear();
         this.buscar();
         this.actualizarProductosCargadosEnFactura();
         this.limpiarJTable();
