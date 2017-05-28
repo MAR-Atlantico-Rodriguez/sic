@@ -4,9 +4,7 @@ import sic.service.IAfipService;
 import afip.wsaa.wsdl.LoginCms;
 import afip.wsfe.wsdl.AlicIva;
 import afip.wsfe.wsdl.ArrayOfAlicIva;
-import afip.wsfe.wsdl.ArrayOfErr;
 import afip.wsfe.wsdl.ArrayOfFECAEDetRequest;
-import afip.wsfe.wsdl.Err;
 import afip.wsfe.wsdl.FEAuthRequest;
 import afip.wsfe.wsdl.FECAECabRequest;
 import afip.wsfe.wsdl.FECAEDetRequest;
@@ -24,8 +22,7 @@ import java.util.ResourceBundle;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +42,7 @@ public class AfipServiceImpl implements IAfipService {
 
     private final AfipWebServiceSOAPClient afipWebServiceSOAPClient;
     private final IConfiguracionDelSistemaService configuracionDelSistemaService;
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());    
+    private final Logger LOGGER = Logger.getLogger(this.getClass());    
     private final FormatterFechaHora formatterFechaHora = new FormatterFechaHora(FormatterFechaHora.FORMATO_FECHA_INTERNACIONAL);
 
     @Autowired
@@ -88,7 +85,7 @@ public class AfipServiceImpl implements IAfipService {
     }
 
     @Override    
-    public FacturaVenta autorizarFacturaVenta(FacturaVenta factura) {
+    public FacturaVenta autorizarFacturaVenta(FacturaVenta factura) {        
         if (configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).isFacturaElectronicaHabilitada() == false) {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes").getString("mensaje_cds_fe_habilitada"));
         }
@@ -111,27 +108,28 @@ public class AfipServiceImpl implements IAfipService {
         int siguienteNroComprobante = this.getSiguienteNroComprobante(feAuthRequest, factura.getTipoComprobante(), nroPuntoDeVentaAfip);
         fecaeSolicitud.setFeCAEReq(this.transformFacturaVentaToFECAERequest(factura, siguienteNroComprobante));
         try {
-            FECAEResponse response = afipWebServiceSOAPClient.FECAESolicitar(fecaeSolicitud);            
+            FECAEResponse response = afipWebServiceSOAPClient.FECAESolicitar(fecaeSolicitud);
             String msjError = "";
             // errores generales de la request
-            msjError = response.getErrors().getErr().stream()
-                    .map(err -> err.getCode() + " - " + err.getMsg() + "\n")
-                    .map(detalleError -> {
-                        LOGGER.error(detalleError);
-                        return detalleError;
-                    }).map(detalleError -> detalleError)
-                    .reduce(msjError, String::concat);
-            if (!msjError.isEmpty()) {
-                throw new BusinessServiceException(msjError);
+            if (response.getErrors() != null) {
+                msjError = response.getErrors().getErr().get(0).getCode() + "-" + response.getErrors().getErr().get(0).getMsg();
+                LOGGER.error(msjError);
+                if (!msjError.isEmpty()) {
+                    throw new BusinessServiceException(msjError);
+                }
             }
             // errores particulares de cada comprobante
             if (response.getFeDetResp().getFECAEDetResponse().get(0).getResultado().equals("R")) {
-                throw new BusinessServiceException("Rechazada!");
+                msjError += response.getFeDetResp().getFECAEDetResponse().get(0).getObservaciones().getObs().get(0).getMsg();
+                LOGGER.error(msjError);                
+                throw new BusinessServiceException(msjError);
             }
-            long cae = Long.valueOf(response.getFeDetResp().getFECAEDetResponse().get(0).getCAE());
+            long cae = Long.valueOf(response.getFeDetResp().getFECAEDetResponse().get(0).getCAE());            
             factura.setCAE(cae);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");            
             factura.setVencimientoCAE(formatter.parse(response.getFeDetResp().getFECAEDetResponse().get(0).getCAEFchVto()));
+            factura.setNumSerieAfip(nroPuntoDeVentaAfip);
+            factura.setNumFacturaAfip(siguienteNroComprobante);
             return factura;
         } catch (WebServiceClientException ex) {
             LOGGER.error(ex.getMessage());

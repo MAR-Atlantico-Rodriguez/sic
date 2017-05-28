@@ -103,6 +103,10 @@ public abstract class Factura implements Serializable {
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimientoCAE;
+    
+    private long numSerieAfip;
+
+    private long numFacturaAfip;
 
     public Factura() {}
         
@@ -112,7 +116,8 @@ public abstract class Factura implements Serializable {
             double recargo_porcentaje, double recargo_neto, double descuento_porcentaje,
             double descuento_neto, double subTotal_bruto, double iva_105_neto, double iva_21_neto,
             double impuestoInterno_neto, double total, String observaciones, boolean pagada,
-            Empresa empresa, boolean eliminada, long CAE, Date vencimientoCAE) {
+            Empresa empresa, boolean eliminada, long CAE, Date vencimientoCAE, long numSerieAfip,
+            long numFacturaAfip) {
         this.id_Factura = id_Factura;
         this.fecha = fecha;
         this.tipoComprobante = tipoComprobante;

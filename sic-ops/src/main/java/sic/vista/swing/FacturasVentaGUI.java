@@ -1164,8 +1164,12 @@ public class FacturasVentaGUI extends JInternalFrame {
             int indexFilaSeleccionada = Utilidades.getSelectedRowModelIndice(tbl_Resultados);
             long idFacturaSeleccionada = facturas.get(indexFilaSeleccionada).getId_Factura();
             try {
-                RestClient.getRestTemplate().postForObject("/facturas/" + idFacturaSeleccionada + "/autorizacion",
+                RestClient.getRestTemplate()
+                        .postForObject("/facturas/" + idFacturaSeleccionada + "/autorizacion",
                         null, FacturaVenta.class);
+                JOptionPane.showMessageDialog(this,
+                            ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_autorizada"),
+                            "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 this.buscar();
             } catch (RestClientResponseException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

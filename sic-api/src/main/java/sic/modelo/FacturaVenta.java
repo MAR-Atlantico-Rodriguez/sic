@@ -32,12 +32,12 @@ public class FacturaVenta extends Factura implements Serializable {
             List<Pago> pagos, double subTotal, double recargo_porcentaje, double recargo_neto,
             double descuento_porcentaje, double descuento_neto, double subTotal_neto, double iva_105_neto,
             double iva_21_neto, double impuestoInterno_neto, double total, String observaciones, boolean pagada,
-            Empresa empresa, boolean eliminada, long CAE, Date vencimientoCAE) {
+            Empresa empresa, boolean eliminada, long CAE, Date vencimientoCAE, long numSerieAfip, long numFacturaAfip) {
         super(id_Factura, fecha, tipoComprobante, numSerie, numFactura, fechaVencimiento, 
                 pedido, transportista, renglones, pagos, subTotal, recargo_porcentaje, 
                 recargo_neto, descuento_porcentaje, descuento_neto, subTotal_neto, 
                 iva_105_neto, iva_21_neto, impuestoInterno_neto, total, observaciones,
-                pagada, empresa, eliminada, CAE, vencimientoCAE);
+                pagada, empresa, eliminada, CAE, vencimientoCAE, numSerieAfip, numFacturaAfip);
         this.cliente = cliente;
         this.usuario = usuario;
     }

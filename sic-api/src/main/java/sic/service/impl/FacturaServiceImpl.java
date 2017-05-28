@@ -54,7 +54,7 @@ public class FacturaServiceImpl implements IFacturaService {
     private final IConfiguracionDelSistemaService configuracionDelSistemaService;
     private final IPedidoService pedidoService;
     private final IPagoService pagoService;
-    private static final Logger LOGGER = Logger.getLogger(FacturaServiceImpl.class.getPackage().getName());
+    private final Logger LOGGER = Logger.getLogger(this.getClass());
 
     @Autowired
     @Lazy
@@ -265,7 +265,8 @@ public class FacturaServiceImpl implements IFacturaService {
     private Factura procesarFactura(Factura factura) {
         factura.setEliminada(false);
         if (factura instanceof FacturaVenta) {
-            factura.setNumSerie(1); //Serie de la factura hardcodeada a 1
+            factura.setNumSerie(configuracionDelSistemaService
+                    .getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).getNroPuntoDeVentaAfip());
             factura.setNumFactura(this.calcularNumeroFactura(factura.getTipoComprobante(),
                     factura.getNumSerie(), factura.getEmpresa().getId_Empresa()));
         }
