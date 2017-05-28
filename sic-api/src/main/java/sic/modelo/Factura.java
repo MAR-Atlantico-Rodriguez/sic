@@ -144,7 +144,7 @@ public abstract class Factura implements Serializable {
         this.eliminada = eliminada;
         this.CAE = CAE;
         this.vencimientoCAE = vencimientoCAE;
+        this.numSerieAfip = numSerieAfip;
+        this.numFacturaAfip = numFacturaAfip;
     }
-
-
 }
