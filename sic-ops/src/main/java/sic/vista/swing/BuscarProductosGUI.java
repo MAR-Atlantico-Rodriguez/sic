@@ -34,7 +34,7 @@ public class BuscarProductosGUI extends JDialog {
     private final TipoDeComprobante tipoComprobante;
     private ModeloTabla modeloTablaResultados = new ModeloTabla();
     private List<Producto> productos = new ArrayList<>();
-    private List<Producto> productosAux;
+    private List<Producto> productosAux = new ArrayList<>();
     private final List<RenglonFactura> renglonesFactura;
     private Producto prodSeleccionado;
     private RenglonFactura renglon;
@@ -301,7 +301,6 @@ public class BuscarProductosGUI extends JDialog {
      * Clase interna para manejar las hotkeys
      */
     class HotKeysHandler extends KeyAdapter {
-
         @Override
         public void keyPressed(KeyEvent evt) {
             if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -603,7 +602,6 @@ public class BuscarProductosGUI extends JDialog {
     }//GEN-LAST:event_txt_PorcentajeDescuentoFocusGained
 
     private void tbl_ResultadoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tbl_ResultadoFocusGained
-        //Si no hay nada seleccionado y NO esta vacio el table, selecciona la primer fila
         if ((tbl_Resultado.getSelectedRow() == -1) && (tbl_Resultado.getRowCount() != 0)) {
             tbl_Resultado.setRowSelectionInterval(0, 0);
         }

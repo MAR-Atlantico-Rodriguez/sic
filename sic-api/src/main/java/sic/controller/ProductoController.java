@@ -39,6 +39,7 @@ public class ProductoController {
     private final IRubroService rubroService;
     private final IProveedorService proveedorService;  
     private final IMedidaService medidaService;
+    private final int TAMANIO_PAGINA_DEFAULT = 100;
     
     @Autowired
     public ProductoController(IProductoService productoService, IEmpresaService empresaService,
@@ -103,13 +104,13 @@ public class ProductoController {
     @GetMapping("/productos/busqueda/criteria") 
     @ResponseStatus(HttpStatus.OK)
     public Page buscarProductos(@RequestParam long idEmpresa,
-                                          @RequestParam(required = false) String codigo,
-                                          @RequestParam(required = false) String descripcion,
-                                          @RequestParam(required = false) Long idRubro,
-                                          @RequestParam(required = false) Long idProveedor,
-                                          @RequestParam(required = false) boolean soloFantantes,
-                                          @RequestParam(required = false) Integer pagina,
-                                          @RequestParam(required = false) Integer tamanio) {
+                                @RequestParam(required = false) String codigo,
+                                @RequestParam(required = false) String descripcion,
+                                @RequestParam(required = false) Long idRubro,
+                                @RequestParam(required = false) Long idProveedor,
+                                @RequestParam(required = false) boolean soloFantantes,
+                                @RequestParam(required = false) Integer pagina,
+                                @RequestParam(required = false) Integer tamanio) {
         Rubro rubro = null;
         if (idRubro != null) {
             rubro = rubroService.getRubroPorId(idRubro);
@@ -119,7 +120,7 @@ public class ProductoController {
             proveedor = proveedorService.getProveedorPorId(idProveedor);
         }
         if (tamanio == null || tamanio <= 0) {
-            tamanio = 100;
+            tamanio = TAMANIO_PAGINA_DEFAULT;
         }
         if (pagina == null || pagina < 0) {
             pagina = 0;

@@ -272,13 +272,7 @@ public class ProductosGUI extends JInternalFrame {
             productosAux = response.getContent();
             productos.addAll(productosAux);
             totalBusqueda = response.getTotalElements();
-            txt_ValorStock.setValue(RestClient.getRestTemplate().getForObject(criteriaCosto, Double.class));
-
-            if (productos.isEmpty()) {
-                JOptionPane.showInternalMessageDialog(getParent(),
-                        ResourceBundle.getBundle("Mensajes").getString("mensaje_busqueda_sin_resultados"),
-                        "Aviso", JOptionPane.INFORMATION_MESSAGE);
-            }
+            txt_ValorStock.setValue(RestClient.getRestTemplate().getForObject(criteriaCosto, Double.class));            
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (ResourceAccessException ex) {
