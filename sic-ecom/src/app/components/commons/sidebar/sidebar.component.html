@@ -4,7 +4,8 @@
     <md-nav-list>
       <md-list-item><h3>Rubros</h3></md-list-item>
       
-      <md-progress-bar mode="indeterminate" *ngIf="loadingSidebar"></md-progress-bar>
+      
+      <md-spinner *ngIf="loadingSidebar" strokeWidth="5"> </md-spinner>
       
       <md-list-item *ngFor="let r of rubros" 
                     [ngClass]="{ 'active': r.id_Rubro == rubroActivado }"

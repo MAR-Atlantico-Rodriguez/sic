@@ -54,8 +54,8 @@
                     Ingresar
                 </button>
 
-                <md-progress-bar *ngIf="loading" mode="indeterminate" ></md-progress-bar>
                 
+                <md-spinner *ngIf="loading" strokeWidth="5"> </md-spinner>
                 <!--<a [routerLink]="['/register']" class="btn btn-link">Register</a>-->
             </div>
         </form>

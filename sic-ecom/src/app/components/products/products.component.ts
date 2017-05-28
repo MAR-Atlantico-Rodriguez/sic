@@ -7,6 +7,7 @@ import {Observable} from 'rxjs/Observable';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
+
 export class ProductsComponent{
 
     public productos: Array<any>;
