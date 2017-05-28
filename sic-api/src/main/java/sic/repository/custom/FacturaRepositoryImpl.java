@@ -104,8 +104,7 @@ public class FacturaRepositoryImpl implements FacturaRepositoryCustom {
 
     @Override
     public double calcularIVA_Venta(BusquedaFacturaVentaCriteria criteria, TipoDeComprobante[] tipoComprobante) {
-        String query = "SELECT SUM(r.iva_neto * r.cantidad) FROM FacturaVenta f LEFT JOIN f.renglones r "
-                + "WHERE f.empresa = :empresa AND f.eliminada = false";
+        String query = "SELECT SUM(f.iva_105_neto * f.iva_21_neto) FROM FacturaVenta f WHERE f.empresa = :empresa AND f.eliminada = false";        
         //Fecha
         if (criteria.isBuscaPorFecha() == true) {
             FormatterFechaHora formateadorFecha = new FormatterFechaHora(FormatterFechaHora.FORMATO_FECHAHORA_INTERNACIONAL);
@@ -163,8 +162,7 @@ public class FacturaRepositoryImpl implements FacturaRepositoryCustom {
 
     @Override
     public double calcularIVA_Compra(BusquedaFacturaCompraCriteria criteria, TipoDeComprobante[] tipoComprobante) {
-        String query = "SELECT SUM(f.iva_105_neto + f.iva_21_neto) FROM FacturaCompra f "
-                + "WHERE f.empresa = :empresa AND f.eliminada = false";
+        String query = "SELECT SUM(f.iva_105_neto + f.iva_21_neto) FROM FacturaCompra f WHERE f.empresa = :empresa AND f.eliminada = false";
         //Fecha Factura
         if (criteria.isBuscaPorFecha() == true) {
             FormatterFechaHora formateadorFecha = new FormatterFechaHora(FormatterFechaHora.FORMATO_FECHAHORA_INTERNACIONAL);

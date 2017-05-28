@@ -23,6 +23,9 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
     
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new UnauthorizedException(ResourceBundle.getBundle("Mensajes")

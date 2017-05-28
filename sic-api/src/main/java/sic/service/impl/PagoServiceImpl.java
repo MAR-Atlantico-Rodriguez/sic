@@ -95,7 +95,7 @@ public class PagoServiceImpl implements IPagoService {
         pago.setNroPago(this.getSiguienteNroPago(pago.getEmpresa().getId_Empresa()));
         pago.setFecha(new Date());
         pago = pagoRepository.save(pago);
-        facturaService.actualizarFacturaEstadoPagada(pago.getFactura());
+        facturaService.actualizarFacturaEstadoPago(pago.getFactura());
         LOGGER.warn("El Pago " + pago + " se guardó correctamente.");
         return pago;
     }
@@ -106,7 +106,7 @@ public class PagoServiceImpl implements IPagoService {
         Pago pago = this.getPagoPorId(idPago);
         pago.setEliminado(true);
         pagoRepository.save(pago);
-        facturaService.actualizarFacturaEstadoPagada(pago.getFactura());
+        facturaService.actualizarFacturaEstadoPago(pago.getFactura());
         LOGGER.warn("El Pago " + pago + " se eliminó correctamente.");
     }
     
