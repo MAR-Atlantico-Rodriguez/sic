@@ -1,7 +1,7 @@
 package sic.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,11 +22,11 @@ import sic.service.IGastoService;
 @RequestMapping("/api/v1")
 public class GastoController {
     
-    private final IGastoService gastoService;
+    private final IGastoService gastoService;    
     
     @Autowired
     public GastoController(IGastoService gastoService) {
-        this.gastoService = gastoService;
+        this.gastoService = gastoService;        
     }
     
     @GetMapping("/gastos/{idGasto}")
@@ -51,10 +51,13 @@ public class GastoController {
     
     @GetMapping("/gastos/busqueda")
     @ResponseStatus(HttpStatus.OK)
-    public List<Gasto> getGastosPorFechaYFormaDePago(@RequestParam long idEmpresa,
-                                                     @RequestParam long idFormaDePago,
-                                                     @RequestParam long idCaja) {
-        return gastoService.getGastosPorFechaYFormaDePago(idEmpresa, idFormaDePago, idCaja);
+    public List<Gasto> getGastosPorCajaYFormaDePago(@RequestParam long idEmpresa,
+                                                    @RequestParam long idFormaDePago,
+                                                    @RequestParam long desde,
+                                                    @RequestParam long hasta) {
+        Date fechaDesde = new Date(desde);
+        Date fechaHasta = new Date(hasta);
+        return gastoService.getGastosEntreFechasYFormaDePago(idEmpresa, idFormaDePago, fechaDesde, fechaHasta);
     }
     
     @GetMapping("/gastos/total")

@@ -40,7 +40,7 @@ public class GastoServiceImpl implements IGastoService {
     
     @Override
     public Gasto getGastoPorId(Long idGasto) {
-        Gasto gasto = gastoRepository.findOne(idGasto);
+        Gasto gasto = gastoRepository.findById(idGasto);
         if (gasto == null) {
             throw new EntityNotFoundException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_gasto_no_existente"));
@@ -122,10 +122,7 @@ public class GastoServiceImpl implements IGastoService {
     }
 
     @Override
-    public List<Gasto> getGastosPorFechaYFormaDePago(Long idEmpresa, Long idFormaDePago, long idCaja) {
-        Caja caja = cajaService.getCajaPorId(idCaja);
-        Date desde = caja.getFechaApertura();
-        Date hasta = caja.getFechaCierre() == null ? new Date() : caja.getFechaCierre();
+    public List<Gasto> getGastosEntreFechasYFormaDePago(Long idEmpresa, Long idFormaDePago, Date desde, Date hasta) {
         return gastoRepository.findAllByFechaBetweenAndEmpresaAndFormaDePagoAndEliminado(desde, hasta, empresaService.getEmpresaPorId(idEmpresa), 
                 formaDePagoService.getFormasDePagoPorId(idFormaDePago), false);
     }

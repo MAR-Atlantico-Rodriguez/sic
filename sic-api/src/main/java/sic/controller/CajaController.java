@@ -3,10 +3,7 @@ package sic.controller;
 import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,7 +66,7 @@ public class CajaController {
     public Caja cerrarCaja(@PathVariable long idCaja,
                            @RequestParam double monto,
                            @RequestParam long idUsuarioCierre) {
-        return cajaService.cerrarCaja(idCaja, monto, idUsuarioCierre);
+        return cajaService.cerrarCaja(idCaja, monto, idUsuarioCierre, false);
     }
     
     @GetMapping("/cajas/busqueda/criteria")
@@ -100,21 +97,11 @@ public class CajaController {
         return cajaService.getCajasCriteria(criteria);        
     }
     
-    @GetMapping("/cajas/empresas/{idEmpresa}/ultima")
-    @ResponseStatus(HttpStatus.OK)
-    public Caja getUltimaCaja(@PathVariable long idEmpresa) {
-        return cajaService.getUltimaCaja(idEmpresa);
-    }
-  
-    @GetMapping("/cajas/{idCaja}/empresas/{idEmpresa}/reporte")
-    public ResponseEntity<byte[]> getReporteCaja(@PathVariable long idCaja,
-                                                 @PathVariable long idEmpresa) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);        
-        headers.add("content-disposition", "inline; filename=Caja.pdf");
-        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        byte[] reportePDF = cajaService.getReporteCaja(cajaService.getCajaPorId(idCaja), idEmpresa);
-        return new ResponseEntity<>(reportePDF, headers, HttpStatus.OK);
+    
+    @GetMapping("/cajas/{idCaja}/total")
+    public double getTotalCaja(@PathVariable long idCaja, 
+                               @RequestParam(required = false) boolean soloAfectaCaja) {
+        return cajaService.getTotalCaja(cajaService.getCajaPorId(idCaja), soloAfectaCaja);
     }
     
 }

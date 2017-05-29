@@ -18,7 +18,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sic.modelo.Empresa;
@@ -140,7 +140,7 @@ public class ProductoServiceImpl implements IProductoService {
     }
 
     @Override
-    public List<Producto> buscarProductos(BusquedaProductoCriteria criteria) {
+    public Page<Producto> buscarProductos(BusquedaProductoCriteria criteria) {
         //Empresa
         if (criteria.getEmpresa() == null) {
             throw new EntityNotFoundException(ResourceBundle.getBundle("Mensajes")
@@ -179,11 +179,9 @@ public class ProductoServiceImpl implements IProductoService {
         if (criteria.isListarSoloFaltantes() == true) {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
-        List<Producto> list = new ArrayList<>();
-        productoRepository.findAll(builder, new Sort(Sort.Direction.ASC, "descripcion")).iterator().forEachRemaining(list::add);
-        return list;
+        return productoRepository.findAll(builder, criteria.getPageable());
     }
-
+    
     private BooleanBuilder buildPredicadoDescripcion(String descripcion, QProducto qproducto) {
         String[] terminos = descripcion.split(" ");
         BooleanBuilder descripcionProducto = new BooleanBuilder();

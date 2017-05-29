@@ -82,7 +82,7 @@ public abstract class Factura implements Serializable {
     private double recargo_neto;
     private double descuento_porcentaje;
     private double descuento_neto;
-    private double subTotal_neto;
+    private double subTotal_bruto;
     private double iva_105_neto;
     private double iva_21_neto;
     private double impuestoInterno_neto;
@@ -98,6 +98,11 @@ public abstract class Factura implements Serializable {
     private Empresa empresa;
 
     private boolean eliminada;
+    
+    private long CAE;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date vencimientoCAE;
 
     public Factura() {}
         
@@ -105,9 +110,9 @@ public abstract class Factura implements Serializable {
             long numFactura, Date fechaVencimiento, Pedido pedido, Transportista transportista,
             List<RenglonFactura> renglones, List<Pago> pagos, double subTotal,
             double recargo_porcentaje, double recargo_neto, double descuento_porcentaje,
-            double descuento_neto, double subTotal_neto, double iva_105_neto, double iva_21_neto,
+            double descuento_neto, double subTotal_bruto, double iva_105_neto, double iva_21_neto,
             double impuestoInterno_neto, double total, String observaciones, boolean pagada,
-            Empresa empresa, boolean eliminada) {
+            Empresa empresa, boolean eliminada, long CAE, Date vencimientoCAE) {
         this.id_Factura = id_Factura;
         this.fecha = fecha;
         this.tipoComprobante = tipoComprobante;
@@ -123,7 +128,7 @@ public abstract class Factura implements Serializable {
         this.recargo_neto = recargo_neto;
         this.descuento_porcentaje = descuento_porcentaje;
         this.descuento_neto = descuento_neto;
-        this.subTotal_neto = subTotal_neto;
+        this.subTotal_bruto = subTotal_bruto;
         this.iva_105_neto = iva_105_neto;
         this.iva_21_neto = iva_21_neto;
         this.impuestoInterno_neto = impuestoInterno_neto;
@@ -132,6 +137,8 @@ public abstract class Factura implements Serializable {
         this.pagada = pagada;
         this.empresa = empresa;
         this.eliminada = eliminada;
+        this.CAE = CAE;
+        this.vencimientoCAE = vencimientoCAE;
     }
 
 

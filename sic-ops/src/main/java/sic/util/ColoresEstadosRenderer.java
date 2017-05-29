@@ -30,10 +30,10 @@ public class ColoresEstadosRenderer extends DefaultTableCellRenderer {
         }
         if (valor instanceof EstadoCaja) {
             EstadoCaja estado = (EstadoCaja) valor;
-            if (estado == estado.ABIERTA) {
+            if (estado == EstadoCaja.ABIERTA) {
                 cell.setBackground(Color.GREEN);
             }
-            if (estado == estado.CERRADA) {
+            if (estado == EstadoCaja.CERRADA) {
                 cell.setBackground(Color.PINK);
             }
         }

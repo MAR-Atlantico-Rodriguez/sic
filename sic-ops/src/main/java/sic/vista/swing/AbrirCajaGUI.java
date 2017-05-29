@@ -22,16 +22,13 @@ public class AbrirCajaGUI extends JDialog {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
-    public AbrirCajaGUI(boolean modal) {
-        this.setModal(true);
-        initComponents();
-        this.setModelSpinner();
-        ImageIcon iconoVentana = new ImageIcon(AbrirCajaGUI.class.getResource("/sic/icons/Caja_16x16.png"));
-        this.setIconImage(iconoVentana.getImage());
+    public AbrirCajaGUI() {
+        this.initComponents();        
     }
     
     private void setModelSpinner() {
-        SpinnerModel spinnerModel = new SpinnerNumberModel(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), 00, 23, 1);
+        SpinnerModel spinnerModel = new SpinnerNumberModel(Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                                                           Calendar.getInstance().get(Calendar.HOUR_OF_DAY), 23, 1);
         this.spinner_Hora.setModel(spinnerModel);
         spinnerModel = new SpinnerNumberModel(Calendar.getInstance().get(Calendar.MINUTE), 00, 59, 1);
         this.spinner_Minutos.setModel(spinnerModel);
@@ -47,7 +44,7 @@ public class AbrirCajaGUI extends JDialog {
         corte.set(Calendar.MINUTE, (int) spinner_Minutos.getValue());
         caja.setFechaCorteInforme(corte.getTime());
         caja.setSaldoInicial(monto);
-        caja.setSaldoFinal(0);
+        caja.setSaldoFinal(monto);
         caja.setSaldoReal(0);
         caja.setUsuarioAbreCaja(UsuarioActivo.getInstance().getUsuario());
         return caja;
@@ -68,6 +65,11 @@ public class AbrirCajaGUI extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Abrir Caja");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         p_container.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
@@ -173,9 +175,8 @@ public class AbrirCajaGUI extends JDialog {
             ftxt_Monto.setValue(0);
         }
         try {
-            RestClient.getRestTemplate()
-                    .postForObject("/cajas",
-                    this.construirCaja(((Number) ftxt_Monto.getValue()).doubleValue()),
+            RestClient.getRestTemplate().postForObject("/cajas",
+                    this.construirCaja(Double.parseDouble(ftxt_Monto.getValue().toString())),
                     Caja.class);
             this.dispose();
         } catch (RestClientResponseException ex) {
@@ -193,6 +194,13 @@ public class AbrirCajaGUI extends JDialog {
             ftxt_Monto.selectAll();
         });
     }//GEN-LAST:event_ftxt_MontoFocusGained
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        this.setModal(true);
+        ImageIcon iconoVentana = new ImageIcon(AbrirCajaGUI.class.getResource("/sic/icons/Caja_16x16.png"));
+        this.setIconImage(iconoVentana.getImage());
+        this.setModelSpinner();
+    }//GEN-LAST:event_formWindowOpened
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_AbrirCaja;

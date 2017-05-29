@@ -1,6 +1,7 @@
 package sic.builder;
 
 import java.util.Date;
+import java.util.Map;
 import sic.modelo.Caja;
 import sic.modelo.Empresa;
 import sic.modelo.EstadoCaja;
@@ -21,12 +22,15 @@ public class CajaBuilder {
     private double saldoFinal;
     private double saldoReal;
     private boolean eliminada = false;
+    private Map<Long, Double> totalesPorFomaDePago;
+    private double totalAfectaCaja;
+    private double totalGeneral;
     private Empresa empresa = new EmpresaBuilder().build();
 
     public Caja build() {
         return new Caja(id_Caja, nroCaja, fechaApertura, fechaCorteInforme, fechaCierre, empresa,
                 usuarioAbreCaja, usuarioCierraCaja, observacion, estado,
-                saldoInicial, saldoFinal, saldoReal, eliminada);
+                saldoInicial, saldoFinal, saldoReal, eliminada, totalesPorFomaDePago, totalAfectaCaja, totalGeneral);
     }
 
     public CajaBuilder withIdCaja(long idCaja) {

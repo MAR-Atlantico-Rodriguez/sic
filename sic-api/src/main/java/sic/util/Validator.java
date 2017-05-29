@@ -1,5 +1,7 @@
 package sic.util;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -64,6 +66,20 @@ public class Validator {
         anterior.setTime(fechaAnterior);
         siguiente.setTime(fechaSiguiente);
         return siguiente.compareTo(anterior);
+    }
+    
+    /**
+     * Compara dos fechas teniendo en cuenta solo los dias sin hora
+     * 
+     * @param fechaAnterior
+     * @param fechaSiguiente
+     * @return -1 si la fechaAnterior esta antes de la fechaSiguiente, 0 si son iguales,
+     * o 1 si la fechaAnterior esta despues de la fechaSiguiente
+     */
+    public static int compararDias(Date fechaAnterior, Date fechaSiguiente) {
+        LocalDate diaAnterior = fechaAnterior.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate diaSiguiente = fechaSiguiente.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return diaAnterior.compareTo(diaSiguiente);
     }
     
     public static boolean tieneDuplicados(long[] array) {

@@ -364,7 +364,7 @@ public class PedidosGUI extends JInternalFrame {
                 byte[] reporte = RestClient.getRestTemplate()
                         .getForObject("/pedidos/" + idPedido + "/reporte",
                         byte[].class);
-                File f = new File("Pedido.pdf");
+                File f = new File(System.getProperty("user.home") + "/Pedido.pdf");
                 Files.write(f.toPath(), reporte);
                 Desktop.getDesktop().open(f);
             } catch (IOException ex) {

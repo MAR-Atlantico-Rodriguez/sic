@@ -2,6 +2,7 @@ package sic.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,5 +73,14 @@ public class Caja implements Serializable {
     private double saldoReal;
 
     private boolean eliminada;
+    
+    @Transient
+    private Map<Long, Double> totalesPorFomaDePago;
+    
+    @Transient
+    private double totalAfectaCaja;
+            
+    @Transient
+    private double totalGeneral;
 
 }

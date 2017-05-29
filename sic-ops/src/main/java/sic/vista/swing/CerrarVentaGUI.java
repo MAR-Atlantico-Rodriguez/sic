@@ -68,7 +68,7 @@ public class CerrarVentaGUI extends JDialog {
                 byte[] reporte = RestClient.getRestTemplate()
                         .getForObject("/facturas/" + factura.getId_Factura() + "/reporte",
                                 byte[].class);
-                File f = new File(nombreReporte + ".pdf");
+                File f = new File(System.getProperty("user.home") + "/" + nombreReporte + ".pdf");
                 Files.write(f.toPath(), reporte);
                 Desktop.getDesktop().open(f);
             } catch (IOException ex) {

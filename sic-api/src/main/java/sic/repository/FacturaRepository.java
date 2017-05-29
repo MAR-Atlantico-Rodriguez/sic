@@ -11,7 +11,7 @@ import sic.modelo.TipoDeComprobante;
 
 public interface FacturaRepository extends PagingAndSortingRepository<Factura, Long>, FacturaRepositoryCustom {
 
-    @Query("SELECT fv FROM FacturaVenta fv WHERE fv.id_Factura = :idFactura AND fv.eliminada = false")
+    @Query("SELECT f FROM Factura f WHERE f.id_Factura = :idFactura AND f.eliminada = false")
     Factura findById(@Param("idFactura") long idFactura);
     
     Factura findByTipoComprobanteAndNumSerieAndNumFacturaAndEmpresaAndEliminada(TipoDeComprobante tipoComprobante, long serie, long num, Empresa empresa, boolean eliminada);

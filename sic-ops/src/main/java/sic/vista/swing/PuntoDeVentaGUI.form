@@ -220,9 +220,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btn_BuscarProductos" linkSize="14" min="-2" pref="173" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="btn_EliminarEntradaProducto" linkSize="14" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                              <Component id="btn_nuevoProducto" linkSize="14" min="-2" max="-2" attributes="0"/>
+                              <Component id="btn_QuitarProducto" linkSize="14" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -234,17 +232,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="2" attributes="0">
-                              <Component id="txt_CodigoProducto" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Component id="btn_BuscarPorCodigoProducto" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="2" groupAlignment="3" attributes="0">
-                                  <Component id="btn_BuscarProductos" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btn_EliminarEntradaProducto" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="tbtn_marcarDesmarcar" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="2" attributes="0">
+                          <Component id="txt_CodigoProducto" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="btn_BuscarPorCodigoProducto" linkSize="6" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" alignment="2" groupAlignment="3" attributes="0">
+                              <Component id="btn_BuscarProductos" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btn_QuitarProducto" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="btn_nuevoProducto" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="tbtn_marcarDesmarcar" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="sp_Resultado" pref="220" max="32767" attributes="0"/>
@@ -330,7 +325,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_BuscarProductosActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btn_EliminarEntradaProducto">
+            <Component class="javax.swing.JButton" name="btn_QuitarProducto">
               <Properties>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
@@ -338,11 +333,11 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/sic/icons/DeleteProduct_16x16.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Eliminar Producto (DEL)"/>
+                <Property name="text" type="java.lang.String" value="Quitar Producto (DEL)"/>
                 <Property name="focusable" type="boolean" value="false"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_EliminarEntradaProductoActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_QuitarProductoActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txt_CodigoProducto">
@@ -375,27 +370,6 @@
               </Properties>
               <Events>
                 <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="tbtn_marcarDesmarcarStateChanged"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="btn_nuevoProducto">
-              <Properties>
-                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="ff" green="0" id="blue" palette="1" red="0" type="palette"/>
-                </Property>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/sic/icons/AddProduct_16x16.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Nuevo Producto (F7)"/>
-                <Property name="focusable" type="boolean" value="false"/>
-                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[163, 25]"/>
-                </Property>
-                <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[163, 25]"/>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_nuevoProductoActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -500,8 +474,8 @@
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="txt_SubTotalNeto" max="32767" attributes="0"/>
-                          <Component id="lbl_SubTotalNeto" pref="120" max="32767" attributes="0"/>
+                          <Component id="txt_SubTotalBruto" max="32767" attributes="0"/>
+                          <Component id="lbl_SubTotalBruto" pref="120" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -532,7 +506,7 @@
                           <Component id="lbl_SubTotal" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_DescuentoRecargo" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_recargoPorcentaje" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="lbl_SubTotalNeto" alignment="2" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbl_SubTotalBruto" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_IVA105" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_IVA21" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="lbl_Total" alignment="2" max="32767" attributes="0"/>
@@ -551,7 +525,7 @@
                                   <Component id="txt_Subtotal" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_Decuento_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_Recargo_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="txt_SubTotalNeto" linkSize="7" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="txt_SubTotalBruto" linkSize="7" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                                   <Component id="txt_IVA105_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                                   <Component id="txt_IVA21_neto" linkSize="7" alignment="2" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -681,7 +655,7 @@
                 <Property name="text" type="java.lang.String" value="Descuento (%)"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JFormattedTextField" name="txt_SubTotalNeto">
+            <Component class="javax.swing.JFormattedTextField" name="txt_SubTotalBruto">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -698,9 +672,9 @@
                 </Property>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="lbl_SubTotalNeto">
+            <Component class="javax.swing.JLabel" name="lbl_SubTotalBruto">
               <Properties>
-                <Property name="text" type="java.lang.String" value="SubTotal Neto"/>
+                <Property name="text" type="java.lang.String" value="SubTotal Bruto"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JFormattedTextField" name="txt_IVA105_neto">

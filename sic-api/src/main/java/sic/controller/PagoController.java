@@ -1,7 +1,7 @@
 package sic.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import sic.modelo.Factura;
 import sic.modelo.Pago;
-import sic.service.ICajaService;
 import sic.service.IFacturaService;
 import sic.service.IFormaDePagoService;
 import sic.service.IPagoService;
@@ -28,14 +27,14 @@ public class PagoController {
     
     private final IPagoService pagoService;
     private final IFacturaService facturaService;
-    private final IFormaDePagoService formaDePagoService;
+    private final IFormaDePagoService formaDePagoService;    
     
     @Autowired
     public PagoController(IPagoService pagoService, IFacturaService facturaService,
                           IFormaDePagoService formaDePago) {
         this.pagoService = pagoService;
         this.facturaService = facturaService;
-        this.formaDePagoService = formaDePago;
+        this.formaDePagoService = formaDePago;        
     }
     
     @GetMapping("/pagos/{idPago}")
@@ -88,10 +87,13 @@ public class PagoController {
     
     @GetMapping("/pagos/busqueda")
     @ResponseStatus(HttpStatus.OK)
-    public List<Pago> getPagosEntreFechasYFormaDePago(@RequestParam long idEmpresa,
-                                                      @RequestParam long idFormaDePago,
-                                                      @RequestParam long idCaja) {
-        return pagoService.getPagosEntreFechasYFormaDePago(idEmpresa, idFormaDePago, idCaja);
+    public List<Pago> getPagosPorCajaYFormaDePago(@RequestParam long idEmpresa,
+                                                  @RequestParam long idFormaDePago,
+                                                  @RequestParam long desde,
+                                                  @RequestParam long hasta) {
+        Date fechaDesde = new Date(desde);
+        Date fechaHasta = new Date(hasta);
+        return pagoService.getPagosEntreFechasYFormaDePago(idEmpresa, idFormaDePago, fechaDesde, fechaHasta);
     }
     
     @PutMapping("/pagos/pagar-multiples-facturas")

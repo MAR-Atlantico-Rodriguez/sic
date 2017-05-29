@@ -2,6 +2,7 @@ package sic.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,4 +24,8 @@ public class Caja implements Serializable {
     private double saldoFinal;
     private double saldoReal;
     private boolean eliminada;
+    private Map<Long, Double> totalesPorFomaDePago;
+    private double totalAfectaCaja;
+    private double totalGeneral;
+
 }

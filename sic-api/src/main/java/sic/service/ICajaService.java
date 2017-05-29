@@ -12,8 +12,6 @@ public interface ICajaService {
     void eliminar(Long idCaja);
     
     Caja getCajaPorId(Long id);
-    
-    Caja getCajaPorNroYEmpresa(int nroCaja, long id_Empresa);
 
     List<Caja> getCajas(long id_Empresa, Date desde, Date hasta);
 
@@ -26,9 +24,9 @@ public interface ICajaService {
     Caja guardar(Caja caja);
 
     void validarCaja(Caja caja);
-
-    byte[] getReporteCaja(Caja caja, Long idEmpresa);
     
-    Caja cerrarCaja(long idCaja, double monto, Long idUsuario);
+    Caja cerrarCaja(long idCaja, double monto, Long idUsuario, boolean scheduling);
+    
+    double getTotalCaja(Caja caja, boolean afectaCaja);
 
 }
