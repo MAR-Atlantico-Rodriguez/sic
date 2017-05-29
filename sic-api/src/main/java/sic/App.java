@@ -36,6 +36,7 @@ public class App extends WebMvcConfigurerAdapter {
         return afipClient;
     }
 
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
