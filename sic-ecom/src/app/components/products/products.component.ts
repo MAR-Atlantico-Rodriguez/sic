@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../../services/product.service';
 import {Observable} from 'rxjs/Observable';
+import {AuthGuard} from '../../guards/auth.guard';
 
 @Component({
   selector: 'app-products',
@@ -14,25 +15,31 @@ export class ProductsComponent{
 
     public loadingProducts = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, public authGuard:AuthGuard) {}
 
-  ngOnInit(){
-    
+  ngOnInit(){    
   	this.getProductos();
   	this.productService.productosService.subscribe(
   		dataSearch => {
   			this.productos = dataSearch;            
   		},
-  		error => {}
-  	);
+  		error => {
+
+      });
   }
 
   getProductos(){
+    this.authGuard.canActivate();
+    
     this.loadingProducts = true;
   	this.productService.getProductos()
       .subscribe(data => {      	
         this.productos = data;
         this.loadingProducts = false;
+      },
+      error => {
+         
+         
       });
   }
 }

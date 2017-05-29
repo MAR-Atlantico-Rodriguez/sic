@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RubrosService } from '../../../services/rubros.service';
 import { ProductService } from '../../../services/product.service';
+import {AuthGuard} from '../../../guards/auth.guard';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,10 +17,13 @@ export class SidebarComponent {
 	public loadingSidebar = false;
 
 	constructor(public rubrosService:RubrosService,
-				public productService:ProductService) {
+				public productService:ProductService,
+				public authGuard:AuthGuard) {
+
 	}
 
 	ngOnInit(){
+		this.authGuard.canActivate();
 		this.loadingSidebar = true;
 		this.rubrosService.getRubros().subscribe(
 			data => {
@@ -31,6 +35,7 @@ export class SidebarComponent {
 	}
 
 	getFiltrarRubro(id){
+		this.authGuard.canActivate();
 		this.rubroActivado = (this.rubroActivado != id)?id:false;
 		this.productService.getRubro(id);
 	}

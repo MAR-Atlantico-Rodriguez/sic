@@ -49,13 +49,19 @@
         <md-icon> keyboard_arrow_left</md-icon>
         <div> {{r.nombre}}</div>
       </md-list-item>
-    </md-nav-list>
-    <md-divider></md-divider>
 
-    <button md-icon-button [routerLink]="['/login']">
-      <span> Salir</span>
-      <i class="material-icons">power_settings_new</i>
-    </button>
-    <md-divider></md-divider>
+
+      <md-divider></md-divider>
+
+      <md-list-item [routerLink]="['/login']">
+        <md-icon>power_settings_new</md-icon>
+        <div> Salir </div>
+      </md-list-item>
+      
+      <md-divider></md-divider>
+
+    </md-nav-list>
+
+   
   </md-list>
 </md-sidenav>

@@ -1,6 +1,6 @@
 .formulario{
 	background: #fff;
-	border: 1px solid #d03906;
+	border: 1px solid #f05724;
 	padding: 40px;	
 	box-shadow: 0px 0px 15px #5e1a03;	
 }
@@ -12,6 +12,7 @@
 
 .form-control{
 	font-size: 20px;
+	
 	color:#e03906;
 }
 

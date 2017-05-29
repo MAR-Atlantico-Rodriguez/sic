@@ -2,8 +2,6 @@ md-toolbar-row {
   justify-content: space-between;
 }
 
-
-
 md-sidenav {
   margin-top: 65px;
   width: 80%;
@@ -30,8 +28,7 @@ md-sidenav {
 }
 
 @media (max-width: 600px){
-  .mat-toolbar {
-      
+  .mat-toolbar {      
       padding-top: 4px;
   }
 }

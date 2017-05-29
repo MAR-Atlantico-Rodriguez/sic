@@ -42,14 +42,10 @@ export class AuthService {
 
   useJwtHelper() {
     let token = localStorage.getItem('token');
-    /*console.log(this.jwtHelper.decodeToken(token),
+    console.log(this.jwtHelper.decodeToken(token),
                 this.jwtHelper.getTokenExpirationDate(token),
-                this.jwtHelper.isTokenExpired(token));*/
+                this.jwtHelper.isTokenExpired(token));
 
-    //Genera un Token de 24Horas - isTokenExpired pregunta si expiro el token
-    //da falso, en caso contrario da TRUE 
-    //lo nego al return para que ingrese, si da true entonces lo pasa a false 
-    //y redirecciona al Login
-    return !this.jwtHelper.isTokenExpired(token);
+    return this.jwtHelper.isTokenExpired(token);
   }
 }
