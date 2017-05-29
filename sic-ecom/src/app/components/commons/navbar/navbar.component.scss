@@ -5,8 +5,8 @@ md-toolbar-row {
 md-sidenav {
   margin-top: 65px;
   width: 80%;
-  padding:20px;
-  box-shadow: -10px 3px 20px #888;  
+  padding: 20px;
+  box-shadow: -10px 3px 20px #888;
 }
 
 .mat-sidenav-content {
@@ -19,56 +19,49 @@ md-sidenav {
 
 .md-toolbar{
   background: #f05724;
-  color:#fff;
-  min-height:64px!important;
+  color: #fff;
+  min-height: 64px!important;
 }
 
-.mat-toolbar{
-  max-height:64px!important;
+.mat-toolbar {
+  max-height: 64px!important;
 }
 
-@media (max-width: 600px){
-  .mat-toolbar {      
+@media (max-width: 600px) {
+  .mat-toolbar {
       padding-top: 4px;
   }
 }
-
-
-.inputSearch{
-  width:100%;
-  border:none;
-  /*background:#e03906;*/
-  padding:10px;
-  color:#000;
+.inputSearch {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  color: #000;
   font-size: 17px;
-  -webkit-border-radius: 10px 0px 0px 10px;
-  -moz-border-radius: 10px 0px 0px 10px;
-  border-radius: 10px 0px 0px 10px;
+  -webkit-border-radius: 10px 0 0 10px;
+  -moz-border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 10px;
 }
 
-
-.searchs{
+.buscador {
   background: #e03906;
-  padding:10px;
+  padding: 10px;
   font-size: 25px;
-  -webkit-border-radius: 0px 10px 10px 0px;
-  -moz-border-radius: 0px 10px 10px 0px;
-  border-radius: 0px 10px 10px 0px;
+  -webkit-border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
 }
 
-
-
-.logoImg{
+.logoImg {
   width:150px;
   height:50px;
 }
 
-.logoImgCelular{
+.logoImgCelular {
   width:45px;
   height:40px;
 }
 
-
-.active{
-  color:#f05724;
+.active {
+  color: #f05724;
 }

@@ -1,54 +1,53 @@
-.formulario{
-	background: #fff;
-	border: 1px solid #f05724;
-	padding: 40px;	
-	box-shadow: 0px 0px 15px #5e1a03;	
+.formulario {
+  background: #fff;
+  border: 1px solid #f05724;
+  padding: 40px;
+  box-shadow: 0 0 15px #5e1a03;
 }
 
-.form-group{
-	margin-top: 10px;
-	width: 100%;
+.form-group {
+  margin-top: 10px;
+  width: 100%;
 }
 
-.form-control{
-	font-size: 20px;
-	
-	color:#e03906;
+.form-control {
+  font-size: 20px;
+  color: #e03906;
 }
 
-.example-full-width{
-	width: 100%;
+.example-full-width {
+  width: 100%;
 }
 
-.btn-login{
-	color:#000;
-	font-size: 17px;
+.btn-login {
+  color: #000;
+  font-size: 17px;
 }
 
-#img{
-	width: 120px;
+#img {
+  width: 120px;
 }
 
-md-spinner{
-	width: 50px;
-	height: 50px;
+md-spinner {
+  width: 50px;
+  height: 50px;
 }
 
-
-.msjError{
-	color:red;
-	margin: 3px 0px;
-	font-weight: bolder;
-	font-size: 16px;
-}
-.nroTransaccionError{
-	color:red;
-	margin: 3px 0px;
-	font-weight: bolder;
-	font-size: 12px;
+.msjError {
+  color: red;
+  margin: 3px 0;
+  font-weight: bolder;
+  font-size: 16px;
 }
 
-.error{
-	color: red;
-	font-size: 11px;
+.nroTransaccionError {
+  color: red;
+  margin: 3px 0;
+  font-weight: bolder;
+  font-size: 12px;
+}
+
+.error {
+  color: red;
+  font-size: 11px;
 }

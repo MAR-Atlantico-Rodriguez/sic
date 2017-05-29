@@ -9,20 +9,15 @@ md-card {
   width: 100px !important;
 }
 
-.products-derecha{
-	/*border-right:1px solid #e5e5e5;*/
+.descripcion-products-list {
+  color: #f05724 !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  font-weight: bold !important;
+  word-break: break-all;
 }
 
-.descripcion-products-list{
-	color:#f05724!important;	
-    white-space:nowrap!important;
-    text-overflow: ellipsis!important;
-    font-weight: bold!important;
-    word-break: break-all;
-    white-space:normal;
-}
-
-.mat-list .mat-list-item .mat-list-avatar, .mat-nav-list .mat-list-item .mat-list-avatar{
-	height: 75px;
-  	width: 75px;	
+.mat-list .mat-list-item .mat-list-avatar, .mat-nav-list .mat-list-item .mat-list-avatar {
+  height: 75px;
+  width: 75px;
 }

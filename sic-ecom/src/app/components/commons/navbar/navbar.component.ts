@@ -1,33 +1,32 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from '../../../services/product.service';
-import { RubrosService } from '../../../services/rubros.service';
+import {RubrosService} from '../../../services/rubros.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
-	
-	public rubros = [];
-	public rubroActivado: false;
+export class NavbarComponent implements OnInit {
 
-  	constructor(public productService:ProductService,
-  				public rubrosService:RubrosService) {}
+  public rubros = [];
+  public rubroActivado = false;
 
-  	ngOnInit(){
-		this.rubrosService.getRubros().subscribe(
-			data => this.rubros = data,
-			error => console.log(error)
-		);
-	}
+  constructor(private productService: ProductService, private rubrosService: RubrosService) {}
 
-  	buscadorProductos(palabraBuscar: string){
-  		this.productService.getBuscador(palabraBuscar);
-  	}
+  ngOnInit() {
+    this.rubrosService.getRubros().subscribe(
+      data => this.rubros = data,
+      error => console.log(error)
+    );
+  }
 
-  	getFiltrarRubroNavbar(id){
-  		this.rubroActivado = (this.rubroActivado != id)?id:false;
-		this.productService.getRubro(id);
-	}
+  buscadorProductos(palabraBuscar: string) {
+    this.productService.getBuscador(palabraBuscar);
+  }
+
+  getFiltrarRubroNavbar(id) {
+    this.rubroActivado = (this.rubroActivado !== id) ? id : false;
+    this.productService.getRubro(id);
+  }
 }

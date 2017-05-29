@@ -1,23 +1,14 @@
 <div>
-
   <md-list>
     <md-nav-list>
       <md-list-item><h3>Rubros</h3></md-list-item>
-      
-      
-      <md-spinner *ngIf="loadingSidebar" strokeWidth="5"> </md-spinner>
-      
-      <md-list-item *ngFor="let r of rubros" 
-                    [ngClass]="{ 'active': r.id_Rubro == rubroActivado }"
+      <md-spinner *ngIf="loadingSidebar" strokeWidth="5"></md-spinner>
+      <md-list-item *ngFor="let r of rubros"
+                    [ngClass]="{ 'active': r.id_Rubro === rubroActivado }"
                     (click)="getFiltrarRubro(r.id_Rubro)">
-        
-          <md-icon> keyboard_arrow_left</md-icon>
-          <div> 
-            {{r.nombre}}
-          </div>
-        
+        <md-icon> keyboard_arrow_left</md-icon>
+        <div>{{r.nombre}}</div>
       </md-list-item>
-      
     </md-nav-list>
   </md-list>
 </div>

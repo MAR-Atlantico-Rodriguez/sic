@@ -1,15 +1,9 @@
 <md-sidenav-container>
   <app-navbar></app-navbar>
   <div fxLayout="column" fxLayoutAlign="space-between stretch" fxFlexFill>
-    <header></header>
-    <article fxFlex fxFlexOffset.gt-md="19">
-      	<app-products class="container" fxFlex>
-      	      		
-      	</app-products>
-    	<app-sidebar fxFlex="30" fxHide.lt-md>
-    		
-    	</app-sidebar>
-    </article>
-    <footer></footer>
+    <div fxFlex fxFlexOffset.gt-md="19">
+      <app-products class="container" fxFlex></app-products>
+      <app-sidebar fxFlex="30" fxHide.lt-md></app-sidebar>
+    </div>
   </div>
 </md-sidenav-container>
