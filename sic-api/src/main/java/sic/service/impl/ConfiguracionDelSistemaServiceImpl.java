@@ -54,7 +54,7 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     public void actualizar(ConfiguracionDelSistema cds) {
         this.validarCds(TipoDeOperacion.ACTUALIZACION, cds);
         if (cds.getPasswordCertificadoAfip() != null) {
-            cds.setPasswordCertificadoAfip(Utilidades.encriptarConMD5(cds.getPasswordCertificadoAfip()));
+            cds.setPasswordCertificadoAfip(cds.getPasswordCertificadoAfip());
         }
         configuracionRepository.save(cds);
     }

@@ -328,14 +328,19 @@ public class FacturaServiceImpl implements IFacturaService {
     public void eliminar(long[] idsFactura) {
         for (long idFactura : idsFactura) {
             Factura factura = this.getFacturaPorId(idFactura);
-            this.eliminarPagosDeFactura(factura);
-            factura.setEliminada(true);
-            productoService.actualizarStock(factura, TipoDeOperacion.ELIMINACION);            
-            if (factura.getPedido() != null) {
-                List<Factura> facturas = new ArrayList<>();
-                facturas.add(factura);
-                pedidoService.actualizarEstadoPedido(factura.getPedido(), facturas);                
-            }            
+            if (factura.getCAE() == 0L) {
+                this.eliminarPagosDeFactura(factura);
+                factura.setEliminada(true);
+                productoService.actualizarStock(factura, TipoDeOperacion.ELIMINACION);
+                if (factura.getPedido() != null) {
+                    List<Factura> facturas = new ArrayList<>();
+                    facturas.add(factura);
+                    pedidoService.actualizarEstadoPedido(factura.getPedido(), facturas);
+                }
+            } else {
+                throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_eliminar_factura_aprobada"));
+            }
         }       
     }
 
@@ -937,7 +942,16 @@ public class FacturaServiceImpl implements IFacturaService {
             factura.setIva_21_neto(0);
         }
         params.put("facturaVenta", factura);
-        params.put("nroComprobante", factura.getNumSerie() + "-" + factura.getNumFactura());
+        if (factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_A) || factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_B)
+                || factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_C)) {
+            if (factura.getNumSerieAfip() != 0 && factura.getNumFacturaAfip() != 0) {
+                params.put("nroComprobante", factura.getNumSerieAfip() + "-" + factura.getNumFacturaAfip());
+            } else {
+                params.put("nroComprobante", "");
+            }
+        } else {
+            params.put("nroComprobante", factura.getNumSerie() + "-" + factura.getNumFactura());
+        }
         params.put("logo", Utilidades.convertirByteArrayIntoImage(factura.getEmpresa().getLogo()));
         List<RenglonFactura> renglones = this.getRenglonesDeLaFactura(factura.getId_Factura());
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(renglones);
