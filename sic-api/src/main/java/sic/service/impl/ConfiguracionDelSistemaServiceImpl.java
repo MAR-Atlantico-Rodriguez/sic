@@ -12,7 +12,6 @@ import sic.modelo.TipoDeOperacion;
 import sic.service.IConfiguracionDelSistemaService;
 import sic.repository.ConfiguracionDelSistemaRepository;
 import sic.service.BusinessServiceException;
-import sic.util.Utilidades;
 
 @Service
 public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSistemaService {
