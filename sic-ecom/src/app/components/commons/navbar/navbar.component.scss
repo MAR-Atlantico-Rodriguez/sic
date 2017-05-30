@@ -1,0 +1,67 @@
+md-toolbar-row {
+  justify-content: space-between;
+}
+
+md-sidenav {
+  margin-top: 65px;
+  width: 80%;
+  padding: 20px;
+  box-shadow: -10px 3px 20px #888;
+}
+
+.mat-sidenav-content {
+    display: block;
+    height: 100%;
+    overflow: initial;
+    position: relative;
+    transform: translate3d(0px, 0px, 0px);
+}
+
+.md-toolbar{
+  background: #f05724;
+  color: #fff;
+  min-height: 64px!important;
+}
+
+.mat-toolbar {
+  max-height: 64px!important;
+}
+
+@media (max-width: 600px) {
+  .mat-toolbar {
+      padding-top: 4px;
+  }
+}
+.inputSearch {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  color: #000;
+  font-size: 17px;
+  -webkit-border-radius: 10px 0 0 10px;
+  -moz-border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 10px;
+}
+
+.buscador {
+  background: #e03906;
+  padding: 10px;
+  font-size: 25px;
+  -webkit-border-radius: 0 10px 10px 0;
+  -moz-border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
+}
+
+.logoImg {
+  width:150px;
+  height:50px;
+}
+
+.logoImgCelular {
+  width:45px;
+  height:40px;
+}
+
+.active {
+  color: #f05724;
+}

@@ -1,10 +1,10 @@
 package sic.vista.swing;
 
+import java.awt.event.AdjustmentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import sic.RestClient;
@@ -22,6 +24,7 @@ import sic.modelo.EmpresaActiva;
 import sic.modelo.Movimiento;
 import sic.modelo.Producto;
 import sic.modelo.RenglonFactura;
+import sic.modelo.PaginaRespuestaRest;
 import sic.modelo.TipoDeComprobante;
 import sic.util.RenderTabla;
 import sic.util.Utilidades;
@@ -30,20 +33,22 @@ public class BuscarProductosGUI extends JDialog {
 
     private final TipoDeComprobante tipoComprobante;
     private ModeloTabla modeloTablaResultados = new ModeloTabla();
-    private List<Producto> productos;
+    private List<Producto> productos = new ArrayList<>();
+    private List<Producto> productosAux = new ArrayList<>();
     private final List<RenglonFactura> renglonesFactura;
     private Producto prodSeleccionado;
     private RenglonFactura renglon;
     private boolean debeCargarRenglon;    
     private final Movimiento tipoMovimiento;
     private final HotKeysHandler keyHandler = new HotKeysHandler();
-    private static final int CANTIDAD_RESULTADOS = 200;
+    private int NUMERO_PAGINA = 0;
+    private static final int TAMANIO_PAGINA = 100;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
     public BuscarProductosGUI(JDialog parent, boolean modal, List<RenglonFactura> renglones,
             TipoDeComprobante tipoDeComprobante, Movimiento movimiento) {
         
-        this.setModal(modal);
+        super(parent, modal);        
         this.initComponents();
         this.setIcon();
         renglonesFactura = renglones;
@@ -51,8 +56,7 @@ public class BuscarProductosGUI extends JDialog {
         this.tipoComprobante = tipoDeComprobante;
         this.setSize(parent.getWidth() - 100, parent.getHeight() - 200);
         this.setLocationRelativeTo(parent);
-        this.setColumnas();
-        //listeners        
+        this.setColumnas();        
         txt_CampoBusqueda.addKeyListener(keyHandler);
         btn_Buscar.addKeyListener(keyHandler);
         tbl_Resultado.addKeyListener(keyHandler);
@@ -60,8 +64,7 @@ public class BuscarProductosGUI extends JDialog {
         txt_Cantidad.addKeyListener(keyHandler);
         txt_UnidadMedida.addKeyListener(keyHandler);
         txt_PorcentajeDescuento.addKeyListener(keyHandler);
-        btn_Aceptar.addKeyListener(keyHandler);
-        //timer
+        btn_Aceptar.addKeyListener(keyHandler);        
         Timer timer = new Timer(false);
         txt_CampoBusqueda.addKeyListener(new KeyAdapter() {
             private TimerTask task;
@@ -73,14 +76,30 @@ public class BuscarProductosGUI extends JDialog {
                 task = new TimerTask() {
                     @Override
                     public void run() {
+                        NUMERO_PAGINA = 0;
+                        productos.clear();
                         buscar();
                         actualizarProductosCargadosEnFactura();
+                        limpiarJTable();
                         cargarResultadosAlTable();
                     }
                 };
                 timer.schedule(task, 450);
             }
-        });   
+        });        
+        sp_Resultado.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
+            int extent = sp_Resultado.getVerticalScrollBar().getModel().getExtent() + 250;
+            int tamanioActual = sp_Resultado.getVerticalScrollBar().getValue();
+            int tamanioMaximo = sp_Resultado.getVerticalScrollBar().getMaximum();
+            if (extent != 0 && tamanioMaximo != 0 && ((tamanioActual + extent) >= tamanioMaximo)) {
+                if (productos.size() >= TAMANIO_PAGINA) {
+                    NUMERO_PAGINA += 1;
+                    buscar();
+                    actualizarProductosCargadosEnFactura();
+                    cargarResultadosAlTable();
+                }
+            }
+        });       
     }
 
     private void setIcon() {
@@ -110,10 +129,13 @@ public class BuscarProductosGUI extends JDialog {
             String uri = "descripcion=" + txt_CampoBusqueda.getText().trim()
                     + "&codigo=" + txt_CampoBusqueda.getText().trim()
                     + "&idEmpresa=" + EmpresaActiva.getInstance().getEmpresa().getId_Empresa()
-                    + "&cantidadRegistros=" + CANTIDAD_RESULTADOS;
-            productos = new ArrayList(Arrays.asList(RestClient.getRestTemplate()
-                    .getForObject("/productos/busqueda/criteria?" + uri,
-                    Producto[].class)));
+                    + "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA;                        
+            PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()
+                    .exchange("/productos/busqueda/criteria?" + uri, HttpMethod.GET, null,
+                            new ParameterizedTypeReference<PaginaRespuestaRest<Producto>>() {})
+                    .getBody();
+            productosAux = response.getContent();
+            productos.addAll(productosAux);
             prodSeleccionado = null;
             txt_UnidadMedida.setText("");
         } catch (RestClientResponseException ex) {
@@ -123,6 +145,7 @@ public class BuscarProductosGUI extends JDialog {
             JOptionPane.showMessageDialog(this,
                     ResourceBundle.getBundle("Mensajes").getString("mensaje_error_conexion"),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
         }
     }
 
@@ -196,8 +219,7 @@ public class BuscarProductosGUI extends JDialog {
     }
 
     private void cargarResultadosAlTable() {
-        this.limpiarJTable();
-        productos.stream().map((p) -> {
+        productosAux.stream().map((p) -> {
             Object[] fila = new Object[6];
             fila[0] = p.getCodigo();
             fila[1] = p.getDescripcion();
@@ -279,7 +301,6 @@ public class BuscarProductosGUI extends JDialog {
      * Clase interna para manejar las hotkeys
      */
     class HotKeysHandler extends KeyAdapter {
-
         @Override
         public void keyPressed(KeyEvent evt) {
             if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -310,11 +331,11 @@ public class BuscarProductosGUI extends JDialog {
         setTitle("Productos");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -438,7 +459,7 @@ public class BuscarProductosGUI extends JDialog {
                         .addGap(0, 0, 0)
                         .addComponent(btn_Buscar))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelFondoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lbl_Descuento)
@@ -461,7 +482,7 @@ public class BuscarProductosGUI extends JDialog {
                     .addComponent(btn_Buscar)
                     .addComponent(txt_CampoBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sp_Resultado, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+                .addComponent(sp_Resultado, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelFondoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelFondoLayout.createSequentialGroup()
@@ -501,9 +522,12 @@ public class BuscarProductosGUI extends JDialog {
     }//GEN-LAST:event_btn_AceptarActionPerformed
 
     private void btn_BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BuscarActionPerformed
-            this.buscar();
-            this.actualizarProductosCargadosEnFactura();
-            this.cargarResultadosAlTable();
+        NUMERO_PAGINA = 0;
+        productos.clear();
+        this.buscar();
+        this.actualizarProductosCargadosEnFactura();
+        this.limpiarJTable();
+        this.cargarResultadosAlTable();
     }//GEN-LAST:event_btn_BuscarActionPerformed
 
     private void tbl_ResultadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_ResultadoMouseClicked
@@ -541,6 +565,7 @@ public class BuscarProductosGUI extends JDialog {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         prodSeleccionado = null;
+        NUMERO_PAGINA = 0;
     }//GEN-LAST:event_formWindowClosing
 
     private void txt_CampoBusquedaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_CampoBusquedaKeyTyped
@@ -548,10 +573,11 @@ public class BuscarProductosGUI extends JDialog {
     }//GEN-LAST:event_txt_CampoBusquedaKeyTyped
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-            this.prepararComponentes();
-            this.buscar();
-            this.actualizarProductosCargadosEnFactura();
-            this.cargarResultadosAlTable();
+        this.prepararComponentes();
+        this.buscar();
+        this.actualizarProductosCargadosEnFactura();
+        this.limpiarJTable();
+        this.cargarResultadosAlTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void txt_CantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt_CantidadFocusGained
@@ -576,7 +602,6 @@ public class BuscarProductosGUI extends JDialog {
     }//GEN-LAST:event_txt_PorcentajeDescuentoFocusGained
 
     private void tbl_ResultadoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tbl_ResultadoFocusGained
-        //Si no hay nada seleccionado y NO esta vacio el table, selecciona la primer fila
         if ((tbl_Resultado.getSelectedRow() == -1) && (tbl_Resultado.getRowCount() != 0)) {
             tbl_Resultado.setRowSelectionInterval(0, 0);
         }

@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {AuthGuard} from './guards/auth.guard';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-ecom',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  title = 'app works!';
+  constructor(public authGuard: AuthGuard) {
+    console.log(authGuard.canActivate());
+  }
 }

@@ -451,7 +451,7 @@ public class FacturaController {
                                    @RequestParam(required = false) Integer nroSerie,
                                    @RequestParam(required = false) Integer nroFactura,                                   
                                    @RequestParam(required = false) Long idViajante,
-                                   @RequestParam(required = false) TipoDeComprobante tipoComprobante,
+                                   @RequestParam(required = false) TipoDeComprobante tipoDeComprobante,
                                    @RequestParam(required = false) Long idUsuario,
                                    @RequestParam(required = false) Long nroPedido,
                                    @RequestParam(required = false) Boolean soloImpagas,
@@ -496,8 +496,8 @@ public class FacturaController {
                 .numFactura((nroFactura != null) ? nroFactura : 0)
                 .buscarPorPedido(nroPedido != null)
                 .nroPedido((nroPedido != null) ? nroPedido : 0)
-                .buscaPorTipoComprobante(tipoComprobante != null)
-                .tipoComprobante((tipoComprobante != null) ? tipoComprobante : null)
+                .buscaPorTipoComprobante(tipoDeComprobante != null)
+                .tipoComprobante((tipoDeComprobante != null) ? tipoDeComprobante : null)
                 .buscaSoloImpagas(soloImpagas)
                 .buscaSoloPagadas(soloPagas)
                 .cantRegistros(0)

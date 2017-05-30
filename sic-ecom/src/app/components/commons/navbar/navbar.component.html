@@ -1,0 +1,47 @@
+<md-toolbar class="md-toolbar">
+  <div fxFlex="16" fxFlex.gt-sm='18' fxLayoutAlign="center">
+    <img fxHide.lt-md src="assets/header.png" class="logoImg">
+    <img fxHide.gt-sm src="assets/header_movile.png" class="logoImgCelular">
+  </div>
+  <div fxFlex class="navbar-search" fxLayoutAlign="center">
+    <input class="inputSearch" #buscador placeholder="Buscar producto"
+           type="search" (keyup.enter)="buscadorProductos(buscador.value)">
+    <md-icon class="buscador" (click)="buscadorProductos(buscador.value)">search</md-icon>
+  </div>
+  <div fxFlex="10" fxLayoutAlign="center">
+    <!--<div fxHide.lt-md>
+          <button md-icon-button (click)="sidenav.open()">
+            <md-icon>shopping_cart</md-icon>
+          </button>
+      </div>-->
+    <div fxHide.gt-sm>
+      <button md-icon-button (click)="sidenav.toggle()">
+        <md-icon>more_vert</md-icon>
+      </button>
+    </div>
+    <div fxHide.lt-md>
+      <button md-icon-button [routerLink]="['/login']">
+        <i class="material-icons">power_settings_new</i>
+      </button>
+    </div>
+  </div>
+</md-toolbar>
+<md-sidenav #sidenav mode="side" opened="false" align="end" fxHide.gt-md>
+  <md-list>
+    <md-nav-list>
+      <md-list-item>Rubros</md-list-item>
+      <md-list-item *ngFor="let r of rubros"
+                    [ngClass]="{ 'active' : r.id_Rubro === rubroActivado }"
+                    (click)="getFiltrarRubroNavbar(r.id_Rubro)">
+        <md-icon>keyboard_arrow_left</md-icon>
+        <div>{{r.nombre}}</div>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item [routerLink]="['/login']">
+        <md-icon>power_settings_new</md-icon>
+        <div>Salir</div>
+      </md-list-item>
+      <md-divider></md-divider>
+    </md-nav-list>
+  </md-list>
+</md-sidenav>

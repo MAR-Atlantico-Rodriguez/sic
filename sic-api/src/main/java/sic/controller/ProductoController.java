@@ -1,7 +1,10 @@
 package sic.controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +39,7 @@ public class ProductoController {
     private final IRubroService rubroService;
     private final IProveedorService proveedorService;  
     private final IMedidaService medidaService;
+    private final int TAMANIO_PAGINA_DEFAULT = 100;
     
     @Autowired
     public ProductoController(IProductoService productoService, IEmpresaService empresaService,
@@ -99,13 +103,14 @@ public class ProductoController {
     
     @GetMapping("/productos/busqueda/criteria") 
     @ResponseStatus(HttpStatus.OK)
-    public List<Producto> buscarProductos(@RequestParam long idEmpresa,
-                                          @RequestParam(required = false) String codigo,
-                                          @RequestParam(required = false) String descripcion,
-                                          @RequestParam(required = false) Long idRubro,
-                                          @RequestParam(required = false) Long idProveedor,                                          
-                                          @RequestParam(required = false) Integer cantidadRegistros,
-                                          @RequestParam(required = false) boolean soloFantantes) {
+    public Page buscarProductos(@RequestParam long idEmpresa,
+                                @RequestParam(required = false) String codigo,
+                                @RequestParam(required = false) String descripcion,
+                                @RequestParam(required = false) Long idRubro,
+                                @RequestParam(required = false) Long idProveedor,
+                                @RequestParam(required = false) boolean soloFantantes,
+                                @RequestParam(required = false) Integer pagina,
+                                @RequestParam(required = false) Integer tamanio) {
         Rubro rubro = null;
         if (idRubro != null) {
             rubro = rubroService.getRubroPorId(idRubro);
@@ -114,9 +119,13 @@ public class ProductoController {
         if (idProveedor != null) {
             proveedor = proveedorService.getProveedorPorId(idProveedor);
         }
-        if (cantidadRegistros == null) {
-            cantidadRegistros = 0;
+        if (tamanio == null || tamanio <= 0) {
+            tamanio = TAMANIO_PAGINA_DEFAULT;
         }
+        if (pagina == null || pagina < 0) {
+            pagina = 0;
+        }
+        Pageable pageable = new PageRequest(pagina, tamanio, new Sort(Sort.Direction.ASC, "descripcion"));
         BusquedaProductoCriteria criteria = BusquedaProductoCriteria.builder()
                                             .buscarPorCodigo((codigo!=null && !codigo.isEmpty()))
                                             .codigo(codigo)
@@ -127,8 +136,8 @@ public class ProductoController {
                                             .buscarPorProveedor(proveedor!=null)
                                             .proveedor(proveedor)
                                             .empresa(empresaService.getEmpresaPorId(idEmpresa))
-                                            .cantRegistros(cantidadRegistros)
                                             .listarSoloFaltantes(soloFantantes)
+                                            .pageable(pageable)
                                             .build();
         return productoService.buscarProductos(criteria);
     }
@@ -173,7 +182,7 @@ public class ProductoController {
                                               @RequestParam double precioCosto,
                                               @RequestParam double pvp, 
                                               @RequestParam(required = false) Double ivaPorcentaje, 
-                                              @RequestParam(required = false) Double impInternoPorcentaje,                                              
+                                              @RequestParam(defaultValue = "0", required = false) Double impInternoPorcentaje,                                              
                                               @RequestParam(required = false) Double precioDeLista, 
                                               @RequestParam(required = false) Double precioDeListaAnterior){
         return productoService.calcularGanancia_Porcentaje(precioDeLista, precioDeListaAnterior,
@@ -191,7 +200,7 @@ public class ProductoController {
     @GetMapping("/productos/imp-interno-neto")
     @ResponseStatus(HttpStatus.OK)
     public double calcularImpInterno_Neto(@RequestParam double pvp, 
-                                          @RequestParam double impInternoPorcentaje){
+                                          @RequestParam(defaultValue = "0",required = false) double impInternoPorcentaje){
         return productoService.calcularImpInterno_Neto(pvp, impInternoPorcentaje);
     }
     
@@ -206,7 +215,7 @@ public class ProductoController {
     @ResponseStatus(HttpStatus.OK)
     public double calcularPrecioLista(@RequestParam double pvp, 
                                       @RequestParam double ivaPorcentaje, 
-                                      @RequestParam double impInternoPorcentaje) {
+                                      @RequestParam(defaultValue = "0",required = false) double impInternoPorcentaje) {
         return productoService.calcularPrecioLista(pvp, ivaPorcentaje, impInternoPorcentaje);
     }
 
@@ -242,7 +251,7 @@ public class ProductoController {
         headers.setContentType(MediaType.APPLICATION_PDF);        
         headers.add("content-disposition", "inline; filename=ListaPrecios.pdf");
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-        byte[] reportePDF = productoService.getReporteListaDePreciosPorEmpresa(productoService.buscarProductos(criteria), idEmpresa);
+        byte[] reportePDF = productoService.getReporteListaDePreciosPorEmpresa(productoService.buscarProductos(criteria).getContent(), idEmpresa);
         return new ResponseEntity<>(reportePDF, headers, HttpStatus.OK);
     }
     
@@ -254,8 +263,8 @@ public class ProductoController {
                                             @RequestParam(required = false) Long idProveedor,
                                             @RequestParam(required = false) Double gananciaNeto,
                                             @RequestParam(required = false) Double gananciaPorcentaje,
-                                            @RequestParam(required = false) Double impuestoInternoNeto,
-                                            @RequestParam(required = false) Double impuestoInternoPorcentaje,
+                                            @RequestParam(defaultValue = "0",required = false) Double impuestoInternoNeto,
+                                            @RequestParam(defaultValue = "0",required = false) Double impuestoInternoPorcentaje,
                                             @RequestParam(required = false) Double IVANeto,
                                             @RequestParam(required = false) Double IVAPorcentaje,
                                             @RequestParam(required = false) Double precioCosto,

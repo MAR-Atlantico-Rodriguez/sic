@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 @Data
 @AllArgsConstructor
@@ -22,5 +23,5 @@ public class BusquedaProductoCriteria {
     private Empresa empresa;
     private int cantRegistros;
     private boolean listarSoloFaltantes;
-
+    private Pageable pageable;
 }

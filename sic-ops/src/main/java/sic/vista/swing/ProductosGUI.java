@@ -2,6 +2,8 @@ package sic.vista.swing;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.AdjustmentEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
@@ -11,16 +13,17 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import sic.RestClient;
 import sic.modelo.EmpresaActiva;
+import sic.modelo.PaginaRespuestaRest;
 import sic.modelo.Producto;
 import sic.modelo.Proveedor;
 import sic.modelo.Rubro;
@@ -30,12 +33,28 @@ import sic.util.Utilidades;
 public class ProductosGUI extends JInternalFrame {
 
     private ModeloTabla modeloTablaResultados = new ModeloTabla();
-    private List<Producto> productos;
+    private List<Producto> productos = new ArrayList<>();
+    private List<Producto> productosAux = new ArrayList<>();
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     private final Dimension sizeInternalFrame = new Dimension(880, 600);
+    private static int totalBusqueda;
+    private static int NUMERO_PAGINA = 0;
+    private static final int TAMANIO_PAGINA = 100;
 
     public ProductosGUI() {
         this.initComponents();
+        sp_Resultados.getVerticalScrollBar().addAdjustmentListener((AdjustmentEvent e) -> {
+            int extent = sp_Resultados.getVerticalScrollBar().getModel().getExtent() + 250;
+            int tamanioActual = sp_Resultados.getVerticalScrollBar().getValue();
+            int tamanioMaximo = sp_Resultados.getVerticalScrollBar().getMaximum();
+            if (extent != 0 && tamanioMaximo != 0 && ((tamanioActual + extent) >= tamanioMaximo)) {
+                if (productos.size() >= TAMANIO_PAGINA) {
+                    NUMERO_PAGINA += 1;
+                    buscar();
+                    cargarResultadosAlTable();
+                }
+            }
+        });
     }
 
     private void cargarRubros() {
@@ -59,7 +78,7 @@ public class ProductosGUI extends JInternalFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+    
     private void cargarProveedores() {
         try {
             List<Proveedor> proveedores = new ArrayList(Arrays.asList(RestClient.getRestTemplate()
@@ -87,7 +106,7 @@ public class ProductosGUI extends JInternalFrame {
         tbl_Resultados.setAutoCreateRowSorter(true);
 
         //nombres de columnas
-        String[] encabezados = new String[23];
+        String[] encabezados = new String[21];
         encabezados[0] = "Codigo";
         encabezados[1] = "Descripcion";
         encabezados[2] = "Cantidad";
@@ -100,17 +119,15 @@ public class ProductosGUI extends JInternalFrame {
         encabezados[9] = "PVP";
         encabezados[10] = "% IVA";
         encabezados[11] = "IVA";
-        encabezados[12] = "% Imp.Interno";
-        encabezados[13] = "Imp.Interno";
-        encabezados[14] = "Precio Lista";
-        encabezados[15] = "Rubro";
-        encabezados[16] = "Fecha U. Modificacion";
-        encabezados[17] = "Estanteria";
-        encabezados[18] = "Estante";
-        encabezados[19] = "Proveedor";
-        encabezados[20] = "Fecha Alta";
-        encabezados[21] = "Fecha Vencimiento";
-        encabezados[22] = "Nota";
+        encabezados[12] = "Precio Lista";
+        encabezados[13] = "Rubro";
+        encabezados[14] = "Fecha U. Modificacion";
+        encabezados[15] = "Estanteria";
+        encabezados[16] = "Estante";
+        encabezados[17] = "Proveedor";
+        encabezados[18] = "Fecha Alta";
+        encabezados[19] = "Fecha Vencimiento";
+        encabezados[20] = "Nota";
         modeloTablaResultados.setColumnIdentifiers(encabezados);
         tbl_Resultados.setModel(modeloTablaResultados);
 
@@ -129,16 +146,14 @@ public class ProductosGUI extends JInternalFrame {
         tipos[10] = Double.class;
         tipos[11] = Double.class;
         tipos[12] = Double.class;
-        tipos[13] = Double.class;
-        tipos[14] = Double.class;
+        tipos[13] = String.class;
+        tipos[14] = Date.class;
         tipos[15] = String.class;
-        tipos[16] = Date.class;
+        tipos[16] = String.class;
         tipos[17] = String.class;
-        tipos[18] = String.class;
-        tipos[19] = String.class;
-        tipos[20] = Date.class;
-        tipos[21] = Date.class;
-        tipos[22] = String.class;
+        tipos[18] = Date.class;
+        tipos[19] = Date.class;
+        tipos[20] = String.class;
         modeloTablaResultados.setClaseColumnas(tipos);
         tbl_Resultados.getTableHeader().setReorderingAllowed(false);
         tbl_Resultados.getTableHeader().setResizingAllowed(true);
@@ -161,20 +176,18 @@ public class ProductosGUI extends JInternalFrame {
         tbl_Resultados.getColumnModel().getColumn(11).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(12).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(13).setPreferredWidth(100);
-        tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(100);
+        tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(150);
         tbl_Resultados.getColumnModel().getColumn(15).setPreferredWidth(200);
         tbl_Resultados.getColumnModel().getColumn(16).setPreferredWidth(200);
         tbl_Resultados.getColumnModel().getColumn(17).setPreferredWidth(200);
-        tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(200);
-        tbl_Resultados.getColumnModel().getColumn(19).setPreferredWidth(450);
-        tbl_Resultados.getColumnModel().getColumn(20).setPreferredWidth(150);
-        tbl_Resultados.getColumnModel().getColumn(21).setPreferredWidth(150);
-        tbl_Resultados.getColumnModel().getColumn(22).setPreferredWidth(1000);
+        tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(125);
+        tbl_Resultados.getColumnModel().getColumn(19).setPreferredWidth(125);
+        tbl_Resultados.getColumnModel().getColumn(20).setPreferredWidth(400);
+
     }
 
     private void cargarResultadosAlTable() {
-        this.limpiarJTable();
-        productos.stream().map((producto) -> {
+        productosAux.stream().map((producto) -> {
             Object[] fila = new Object[23];
             fila[0] = producto.getCodigo();
             fila[1] = producto.getDescripcion();
@@ -188,23 +201,29 @@ public class ProductosGUI extends JInternalFrame {
             fila[9] = producto.getPrecioVentaPublico();
             fila[10] = producto.getIva_porcentaje();
             fila[11] = producto.getIva_neto();
-            fila[12] = producto.getImpuestoInterno_porcentaje();
-            fila[13] = producto.getImpuestoInterno_neto();
-            fila[14] = producto.getPrecioLista();
-            fila[15] = producto.getRubro().getNombre();
-            fila[16] = producto.getFechaUltimaModificacion();
-            fila[17] = producto.getEstanteria();
-            fila[18] = producto.getEstante();
-            fila[19] = producto.getProveedor().getRazonSocial();
-            fila[20] = producto.getFechaAlta();
-            fila[21] = producto.getFechaVencimiento();
-            fila[22] = producto.getNota();
+            fila[12] = producto.getPrecioLista();
+            fila[13] = producto.getRubro().getNombre();
+            fila[14] = producto.getFechaUltimaModificacion();
+            fila[15] = producto.getEstanteria();
+            fila[16] = producto.getEstante();
+            fila[17] = producto.getProveedor().getRazonSocial();
+            fila[18] = producto.getFechaAlta();
+            fila[19] = producto.getFechaVencimiento();
+            fila[20] = producto.getNota();
             return fila;
         }).forEach((fila) -> {
             modeloTablaResultados.addRow(fila);
         });
         tbl_Resultados.setModel(modeloTablaResultados);
-        lbl_cantResultados.setText(productos.size() + " productos encontrados");
+        lbl_cantResultados.setText(totalBusqueda + " productos encontrados");
+    }
+    
+    private void resetScroll(){
+        NUMERO_PAGINA = 0;
+        productos.clear();
+        productosAux.clear();
+        Point p = new Point(0, 0);
+        sp_Resultados.getViewport().setViewPosition(p);
     }
 
     private void limpiarJTable() {
@@ -213,116 +232,49 @@ public class ProductosGUI extends JInternalFrame {
         this.setColumnas();
     }
 
-    private void cambiarEstadoEnabled(boolean status) {
-        chk_Codigo.setEnabled(status);
-        if (status == true && chk_Codigo.isSelected() == true) {
-            txt_Codigo.setEnabled(true);
-        } else {
-            txt_Codigo.setEnabled(false);
-        }
-        chk_Descripcion.setEnabled(status);
-        if (status == true && chk_Descripcion.isSelected() == true) {
-            txt_Descripcion.setEnabled(true);
-        } else {
-            txt_Descripcion.setEnabled(false);
-        }
-        chk_Rubro.setEnabled(status);
-        if (status == true && chk_Rubro.isSelected() == true) {
-            cmb_Rubro.setEnabled(true);
-        } else {
-            cmb_Rubro.setEnabled(false);
-        }
-        chk_Proveedor.setEnabled(status);
-        if (status == true && chk_Proveedor.isSelected() == true) {
-            cmb_Proveedor.setEnabled(true);
-        } else {
-            cmb_Proveedor.setEnabled(false);
-        }
-        chk_Disponibilidad.setEnabled(status);
-        if (status == true && chk_Disponibilidad.isSelected() == true) {
-            rb_Todos.setEnabled(true);
-            rb_Faltantes.setEnabled(true);
-        } else {
-            rb_Todos.setEnabled(false);
-            rb_Faltantes.setEnabled(false);
-        }
-        btn_Buscar.setEnabled(status);
-        tbl_Resultados.setEnabled(status);
-        btn_Nuevo.setEnabled(status);
-        btn_Modificar.setEnabled(status);
-        btn_Eliminar.setEnabled(status);
-        btn_ReporteListaPrecios.setEnabled(status);
-    }
-
     private void buscar() {
-        cambiarEstadoEnabled(false);
-        pg_progreso.setIndeterminate(true);
-        SwingWorker<List<Producto>, Void> worker = new SwingWorker<List<Producto>, Void>() {
-
-            @Override
-            protected List<Producto> doInBackground() throws Exception {
-                long idEmpresa = EmpresaActiva.getInstance().getEmpresa().getId_Empresa();
-                String criteriaBusqueda = "/productos/busqueda/criteria?idEmpresa=" + idEmpresa;
-                String criteriaCosto = "/productos/valor-stock/criteria?idEmpresa=" + idEmpresa;
-                if (chk_Codigo.isSelected()) {
-                    criteriaBusqueda += "&codigo=" + txt_Codigo.getText().trim();
-                    criteriaCosto += "&codigo=" + txt_Codigo.getText().trim();
-                }
-                if (chk_Descripcion.isSelected()) {
-                    criteriaBusqueda += "&descripcion=" + txt_Descripcion.getText().trim();
-                    criteriaCosto += "&descripcion=" + txt_Descripcion.getText().trim();
-                }
-                if (chk_Rubro.isSelected()) {
-                    criteriaBusqueda += "&idRubro=" + ((Rubro) cmb_Rubro.getSelectedItem()).getId_Rubro();
-                    criteriaCosto += "&idRubro=" + ((Rubro) cmb_Rubro.getSelectedItem()).getId_Rubro();
-                }
-                if (chk_Proveedor.isSelected()) {
-                    criteriaBusqueda += "&idProveedor=" + ((Proveedor) cmb_Proveedor.getSelectedItem()).getId_Proveedor();
-                    criteriaCosto += "&idProveedor=" + ((Proveedor) cmb_Proveedor.getSelectedItem()).getId_Proveedor();
-                }
-                if (chk_Disponibilidad.isSelected()) {
-                    criteriaBusqueda += "&soloFantantes=" + rb_Faltantes.isSelected();
-                    criteriaCosto += "&soloFantantes=" + rb_Faltantes.isSelected();
-                }
-                productos = new ArrayList(Arrays.asList(RestClient.getRestTemplate().getForObject(criteriaBusqueda, Producto[].class)));
-                txt_ValorStock.setValue(RestClient.getRestTemplate().getForObject(criteriaCosto, Double.class));
-                cargarResultadosAlTable();
-                cambiarEstadoEnabled(true);
-                return productos;
+        try {
+            long idEmpresa = EmpresaActiva.getInstance().getEmpresa().getId_Empresa();
+            String criteriaBusqueda = "/productos/busqueda/criteria?idEmpresa=" + idEmpresa;
+            String criteriaCosto = "/productos/valor-stock/criteria?idEmpresa=" + idEmpresa;
+            if (chk_Codigo.isSelected()) {
+                criteriaBusqueda += "&codigo=" + txt_Codigo.getText().trim();
+                criteriaCosto += "&codigo=" + txt_Codigo.getText().trim();
             }
-
-            @Override
-            protected void done() {
-                pg_progreso.setIndeterminate(false);
-                try {
-                    if (get().isEmpty()) {
-                        JOptionPane.showInternalMessageDialog(getParent(),
-                                ResourceBundle.getBundle("Mensajes").getString("mensaje_busqueda_sin_resultados"),
-                                "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } catch (InterruptedException ex) {
-                    String msjError = "La tarea que se estaba realizando fue interrumpida. Intente nuevamente.";
-                    LOGGER.error(msjError + " - " + ex.getMessage());
-                    JOptionPane.showInternalMessageDialog(getParent(), msjError, "Error", JOptionPane.ERROR_MESSAGE);
-                } catch (ExecutionException ex) {
-                    if (ex.getCause() instanceof RestClientResponseException) {
-                        JOptionPane.showMessageDialog(getParent(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    } else if (ex.getCause() instanceof ResourceAccessException) {
-                        LOGGER.error(ex.getMessage());
-                        JOptionPane.showMessageDialog(getParent(),
-                                ResourceBundle.getBundle("Mensajes").getString("mensaje_error_conexion"),
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        String msjError = "Se produjo un error en la ejecución de la tarea solicitada. Intente nuevamente.";
-                        LOGGER.error(msjError + " - " + ex.getMessage());
-                        JOptionPane.showInternalMessageDialog(getParent(), msjError, "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    cambiarEstadoEnabled(true);
-                }
+            if (chk_Descripcion.isSelected()) {
+                criteriaBusqueda += "&descripcion=" + txt_Descripcion.getText().trim();
+                criteriaCosto += "&descripcion=" + txt_Descripcion.getText().trim();
             }
-        };
-
-        worker.execute();
+            if (chk_Rubro.isSelected()) {
+                criteriaBusqueda += "&idRubro=" + ((Rubro) cmb_Rubro.getSelectedItem()).getId_Rubro();
+                criteriaCosto += "&idRubro=" + ((Rubro) cmb_Rubro.getSelectedItem()).getId_Rubro();
+            }
+            if (chk_Proveedor.isSelected()) {
+                criteriaBusqueda += "&idProveedor=" + ((Proveedor) cmb_Proveedor.getSelectedItem()).getId_Proveedor();
+                criteriaCosto += "&idProveedor=" + ((Proveedor) cmb_Proveedor.getSelectedItem()).getId_Proveedor();
+            }
+            if (chk_Disponibilidad.isSelected()) {
+                criteriaBusqueda += "&soloFantantes=" + rb_Faltantes.isSelected();
+                criteriaCosto += "&soloFantantes=" + rb_Faltantes.isSelected();
+            }
+            criteriaBusqueda += "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA;
+            PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()
+                    .exchange(criteriaBusqueda, HttpMethod.GET, null,
+                            new ParameterizedTypeReference<PaginaRespuestaRest<Producto>>() {})
+                    .getBody();
+            productosAux = response.getContent();
+            productos.addAll(productosAux);
+            totalBusqueda = response.getTotalElements();
+            txt_ValorStock.setValue(RestClient.getRestTemplate().getForObject(criteriaCosto, Double.class));            
+        } catch (RestClientResponseException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ResourceAccessException ex) {
+            LOGGER.error(ex.getMessage());
+            JOptionPane.showMessageDialog(this,
+                    ResourceBundle.getBundle("Mensajes").getString("mensaje_error_conexion"),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            this.dispose();
+        }
     }
 
     private List<Producto> getSeleccionMultipleDeProductos(int[] indices) {
@@ -357,7 +309,7 @@ public class ProductosGUI extends JInternalFrame {
                     byte[] reporte = RestClient.getRestTemplate()
                             .getForObject(uriReporteListaProductosCriteria,
                                     byte[].class);
-                    File f = new File("ListaPrecios.pdf");
+                    File f = new File(System.getProperty("user.home") + "/ListaPrecios.pdf");
                     Files.write(f.toPath(), reporte);
                     Desktop.getDesktop().open(f);
                 } catch (IOException ex) {
@@ -396,7 +348,6 @@ public class ProductosGUI extends JInternalFrame {
         chk_Descripcion = new javax.swing.JCheckBox();
         chk_Rubro = new javax.swing.JCheckBox();
         cmb_Rubro = new javax.swing.JComboBox();
-        pg_progreso = new javax.swing.JProgressBar();
         lbl_cantResultados = new javax.swing.JLabel();
         chk_Disponibilidad = new javax.swing.JCheckBox();
         rb_Todos = new javax.swing.JRadioButton();
@@ -481,7 +432,7 @@ public class ProductosGUI extends JInternalFrame {
 
         cmb_Rubro.setEnabled(false);
 
-        lbl_cantResultados.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_cantResultados.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         chk_Disponibilidad.setText("Disponibilidad:");
         chk_Disponibilidad.addItemListener(new java.awt.event.ItemListener() {
@@ -527,9 +478,7 @@ public class ProductosGUI extends JInternalFrame {
                     .addGroup(panelFiltrosLayout.createSequentialGroup()
                         .addComponent(btn_Buscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbl_cantResultados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pg_progreso, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lbl_cantResultados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelFiltrosLayout.setVerticalGroup(
@@ -555,7 +504,6 @@ public class ProductosGUI extends JInternalFrame {
                     .addComponent(cmb_Proveedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelFiltrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(pg_progreso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_Buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbl_cantResultados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -700,7 +648,10 @@ public class ProductosGUI extends JInternalFrame {
 
     private void btn_BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_BuscarActionPerformed
         try {
+            this.resetScroll();
+            this.limpiarJTable();
             this.buscar();
+            this.cargarResultadosAlTable();
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (ResourceAccessException ex) {
@@ -717,7 +668,10 @@ public class ProductosGUI extends JInternalFrame {
         gui_DetalleProducto.setLocationRelativeTo(this);
         gui_DetalleProducto.setVisible(true);
         try {
+            this.resetScroll();
             this.buscar();
+            this.limpiarJTable();
+            this.cargarResultadosAlTable();
         } catch (RestClientResponseException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (ResourceAccessException ex) {
@@ -742,7 +696,10 @@ public class ProductosGUI extends JInternalFrame {
                     }
                     RestClient.getRestTemplate().delete("/productos?idProducto="
                             + Arrays.toString(idsProductos).substring(1, Arrays.toString(idsProductos).length() - 1));
-                    buscar();
+                    this.resetScroll();
+                    this.buscar();
+                    this.limpiarJTable();
+                    this.cargarResultadosAlTable();
                 } catch (RestClientResponseException ex) {
                     JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 } catch (ResourceAccessException ex) {
@@ -773,7 +730,10 @@ public class ProductosGUI extends JInternalFrame {
                 gui_DetalleProducto.setVisible(true);
             }
             try {
+                this.resetScroll();
                 this.buscar();
+                this.limpiarJTable();
+                this.cargarResultadosAlTable();
             } catch (RestClientResponseException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } catch (ResourceAccessException ex) {
@@ -851,7 +811,6 @@ public class ProductosGUI extends JInternalFrame {
     private javax.swing.JLabel lbl_cantResultados;
     private javax.swing.JPanel panelFiltros;
     private javax.swing.JPanel panelResultados;
-    private javax.swing.JProgressBar pg_progreso;
     private javax.swing.JRadioButton rb_Faltantes;
     private javax.swing.JRadioButton rb_Todos;
     private javax.swing.JScrollPane sp_Resultados;
