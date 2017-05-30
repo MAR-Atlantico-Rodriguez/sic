@@ -22,10 +22,12 @@ export class NavbarComponent implements OnInit {
   }
 
   buscadorProductos(palabraBuscar: string) {
+    this.productService.pagina = 0;
     this.productService.getBuscador(palabraBuscar);
   }
 
   getFiltrarRubroNavbar(id) {
+    this.productService.pagina = 0;
     this.rubroActivado = (this.rubroActivado !== id) ? id : false;
     this.productService.getRubro(id);
   }

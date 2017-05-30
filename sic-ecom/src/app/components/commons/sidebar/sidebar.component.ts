@@ -32,6 +32,7 @@ export class SidebarComponent implements OnInit {
 
   getFiltrarRubro(id) {
     this.authGuard.canActivate();
+    this.productService.pagina = 0;
     this.rubroActivado = (this.rubroActivado !== id) ? id : false;
     this.productService.getRubro(id);
   }

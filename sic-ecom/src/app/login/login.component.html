@@ -1,5 +1,5 @@
 <div fxFlex fxLayout="row" fxLayoutAlign="center center">
-  <div class="formulario" fxFlex.gt-sm="40">
+  <div class="formulario" fxFlex.gt-sx="40">
     <form #f="ngForm" name="form" (ngSubmit)="f.form.valid && login()" novalidate
           fxLayout="column" fxLayoutAlign="center center">
       <img id="img" md-list-avatar src="assets/loginLogo.png">
@@ -15,7 +15,7 @@
         <div *ngIf="f.submitted && !username.valid" class="error">
           Se requiere nombre de usuario
         </div>
-        <div class="error" *ngIf="msjError">{{msjError}}</div>
+        <div class="error" *ngIf="msjError && username.valid">{{msjError}}</div>
       </div>
       <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
         <md-input-container class="example-full-width">
@@ -28,7 +28,7 @@
         <div *ngIf="f.submitted && !password.valid" class="error">
           Se requiere password
         </div>
-        <div class="error" *ngIf="msjError">{{msjError}}</div>
+        <div class="error" *ngIf="msjError && password.valid">{{msjError}}</div>
       </div>
       <div class="form-group" fxLayoutAlign="center">
         <button [disabled]="loading"

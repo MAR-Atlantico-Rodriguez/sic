@@ -7,7 +7,5 @@ import {AuthGuard} from './guards/auth.guard';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  constructor(public authGuard: AuthGuard) {
-    console.log(authGuard.canActivate());
-  }
+  constructor(public authGuard: AuthGuard) {}
 }

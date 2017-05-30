@@ -10,6 +10,10 @@ export class ProductService {
   public url = 'https://sic-api.herokuapp.com/api/v1/productos/busqueda/criteria?idEmpresa=1';
   public busquedaDescripcion: String = '';
   public busquedaRubro: String = '';
+  public pagina:number = 0;
+  public tamanio:number = 2;
+  public totalPaginas:number = 0;
+  public totalElementos:number = 0;
 
   constructor(public authHttp: AuthHttp) {}
 
@@ -22,7 +26,9 @@ export class ProductService {
     this.busquedaDescripcion = palabraBuscar;
     this.getProductos().subscribe(
       data => {
-        this.productosService.next(data);
+        this.totalPaginas = data.totalPages;
+        this.totalElementos = data.totalElements;
+        this.productosService.next(data.content);
       }
     );
   }
@@ -31,7 +37,9 @@ export class ProductService {
     this.busquedaRubro = (rubroBuscar !== this.busquedaRubro) ? rubroBuscar : '';
     this.getProductos().subscribe(
       data => {
-        this.productosService.next(data);
+        this.totalPaginas = data.totalPages;
+        this.totalElementos = data.totalElements;
+        this.productosService.next(data.content);
       },
       error => {
         console.log(error);
@@ -40,7 +48,7 @@ export class ProductService {
   }
 
   getCriteria(): string {
-    let criteria = '&';
+    let criteria = '&pagina='+this.pagina+'&tamanio='+this.tamanio+'&';
     if (String(this.busquedaRubro).length > 0) {
       criteria += 'idRubro=' + this.busquedaRubro;
     }

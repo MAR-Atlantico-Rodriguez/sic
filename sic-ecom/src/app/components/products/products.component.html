@@ -1,5 +1,5 @@
 <div fxLayout="column">
-  <div fxFlex fxLayoutAlign="center" *ngIf="loadingProducts">
+  <div fxFlex fxLayoutAlign="center" *ngIf="loadingProducts && (productos.length===0)">
     <md-spinner strokeWidth="5"></md-spinner>
   </div>
   <div fxFlex>
@@ -19,6 +19,17 @@
         </md-nav-list>
         <md-divider></md-divider>
       </div>
+      <md-list-item>
+        <md-divider></md-divider>
+          <button md-button fxFlex (click)="masProductos()" color="primary" 
+            *ngIf="(productos.length>0) && (totalPaginas > (pagina+1))">
+            <md-icon>playlist_add</md-icon>
+            Pagina {{pagina+1}} de {{totalPaginas}}
+            <md-progress-bar color="accent" mode="query" 
+              *ngIf="loadingProducts && (productos.length>0)"></md-progress-bar>
+          </button>
+        <md-divider></md-divider>
+      </md-list-item>
     </md-list>
   </div>
 </div>

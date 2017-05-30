@@ -10,8 +10,12 @@ import {AuthGuard} from '../../guards/auth.guard';
 
 export class ProductsComponent implements OnInit {
 
-  public productos: Array<any>;
+  public productos = [];
   public loadingProducts = false;
+  public totalPaginas:number = 0;
+  public totalElementos:number = 0;
+  public pagina:number = 0;
+  public tamanio:number = 2;
 
   constructor(private productService: ProductService, private authGuard: AuthGuard) {}
 
@@ -20,10 +24,12 @@ export class ProductsComponent implements OnInit {
     this.productService.productosService.subscribe(
       dataSearch => {
         this.productos = dataSearch;
+        this.totalPaginas = this.productService.totalPaginas;
+        this.pagina = this.productService.pagina;
       });
   }
 
-  getProductos() {
+  /*getProductos() {
     this.authGuard.canActivate();
     this.loadingProducts = true;
     this.productService.getProductos()
@@ -31,5 +37,27 @@ export class ProductsComponent implements OnInit {
           this.productos = data;
           this.loadingProducts = false;
         });
+  }*/
+
+  getProductos() {
+    this.authGuard.canActivate();
+    this.loadingProducts = true;
+    this.productService.pagina = this.pagina;
+    this.productService.tamanio = this.tamanio;
+    this.productService.getProductos()
+      .subscribe(data => {
+          data.content.forEach((v) => { this.productos.push(v); });
+          
+          this.totalPaginas = data.totalPages;
+          this.totalElementos = data.totalElements;
+          this.loadingProducts = false;
+        });
+  }
+
+  masProductos(){
+    if((this.pagina+1) < this.totalPaginas){
+      this.pagina++;
+      this.getProductos();
+    }
   }
 }
