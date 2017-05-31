@@ -1,6 +1,10 @@
 <div fxLayout="column">
-  <div fxFlex fxLayoutAlign="center" *ngIf="loadingProducts && (productos.length===0)">
+  <div fxFlex fxLayoutAlign="center" *ngIf="loadingProducts && (productos.length === 0)">
     <md-spinner></md-spinner>
+  </div>
+  <div *ngIf="!loadingProducts && (productos.length === 0)" fxLayoutAlign="center" class="sinResultados">
+    <i class="material-icons">sentiment_neutral</i>
+    &nbsp;No se encontraron resultados
   </div>
   <div fxFlex>
     <md-list>

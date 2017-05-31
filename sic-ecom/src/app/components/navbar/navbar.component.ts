@@ -11,7 +11,6 @@ import {SidenavService} from "../../services/sidenav.service";
 export class NavbarComponent implements OnInit {
 
   public rubros = [];
-  public rubroActivado = false;
 
   constructor(private productService: ProductService,
               private rubrosService: RubrosService,
@@ -19,20 +18,13 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.rubrosService.getRubros().subscribe(
-      data => this.rubros = data,
-      error => console.log(error)
+      data => this.rubros = data
     );
   }
 
   buscadorProductos(palabraBuscar: string) {
     this.productService.pagina = 0;
     this.productService.getBuscador(palabraBuscar);
-  }
-
-  getFiltrarRubroNavbar(id) {
-    this.productService.pagina = 0;
-    this.rubroActivado = (this.rubroActivado !== id) ? id : false;
-    this.productService.getRubro(id);
   }
 
   toggleSidenav(){

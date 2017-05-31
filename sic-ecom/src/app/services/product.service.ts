@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {AuthHttp} from 'angular2-jwt';
 import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
+import {AuthGuard} from "../guards/auth.guard";
 
 @Injectable()
 export class ProductService {
@@ -15,9 +16,10 @@ export class ProductService {
   public totalPaginas:number = 0;
   public totalElementos:number = 0;
 
-  constructor(public authHttp: AuthHttp) {}
+  constructor(private authHttp: AuthHttp, private authGuard: AuthGuard) {}
 
   getProductos() {
+    this.authGuard.canActivate();
     const url = this.url + this.getCriteria();
     return this.authHttp.get(url).map(data => data.json());
   }
@@ -40,9 +42,6 @@ export class ProductService {
         this.totalPaginas = data.totalPages;
         this.totalElementos = data.totalElements;
         this.productosService.next(data.content);
-      },
-      error => {
-        console.log(error);
       }
     );
   }

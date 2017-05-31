@@ -44,4 +44,8 @@ export class AuthService {
       this.jwtHelper.isTokenExpired(token));
     return this.jwtHelper.isTokenExpired(token);
   }
+
+  verificarAuth(error){
+    console.log(error);
+  }
 }

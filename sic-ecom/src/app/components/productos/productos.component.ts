@@ -4,8 +4,8 @@ import {AuthGuard} from '../../guards/auth.guard';
 
 @Component({
   selector: 'app-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss']
+  templateUrl: './productos.component.html',
+  styleUrls: ['./productos.component.scss']
 })
 
 export class ProductsComponent implements OnInit {
@@ -47,7 +47,7 @@ export class ProductsComponent implements OnInit {
     this.productService.getProductos()
       .subscribe(data => {
           data.content.forEach((v) => { this.productos.push(v); });
-          
+
           this.totalPaginas = data.totalPages;
           this.totalElementos = data.totalElements;
           this.loadingProducts = false;
