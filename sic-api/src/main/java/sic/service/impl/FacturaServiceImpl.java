@@ -955,12 +955,12 @@ public class FacturaServiceImpl implements IFacturaService {
         if (factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_A) || factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_B)
                 || factura.getTipoComprobante().equals(TipoDeComprobante.FACTURA_C)) {
             if (factura.getNumSerieAfip() != 0 && factura.getNumFacturaAfip() != 0) {
-                params.put("nroComprobante", factura.getNumSerieAfip() + "-" + factura.getNumFacturaAfip());
+                params.put("nroComprobante", factura.getNumSerieAfip() + " - " + factura.getNumFacturaAfip());
             } else {
                 params.put("nroComprobante", "");
             }
         } else {
-            params.put("nroComprobante", factura.getNumSerie() + "-" + factura.getNumFactura());
+            params.put("nroComprobante", factura.getNumSerie() + " - " + factura.getNumFactura());
         }
         params.put("logo", Utilidades.convertirByteArrayIntoImage(factura.getEmpresa().getLogo()));
         List<RenglonFactura> renglones = this.getRenglonesDeLaFactura(factura.getId_Factura());
