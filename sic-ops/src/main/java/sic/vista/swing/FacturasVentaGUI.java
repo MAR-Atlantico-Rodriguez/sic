@@ -318,7 +318,11 @@ public class FacturasVentaGUI extends JInternalFrame {
             fila[15] = factura.getSubTotal_bruto();
             fila[16] = factura.getIva_105_neto();
             fila[17] = factura.getIva_21_neto();
-            fila[18] = factura.getNumSerieAfip() + " - " + factura.getNumFacturaAfip();
+            if (factura.getNumSerieAfip() == 0 && factura.getNumFacturaAfip() == 0) {
+                fila[18] = "";
+            } else {
+                fila[18] = factura.getNumSerieAfip() + " - " + factura.getNumFacturaAfip();
+            }
             fila[19] = factura.getVencimientoCAE();
             return fila;
         }).forEach((fila) -> {
