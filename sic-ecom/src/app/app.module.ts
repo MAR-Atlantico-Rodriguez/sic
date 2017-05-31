@@ -8,15 +8,16 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './guards/auth.guard';
-import {NavbarComponent} from './components/commons/navbar/navbar.component';
-import {SidebarComponent} from './components/commons/sidebar/sidebar.component';
-import {ProductsComponent} from './components/products/products.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
+import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {ProductsComponent} from './components/productos/products.component';
 import {ProductService} from './services/product.service';
 import {AuthService} from './services/auth.service';
 import {RubrosService} from './services/rubros.service';
 import {routing} from './app.routing';
 import {HomeComponent} from './home/home.component';
 import {AuthModule} from './auth.module';
+import {SidenavService} from "./services/sidenav.service";
 
 @NgModule({
   declarations: [
@@ -24,7 +25,7 @@ import {AuthModule} from './auth.module';
     HomeComponent,
     LoginComponent,
     NavbarComponent,
-    SidebarComponent,
+    SidenavComponent,
     ProductsComponent
   ],
   imports: [
@@ -41,7 +42,8 @@ import {AuthModule} from './auth.module';
     AuthGuard,
     AuthService,
     ProductService,
-    RubrosService
+    RubrosService,
+    SidenavService
   ],
   bootstrap: [AppComponent]
 })

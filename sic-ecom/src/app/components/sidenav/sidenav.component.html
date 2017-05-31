@@ -1,0 +1,20 @@
+<md-list>
+  <md-nav-list>
+    <md-list-item><h3>Rubros</h3></md-list-item>
+    <md-spinner *ngIf="loadingSidebar"></md-spinner>
+    <md-list-item *ngFor="let r of rubros"
+                  [ngClass]="{ 'rubroActivo': r.id_Rubro === rubroActivado }"
+                  (click)="getFiltrarRubro(r.id_Rubro)">
+      <md-icon> keyboard_arrow_left</md-icon>
+      <div>{{r.nombre}}</div>
+    </md-list-item>
+    <div fxHide.gt-sm>
+      <md-divider></md-divider>
+      <md-list-item [routerLink]="['/login']">
+        <md-icon>power_settings_new</md-icon>
+        <div>&nbsp;Salir</div>
+      </md-list-item>
+      <md-divider></md-divider>
+    </div>
+  </md-nav-list>
+</md-list>

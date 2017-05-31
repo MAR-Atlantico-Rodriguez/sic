@@ -9,15 +9,21 @@ md-card {
   width: 100px !important;
 }
 
-.descripcion-products-list {
+.descripcion-producto {
   color: #f05724 !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
   font-weight: bold !important;
-  word-break: break-all;
+  white-space: normal !important;
 }
 
 .mat-list .mat-list-item .mat-list-avatar, .mat-nav-list .mat-list-item .mat-list-avatar {
   height: 75px;
   width: 75px;
+}
+
+.spinnerProductos{
+  width: 60px;
+}
+
+.listItemProductos{
+
 }

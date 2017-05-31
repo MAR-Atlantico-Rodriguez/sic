@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from '../../../services/product.service';
-import {RubrosService} from '../../../services/rubros.service';
+import {ProductService} from '../../services/product.service';
+import {RubrosService} from '../../services/rubros.service';
+import {SidenavService} from "../../services/sidenav.service";
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,9 @@ export class NavbarComponent implements OnInit {
   public rubros = [];
   public rubroActivado = false;
 
-  constructor(private productService: ProductService, private rubrosService: RubrosService) {}
+  constructor(private productService: ProductService,
+              private rubrosService: RubrosService,
+              private sidenavService: SidenavService) {}
 
   ngOnInit() {
     this.rubrosService.getRubros().subscribe(
@@ -30,5 +33,9 @@ export class NavbarComponent implements OnInit {
     this.productService.pagina = 0;
     this.rubroActivado = (this.rubroActivado !== id) ? id : false;
     this.productService.getRubro(id);
+  }
+
+  toggleSidenav(){
+    this.sidenavService.toggle().then(() => {});
   }
 }

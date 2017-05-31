@@ -15,7 +15,7 @@
           </button>
       </div>-->
     <div fxHide.gt-sm>
-      <button md-icon-button (click)="sidenav.toggle()">
+      <button md-icon-button (click)="toggleSidenav()">
         <md-icon>more_vert</md-icon>
       </button>
     </div>
@@ -26,22 +26,3 @@
     </div>
   </div>
 </md-toolbar>
-<md-sidenav #sidenav mode="side" opened="false" align="end" fxHide.gt-md>
-  <md-list>
-    <md-nav-list>
-      <md-list-item>Rubros</md-list-item>
-      <md-list-item *ngFor="let r of rubros"
-                    [ngClass]="{ 'active' : r.id_Rubro === rubroActivado }"
-                    (click)="getFiltrarRubroNavbar(r.id_Rubro)">
-        <md-icon>keyboard_arrow_left</md-icon>
-        <div>{{r.nombre}}</div>
-      </md-list-item>
-      <md-divider></md-divider>
-      <md-list-item [routerLink]="['/login']">
-        <md-icon>power_settings_new</md-icon>
-        <div>Salir</div>
-      </md-list-item>
-      <md-divider></md-divider>
-    </md-nav-list>
-  </md-list>
-</md-sidenav>

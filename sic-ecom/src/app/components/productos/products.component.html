@@ -1,0 +1,31 @@
+<div fxLayout="column">
+  <div fxFlex fxLayoutAlign="center" *ngIf="loadingProducts && (productos.length===0)">
+    <md-spinner></md-spinner>
+  </div>
+  <div fxFlex>
+    <md-list>
+      <md-nav-list>
+        <div *ngFor="let p of productos">
+          <md-list-item class="listItemProductos">
+            <img class="imgAvatar" md-list-avatar src="../../assets/placeholderProducto.png">
+            <p md-line>{{p.codigo}}</p>
+            <p md-line class="descripcion-producto">{{p.descripcion}}</p>
+            <p md-line>{{p.cantidad}} / {{p.medida.nombre}}</p>
+            <p md-line>
+              <strong>{{p.precioLista | currency:'USD':true:'1.2-4'}}</strong>
+            </p>
+          </md-list-item>
+          <md-divider></md-divider>
+        </div>
+      </md-nav-list>
+    </md-list>
+  </div>
+  <div fxFlex fxFlexAlign="center">
+    <button md-button (click)="masProductos()" color="primary"
+            *ngIf="(productos.length>0) && (totalPaginas > (pagina+1)) && !loadingProducts">
+      <strong>MAS RESULTADOS</strong>
+    </button>
+    <md-spinner *ngIf="loadingProducts && (productos.length>0)"
+                class="spinnerProductos"></md-spinner>
+  </div>
+</div>

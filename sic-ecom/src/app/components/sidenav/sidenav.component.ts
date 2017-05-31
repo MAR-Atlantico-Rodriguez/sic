@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {RubrosService} from '../../../services/rubros.service';
-import {ProductService} from '../../../services/product.service';
-import {AuthGuard} from '../../../guards/auth.guard';
+import {RubrosService} from '../../services/rubros.service';
+import {ProductService} from '../../services/product.service';
+import {AuthGuard} from '../../guards/auth.guard';
+import {SidenavService} from "../../services/sidenav.service";
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  selector: 'app-sidenav',
+  templateUrl: './sidenav.component.html',
+  styleUrls: ['./sidenav.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidenavComponent implements OnInit {
 
   public rubros = [];
   public rubroActivado = false;
@@ -16,7 +17,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(private rubrosService: RubrosService,
               private productService: ProductService,
-              private authGuard: AuthGuard) {}
+              private authGuard: AuthGuard,
+              private sidenavService: SidenavService) {}
 
   ngOnInit() {
     this.authGuard.canActivate();
@@ -35,5 +37,6 @@ export class SidebarComponent implements OnInit {
     this.productService.pagina = 0;
     this.rubroActivado = (this.rubroActivado !== id) ? id : false;
     this.productService.getRubro(id);
+    this.sidenavService.close().then(() => {});
   }
 }
