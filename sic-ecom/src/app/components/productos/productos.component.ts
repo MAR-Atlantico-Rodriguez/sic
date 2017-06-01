@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from '../../services/productos.service';
+import {ProductosService} from '../../services/productos.service';
 import {AuthGuard} from '../../guards/auth.guard';
 
 @Component({
@@ -7,8 +7,7 @@ import {AuthGuard} from '../../guards/auth.guard';
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.scss']
 })
-
-export class ProductsComponent implements OnInit {
+export class ProductosComponent implements OnInit {
 
   public productos = [];
   public loadingProducts = false;
@@ -17,7 +16,7 @@ export class ProductsComponent implements OnInit {
   public pagina = 0;
   public tamanioPagina = 10;
 
-  constructor(private productService: ProductService, private authGuard: AuthGuard) {}
+  constructor(private productService: ProductosService, private authGuard: AuthGuard) {}
 
   ngOnInit() {
     this.getProductos();

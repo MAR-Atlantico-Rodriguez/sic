@@ -10,8 +10,8 @@ import {LoginComponent} from './login/login.component';
 import {AuthGuard} from './guards/auth.guard';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {ProductsComponent} from './components/productos/productos.component';
-import {ProductService} from './services/productos.service';
+import {ProductosComponent} from './components/productos/productos.component';
+import {ProductosService} from './services/productos.service';
 import {AuthService} from './services/auth.service';
 import {RubrosService} from './services/rubros.service';
 import {routing} from './app.routing';
@@ -26,7 +26,7 @@ import {SidenavService} from "./services/sidenav.service";
     LoginComponent,
     NavbarComponent,
     SidenavComponent,
-    ProductsComponent
+    ProductosComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +41,7 @@ import {SidenavService} from "./services/sidenav.service";
   providers: [
     AuthGuard,
     AuthService,
-    ProductService,
+    ProductosService,
     RubrosService,
     SidenavService
   ],

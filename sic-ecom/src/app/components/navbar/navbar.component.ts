@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from '../../services/productos.service';
+import {ProductosService} from '../../services/productos.service';
 import {RubrosService} from '../../services/rubros.service';
 import {SidenavService} from '../../services/sidenav.service';
 
@@ -12,7 +12,7 @@ export class NavbarComponent implements OnInit {
 
   public rubros = [];
 
-  constructor(private productService: ProductService,
+  constructor(private productosService: ProductosService,
               private rubrosService: RubrosService,
               private sidenavService: SidenavService) {}
 
@@ -22,9 +22,9 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  buscadorProductos(palabraBuscar: string) {
-    this.productService.pagina = 0;
-    this.productService.getBuscador(palabraBuscar);
+  buscarProductos(palabraBuscar: string) {
+    this.productosService.pagina = 0;
+    this.productosService.getBuscador(palabraBuscar);
   }
 
   toggleSidenav(){

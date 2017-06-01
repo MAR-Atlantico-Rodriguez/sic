@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RubrosService} from '../../services/rubros.service';
-import {ProductService} from '../../services/productos.service';
+import {ProductosService} from '../../services/productos.service';
 import {SidenavService} from '../../services/sidenav.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class SidenavComponent implements OnInit {
   public loadingSidebar = false;
 
   constructor(private rubrosService: RubrosService,
-              private productService: ProductService,
+              private productService: ProductosService,
               private sidenavService: SidenavService) {}
 
   ngOnInit() {

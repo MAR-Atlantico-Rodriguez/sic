@@ -4,7 +4,7 @@
   </div>
   <div *ngIf="!loadingProducts && (productos.length === 0)" fxLayoutAlign="center" class="sinResultados">
     <i class="material-icons">sentiment_neutral</i>
-    &nbsp;No se encontraron resultados
+    &nbsp;Sin resultados
   </div>
   <div fxFlex>
     <md-list>
@@ -24,8 +24,8 @@
       </md-nav-list>
     </md-list>
   </div>
-  <div fxFlex fxFlexAlign="center">
-    <button md-button (click)="masProductos()" color="primary"
+  <div fxFlex fxFlexAlign="center" class="paginacion">
+    <button md-button (click)="masProductos()" color="primary" class="masResultados"
             *ngIf="(productos.length>0) && (totalPaginas > (pagina + 1)) && !loadingProducts">
       <strong>MAS RESULTADOS</strong>
     </button>

@@ -20,20 +20,25 @@ md-card {
   width: 75px;
 }
 
-.spinnerProductos{
+.spinnerProductos {
   width: 60px;
+  margin: auto;
 }
-
-.listItemProductos{
-
-}
-
 
 .sinResultados {
   font-size: 30px;
   color: #f05724;
   margin-top: 25px;
-  i{
+  i {
     font-size: 40px;
   }
+}
+
+.masResultados {
+  height: 50px;
+  width: 100%;
+}
+
+.paginacion {
+  width: 100%;
 }

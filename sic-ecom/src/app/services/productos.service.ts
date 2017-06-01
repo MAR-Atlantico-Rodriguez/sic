@@ -6,14 +6,14 @@ import {AuthGuard} from '../guards/auth.guard';
 import {environment} from '../../environments/environment';
 
 @Injectable()
-export class ProductService {
+export class ProductosService {
 
   public productosService = new Subject<any>();
   public url = environment.apiUrl + '/api/v1/productos/busqueda/criteria?idEmpresa=1';
   public busquedaDescripcion: String = '';
   public busquedaRubro: String = '';
   public pagina = 0;
-  public tamanioPagina = 10;
+  public tamanioPagina = 0;
   public totalPaginas: Number = 0;
   public totalElementos: Number = 0;
 
