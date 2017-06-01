@@ -11,7 +11,7 @@ import {AuthGuard} from './guards/auth.guard';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ProductsComponent} from './components/productos/productos.component';
-import {ProductService} from './services/product.service';
+import {ProductService} from './services/productos.service';
 import {AuthService} from './services/auth.service';
 import {RubrosService} from './services/rubros.service';
 import {routing} from './app.routing';

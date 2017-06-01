@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from '../../services/product.service';
+import {ProductService} from '../../services/productos.service';
 import {AuthGuard} from '../../guards/auth.guard';
 
 @Component({
@@ -12,10 +12,10 @@ export class ProductsComponent implements OnInit {
 
   public productos = [];
   public loadingProducts = false;
-  public totalPaginas:number = 0;
-  public totalElementos:number = 0;
-  public pagina:number = 0;
-  public tamanio:number = 2;
+  public totalPaginas: Number = 0;
+  public totalElementos: Number = 0;
+  public pagina = 0;
+  public tamanioPagina = 10;
 
   constructor(private productService: ProductService, private authGuard: AuthGuard) {}
 
@@ -29,33 +29,22 @@ export class ProductsComponent implements OnInit {
       });
   }
 
-  /*getProductos() {
-    this.authGuard.canActivate();
-    this.loadingProducts = true;
-    this.productService.getProductos()
-      .subscribe(data => {
-          this.productos = data;
-          this.loadingProducts = false;
-        });
-  }*/
-
   getProductos() {
     this.authGuard.canActivate();
     this.loadingProducts = true;
     this.productService.pagina = this.pagina;
-    this.productService.tamanio = this.tamanio;
+    this.productService.tamanioPagina = this.tamanioPagina;
     this.productService.getProductos()
       .subscribe(data => {
           data.content.forEach((v) => { this.productos.push(v); });
-
           this.totalPaginas = data.totalPages;
           this.totalElementos = data.totalElements;
           this.loadingProducts = false;
         });
   }
 
-  masProductos(){
-    if((this.pagina+1) < this.totalPaginas){
+  masProductos() {
+    if ((this.pagina + 1) < this.totalPaginas) {
       this.pagina++;
       this.getProductos();
     }

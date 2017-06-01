@@ -3,11 +3,12 @@ import {Http, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {tokenNotExpired, JwtHelper} from 'angular2-jwt';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AuthService {
 
-  private urlApi = 'https://sic-api.herokuapp.com/api/v1/login';
+  private url = environment.apiUrl + '/api/v1/login';
   private token: string;
   private jwtHelper: JwtHelper = new JwtHelper();
 
@@ -16,7 +17,7 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post(this.urlApi, {username: username, password: password})
+    return this.http.post(this.url, {username: username, password: password})
       .map((response: Response) => {
         const token = response.text();
         if (token) {
@@ -35,17 +36,5 @@ export class AuthService {
 
   loggedIn(): boolean {
     return tokenNotExpired();
-  }
-
-  useJwtHelper() {
-    const token = localStorage.getItem('token');
-    console.log(this.jwtHelper.decodeToken(token),
-      this.jwtHelper.getTokenExpirationDate(token),
-      this.jwtHelper.isTokenExpired(token));
-    return this.jwtHelper.isTokenExpired(token);
-  }
-
-  verificarAuth(error){
-    console.log(error);
   }
 }

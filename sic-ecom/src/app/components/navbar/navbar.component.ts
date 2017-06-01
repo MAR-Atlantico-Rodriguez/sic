@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductService} from '../../services/product.service';
+import {ProductService} from '../../services/productos.service';
 import {RubrosService} from '../../services/rubros.service';
-import {SidenavService} from "../../services/sidenav.service";
+import {SidenavService} from '../../services/sidenav.service';
 
 @Component({
   selector: 'app-navbar',

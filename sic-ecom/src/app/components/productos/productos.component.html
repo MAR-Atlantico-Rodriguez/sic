@@ -26,10 +26,10 @@
   </div>
   <div fxFlex fxFlexAlign="center">
     <button md-button (click)="masProductos()" color="primary"
-            *ngIf="(productos.length>0) && (totalPaginas > (pagina+1)) && !loadingProducts">
+            *ngIf="(productos.length>0) && (totalPaginas > (pagina + 1)) && !loadingProducts">
       <strong>MAS RESULTADOS</strong>
     </button>
-    <md-spinner *ngIf="loadingProducts && (productos.length>0)"
+    <md-spinner *ngIf="loadingProducts && (productos.length > 0)"
                 class="spinnerProductos"></md-spinner>
   </div>
 </div>
