@@ -15,7 +15,7 @@ import sic.service.BusinessServiceException;
 @ControllerAdvice
 public class ControllersExceptionHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(ControllersExceptionHandler.class.getPackage().getName());
+    private final Logger LOGGER = Logger.getLogger(this.getClass());
      
     private String log(Exception ex) {
         String mensaje = ex.getMessage() + "\n(Transaction ID: " + new Date().getTime() + ")";

@@ -43,6 +43,8 @@ public class FacturaVentaBuilder {
     private boolean eliminada = false;
     private long CAE = 21064126523746l;
     private Date vencimientoCAE = null;
+    private long numSerieAfip = 0;
+    private long numFacturaAfip = 0;
       
     public FacturaVenta build() {
         if (renglones == null) {
@@ -63,7 +65,7 @@ public class FacturaVentaBuilder {
                 tipoFactura, numSerie, numFactura, fechaVencimiento, pedido, transportista,
                 renglones, pagos, subTotal, recargo_porcentaje, recargo_neto, descuento_porcentaje, 
                 descuento_neto, subTotal_neto, iva_105_neto, iva_21_neto, impuestoInterno_neto, total, 
-                observaciones, pagada, empresa, eliminada, CAE, vencimientoCAE);
+                observaciones, pagada, empresa, eliminada, CAE, vencimientoCAE, numSerieAfip, numFacturaAfip);
         return factura;
     }
     
@@ -207,4 +209,13 @@ public class FacturaVentaBuilder {
         return this;
     }
     
+    public FacturaVentaBuilder withNumSerieAfip(long numeroDeSerieAfip) {
+        this.numSerieAfip = numeroDeSerieAfip;
+        return this;
+    }
+    
+    public FacturaVentaBuilder withNumFacturaAfip(long numeroFacturaAfip) {
+        this.numFacturaAfip = numeroFacturaAfip;
+        return this;
+    }    
 }

@@ -8,8 +8,7 @@ import afip.wsfe.wsdl.FECAESolicitarResponse;
 import afip.wsfe.wsdl.FECompUltimoAutorizado;
 import afip.wsfe.wsdl.FECompUltimoAutorizadoResponse;
 import afip.wsfe.wsdl.FERecuperaLastCbteResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +47,7 @@ public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
 
     private final String WSAA_TESTING = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
     private final String WSAA_PRODUCTION = "https://wsaa.afip.gov.ar/ws/services/LoginCms";
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+    private final Logger LOGGER = Logger.getLogger(this.getClass());
     private final String WSFE_TESTING = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";
     private final String WSFE_PRODUCTION = "https://servicios1.afip.gov.ar/wsfev1/service.asmx";
     private final String SOAP_ACTION_FECAESolicitar = "http://ar.gov.afip.dif.FEV1/FECAESolicitar";

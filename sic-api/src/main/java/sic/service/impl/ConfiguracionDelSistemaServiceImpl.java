@@ -12,7 +12,6 @@ import sic.modelo.TipoDeOperacion;
 import sic.service.IConfiguracionDelSistemaService;
 import sic.repository.ConfiguracionDelSistemaRepository;
 import sic.service.BusinessServiceException;
-import sic.util.Utilidades;
 
 @Service
 public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSistemaService {
@@ -54,7 +53,7 @@ public class ConfiguracionDelSistemaServiceImpl implements IConfiguracionDelSist
     public void actualizar(ConfiguracionDelSistema cds) {
         this.validarCds(TipoDeOperacion.ACTUALIZACION, cds);
         if (cds.getPasswordCertificadoAfip() != null) {
-            cds.setPasswordCertificadoAfip(Utilidades.encriptarConMD5(cds.getPasswordCertificadoAfip()));
+            cds.setPasswordCertificadoAfip(cds.getPasswordCertificadoAfip());
         }
         configuracionRepository.save(cds);
     }

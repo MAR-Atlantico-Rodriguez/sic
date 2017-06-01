@@ -84,17 +84,17 @@ public class FacturasVentaGUI extends JInternalFrame {
         tbl_Resultados.setAutoCreateRowSorter(true);
 
         //nombres de columnas
-        String[] encabezados = new String[19];
+        String[] encabezados = new String[20];
         encabezados[0] = "CAE";
-        encabezados[1] = "Vencimiento CAE";
-        encabezados[2] = "Fecha Factura";
-        encabezados[3] = "Tipo";
-        encabezados[4] = "Nº Factura";
-        encabezados[5] = "Fecha Vencimiento";
-        encabezados[6] = "Cliente";
-        encabezados[7] = "Vendedor";
-        encabezados[8] = "Transportista";
-        encabezados[9] = "Pagada";
+        encabezados[1] = "Fecha Factura";
+        encabezados[2] = "Tipo";
+        encabezados[3] = "Nº Factura";
+        encabezados[4] = "Fecha Vencimiento";
+        encabezados[5] = "Cliente";
+        encabezados[6] = "Vendedor";
+        encabezados[7] = "Transportista";
+        encabezados[8] = "Pagada";
+        encabezados[9] = "Total";
         encabezados[10] = "SubTotal";
         encabezados[11] = "% Descuento";
         encabezados[12] = "Descuento neto";
@@ -103,7 +103,8 @@ public class FacturasVentaGUI extends JInternalFrame {
         encabezados[15] = "SubTotal bruto";
         encabezados[16] = "IVA 10.5% neto";
         encabezados[17] = "IVA 21% neto";
-        encabezados[18] = "Total";
+        encabezados[18] = "Nº Factura Afip";
+        encabezados[19] = "Vencimiento CAE";
         modeloTablaFacturas.setColumnIdentifiers(encabezados);
         tbl_Resultados.setModel(modeloTablaFacturas);
 
@@ -111,14 +112,14 @@ public class FacturasVentaGUI extends JInternalFrame {
         Class[] tipos = new Class[modeloTablaFacturas.getColumnCount()];
         tipos[0] = Object.class;
         tipos[1] = Date.class;
-        tipos[2] = Date.class;
-        tipos[3] = TipoDeComprobante.class;
-        tipos[4] = String.class;
-        tipos[5] = Date.class;
+        tipos[2] = TipoDeComprobante.class;
+        tipos[3] = String.class;
+        tipos[4] = Date.class;
+        tipos[5] = String.class;
         tipos[6] = String.class;
         tipos[7] = String.class;
-        tipos[8] = String.class;
-        tipos[9] = Boolean.class;
+        tipos[8] = Boolean.class;
+        tipos[9] = Double.class;
         tipos[10] = Double.class;
         tipos[11] = Double.class;
         tipos[12] = Double.class;        
@@ -127,7 +128,8 @@ public class FacturasVentaGUI extends JInternalFrame {
         tipos[15] = Double.class;
         tipos[16] = Double.class;
         tipos[17] = Double.class;
-        tipos[18] = Double.class;
+        tipos[18] = String.class;
+        tipos[19] = Date.class;
         modeloTablaFacturas.setClaseColumnas(tipos);
         tbl_Resultados.getTableHeader().setReorderingAllowed(false);
         tbl_Resultados.getTableHeader().setResizingAllowed(true);
@@ -137,24 +139,25 @@ public class FacturasVentaGUI extends JInternalFrame {
 
         //Tamanios de columnas
         tbl_Resultados.getColumnModel().getColumn(0).setPreferredWidth(120);
-        tbl_Resultados.getColumnModel().getColumn(1).setPreferredWidth(120);
-        tbl_Resultados.getColumnModel().getColumn(2).setPreferredWidth(100);
-        tbl_Resultados.getColumnModel().getColumn(3).setPreferredWidth(80);
-        tbl_Resultados.getColumnModel().getColumn(4).setPreferredWidth(100);
-        tbl_Resultados.getColumnModel().getColumn(5).setPreferredWidth(130);
+        tbl_Resultados.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tbl_Resultados.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tbl_Resultados.getColumnModel().getColumn(3).setPreferredWidth(100);
+        tbl_Resultados.getColumnModel().getColumn(4).setPreferredWidth(130);
+        tbl_Resultados.getColumnModel().getColumn(5).setPreferredWidth(190);
         tbl_Resultados.getColumnModel().getColumn(6).setPreferredWidth(190);
         tbl_Resultados.getColumnModel().getColumn(7).setPreferredWidth(190);
-        tbl_Resultados.getColumnModel().getColumn(8).setPreferredWidth(190);
-        tbl_Resultados.getColumnModel().getColumn(9).setPreferredWidth(80);
+        tbl_Resultados.getColumnModel().getColumn(8).setPreferredWidth(80);
+        tbl_Resultados.getColumnModel().getColumn(9).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(10).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(11).setPreferredWidth(120);
-        tbl_Resultados.getColumnModel().getColumn(12).setPreferredWidth(120);        
-        tbl_Resultados.getColumnModel().getColumn(13).setPreferredWidth(120);
+        tbl_Resultados.getColumnModel().getColumn(12).setPreferredWidth(120);
+        tbl_Resultados.getColumnModel().getColumn(13).setPreferredWidth(120);        
         tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(15).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(16).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(17).setPreferredWidth(120);
         tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(120);
+        tbl_Resultados.getColumnModel().getColumn(19).setPreferredWidth(120);
     }
 
     private void calcularResultados(String uriCriteria) {
@@ -296,17 +299,17 @@ public class FacturasVentaGUI extends JInternalFrame {
 
     private void cargarResultadosAlTable() {
         facturas.stream().map((factura) -> {
-            Object[] fila = new Object[19];
+            Object[] fila = new Object[21];
             fila[0] = factura.getCAE() == 0 ? "" : factura.getCAE();
-            fila[1] = factura.getVencimientoCAE();
-            fila[2] = factura.getFecha();
-            fila[3] = factura.getTipoComprobante();
-            fila[4] = factura.getNumSerie() + " - " + factura.getNumFactura();
-            fila[5] = factura.getFechaVencimiento();
-            fila[6] = factura.getCliente().getRazonSocial();
-            fila[7] = factura.getUsuario().getNombre();
-            fila[8] = factura.getTransportista().getNombre();
-            fila[9] = factura.isPagada();
+            fila[1] = factura.getFecha();
+            fila[2] = factura.getTipoComprobante();
+            fila[3] = factura.getNumSerie() + " - " + factura.getNumFactura();
+            fila[4] = factura.getFechaVencimiento();
+            fila[5] = factura.getCliente().getRazonSocial();
+            fila[6] = factura.getUsuario().getNombre();
+            fila[7] = factura.getTransportista().getNombre();
+            fila[8] = factura.isPagada();
+            fila[9] = factura.getTotal();
             fila[10] = factura.getSubTotal();
             fila[11] = factura.getDescuento_porcentaje();
             fila[12] = factura.getDescuento_neto();            
@@ -315,7 +318,12 @@ public class FacturasVentaGUI extends JInternalFrame {
             fila[15] = factura.getSubTotal_bruto();
             fila[16] = factura.getIva_105_neto();
             fila[17] = factura.getIva_21_neto();
-            fila[18] = factura.getTotal();
+            if (factura.getNumSerieAfip() == 0 && factura.getNumFacturaAfip() == 0) {
+                fila[18] = "";
+            } else {
+                fila[18] = factura.getNumSerieAfip() + " - " + factura.getNumFacturaAfip();
+            }
+            fila[19] = factura.getVencimientoCAE();
             return fila;
         }).forEach((fila) -> {
             modeloTablaFacturas.addRow(fila);
@@ -1164,8 +1172,12 @@ public class FacturasVentaGUI extends JInternalFrame {
             int indexFilaSeleccionada = Utilidades.getSelectedRowModelIndice(tbl_Resultados);
             long idFacturaSeleccionada = facturas.get(indexFilaSeleccionada).getId_Factura();
             try {
-                RestClient.getRestTemplate().postForObject("/facturas/" + idFacturaSeleccionada + "/autorizacion",
+                RestClient.getRestTemplate()
+                        .postForObject("/facturas/" + idFacturaSeleccionada + "/autorizacion",
                         null, FacturaVenta.class);
+                JOptionPane.showMessageDialog(this,
+                            ResourceBundle.getBundle("Mensajes").getString("mensaje_factura_autorizada"),
+                            "Aviso", JOptionPane.INFORMATION_MESSAGE);
                 this.buscar();
             } catch (RestClientResponseException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

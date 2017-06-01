@@ -47,4 +47,6 @@ public abstract class Factura implements Serializable {
     private boolean eliminada;   
     private long CAE;
     private Date vencimientoCAE;
+    private long numSerieAfip;
+    private long numFacturaAfip;
 }
