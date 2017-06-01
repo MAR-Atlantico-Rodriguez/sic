@@ -102,8 +102,9 @@ public class ProductosGUI extends JInternalFrame {
     }
 
     private void setColumnas() {
-        //sorting
-        tbl_Resultados.setAutoCreateRowSorter(true);
+        // Momentaneamente desactivado hasta terminar la paginacion.
+        // sorting
+        // tbl_Resultados.setAutoCreateRowSorter(true);
 
         //nombres de columnas
         String[] encabezados = new String[21];
