@@ -512,7 +512,7 @@ public class PuntoDeVentaGUI extends JDialog {
             //iva 10,5% neto - IVA 21% neto
             iva_105_netoFactura = 0;
             iva_21_netoFactura = 0;
-            if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B) || tipoDeComprobante.equals(TipoDeComprobante.FACTURA_A)) {
+            if (tipoDeComprobante == TipoDeComprobante.FACTURA_B || tipoDeComprobante == TipoDeComprobante.FACTURA_A || tipoDeComprobante == TipoDeComprobante.PRESUPUESTO) {
                 iva_105_netoFactura = RestClient.getRestTemplate().getForObject("/facturas/iva-neto?"
                         + "tipoDeComprobante=" + this.tipoDeComprobante.name()
                         + "&cantidades=" + Arrays.toString(cantidades).substring(1, Arrays.toString(cantidades).length() - 1)
@@ -532,7 +532,7 @@ public class PuntoDeVentaGUI extends JDialog {
                         + "&recargoPorcentaje=" + recargo_porcentaje,
                         double.class);
             }
-            if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B)) {
+            if (tipoDeComprobante == TipoDeComprobante.FACTURA_B || tipoDeComprobante == TipoDeComprobante.PRESUPUESTO) {
                 txt_IVA105_neto.setValue(0);
                 txt_IVA21_neto.setValue(0);
             } else {
@@ -549,7 +549,7 @@ public class PuntoDeVentaGUI extends JDialog {
                     + "&iva21Neto=" + iva_21_netoFactura,
                     double.class);
             
-            if (tipoDeComprobante.equals(TipoDeComprobante.FACTURA_B)) {
+            if (tipoDeComprobante == TipoDeComprobante.FACTURA_B || tipoDeComprobante == TipoDeComprobante.PRESUPUESTO) {
                 txt_SubTotalBruto.setValue(subTotal);
             } else {
                 txt_SubTotalBruto.setValue(subTotalBruto);

@@ -16,7 +16,9 @@ public enum TipoDeComprobante {
     
     FACTURA_Y("Factura Y"),
     
-    PEDIDO("Pedido");
+    PEDIDO("Pedido"), 
+    
+    PRESUPUESTO("Presupuesto");
     
     private final String text;
 

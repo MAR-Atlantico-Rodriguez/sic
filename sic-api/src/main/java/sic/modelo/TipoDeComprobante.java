@@ -16,6 +16,8 @@ public enum TipoDeComprobante {
     
     FACTURA_Y,
     
-    PEDIDO;
+    PEDIDO, 
+    
+    PRESUPUESTO;
     
 }
