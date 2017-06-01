@@ -46,16 +46,18 @@ import sic.util.Utilidades;
 public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
 
     private final String WSAA_TESTING = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
-    private final String WSAA_PRODUCTION = "https://wsaa.afip.gov.ar/ws/services/LoginCms";
-    private final Logger LOGGER = Logger.getLogger(this.getClass());
+    private final String WSAA_PRODUCTION = "https://wsaa.afip.gov.ar/ws/services/LoginCms";    
     private final String WSFE_TESTING = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";
     private final String WSFE_PRODUCTION = "https://servicios1.afip.gov.ar/wsfev1/service.asmx";
+    private final String WSAA_URI = WSAA_PRODUCTION;
+    private final String WSFE_URI = WSFE_PRODUCTION;
+    private final Logger LOGGER = Logger.getLogger(this.getClass());
     private final String SOAP_ACTION_FECAESolicitar = "http://ar.gov.afip.dif.FEV1/FECAESolicitar";
     private final String SOAP_ACTION_FECompUltimoAutorizado = "http://ar.gov.afip.dif.FEV1/FECompUltimoAutorizado";
 
     public String loginCMS(LoginCms loginCMS) {
         LoginCmsResponse response = (LoginCmsResponse) this.getWebServiceTemplate()
-                .marshalSendAndReceive(WSAA_TESTING, loginCMS);
+                .marshalSendAndReceive(WSAA_URI, loginCMS);
         return response.getLoginCmsReturn();
     }
 
@@ -127,7 +129,7 @@ public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
 
     public FERecuperaLastCbteResponse FECompUltimoAutorizado(FECompUltimoAutorizado solicitud) {
         FECompUltimoAutorizadoResponse response = (FECompUltimoAutorizadoResponse) this.getWebServiceTemplate()
-                .marshalSendAndReceive(WSFE_TESTING, solicitud, (WebServiceMessage message) -> {
+                .marshalSendAndReceive(WSFE_URI, solicitud, (WebServiceMessage message) -> {
                     ((SoapMessage) message).setSoapAction(SOAP_ACTION_FECompUltimoAutorizado);
         });        
         return response.getFECompUltimoAutorizadoResult();
@@ -135,7 +137,7 @@ public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
     
     public FECAEResponse FECAESolicitar(FECAESolicitar solicitud) {
         FECAESolicitarResponse response = (FECAESolicitarResponse) this.getWebServiceTemplate()
-                .marshalSendAndReceive(WSFE_TESTING, solicitud, (WebServiceMessage message) -> {
+                .marshalSendAndReceive(WSFE_URI, solicitud, (WebServiceMessage message) -> {
                     ((SoapMessage) message).setSoapAction(SOAP_ACTION_FECAESolicitar);
         });        
         return response.getFECAESolicitarResult();

@@ -106,7 +106,7 @@ public class AfipServiceImpl implements IAfipService {
         fecaeSolicitud.setAuth(feAuthRequest);
         int nroPuntoDeVentaAfip = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa()).getNroPuntoDeVentaAfip();
         int siguienteNroComprobante = this.getSiguienteNroComprobante(feAuthRequest, factura.getTipoComprobante(), nroPuntoDeVentaAfip);
-        fecaeSolicitud.setFeCAEReq(this.transformFacturaVentaToFECAERequest(factura, siguienteNroComprobante));
+        fecaeSolicitud.setFeCAEReq(this.transformFacturaVentaToFECAERequest(factura, siguienteNroComprobante, nroPuntoDeVentaAfip));
         try {
             FECAEResponse response = afipWebServiceSOAPClient.FECAESolicitar(fecaeSolicitud);
             String msjError = "";
@@ -167,7 +167,7 @@ public class AfipServiceImpl implements IAfipService {
     }
     
     @Override
-    public FECAERequest transformFacturaVentaToFECAERequest(FacturaVenta factura, int siguienteNroComprobante) {
+    public FECAERequest transformFacturaVentaToFECAERequest(FacturaVenta factura, int siguienteNroComprobante, int nroPuntoDeVentaAfip) {
         FECAERequest fecaeRequest = new FECAERequest();        
         FECAECabRequest cabecera = new FECAECabRequest();
         FECAEDetRequest detalle = new FECAEDetRequest();        
@@ -200,7 +200,7 @@ public class AfipServiceImpl implements IAfipService {
                 break;
         }
         cabecera.setCantReg(1); // Cantidad de registros del detalle del comprobante o lote de comprobantes de ingreso
-        cabecera.setPtoVta(1); // Punto de Venta del comprobante que se está informando. Si se informa más de un comprobante, todos deben corresponder al mismo punto de venta
+        cabecera.setPtoVta(nroPuntoDeVentaAfip); // Punto de Venta del comprobante que se está informando. Si se informa más de un comprobante, todos deben corresponder al mismo punto de venta
         fecaeRequest.setFeCabReq(cabecera);
         ArrayOfFECAEDetRequest arrayDetalle = new ArrayOfFECAEDetRequest();        
         detalle.setCbteDesde(siguienteNroComprobante);

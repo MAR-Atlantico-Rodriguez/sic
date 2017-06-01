@@ -15,6 +15,6 @@ public interface IAfipService {
     
     int getSiguienteNroComprobante(FEAuthRequest feAuthRequest, TipoDeComprobante tipo, int nroPuntoDeVentaAfip);
     
-    FECAERequest transformFacturaVentaToFECAERequest(FacturaVenta factura, int siguienteNroComprobante);
+    FECAERequest transformFacturaVentaToFECAERequest(FacturaVenta factura, int siguienteNroComprobante, int nroPuntoDeVentaAfip);
     
 }
