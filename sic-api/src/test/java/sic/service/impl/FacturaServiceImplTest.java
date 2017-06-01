@@ -50,10 +50,11 @@ public class FacturaServiceImplTest {
         empresa.setCondicionIVA(condicionIVAqueDiscrimina);
         Proveedor proveedor = Mockito.mock(Proveedor.class);
         when(proveedor.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
-        TipoDeComprobante[] expResult = new TipoDeComprobante[3];
+        TipoDeComprobante[] expResult = new TipoDeComprobante[4];
         expResult[0] = TipoDeComprobante.FACTURA_A;
         expResult[1] = TipoDeComprobante.FACTURA_B;
         expResult[2] = TipoDeComprobante.FACTURA_X;
+        expResult[3] = TipoDeComprobante.PRESUPUESTO;
         TipoDeComprobante[] result = facturaService.getTipoFacturaCompra(empresa, proveedor);
         assertArrayEquals(expResult, result);
     }
@@ -68,9 +69,10 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
         when(proveedor.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
-        TipoDeComprobante[] expResult = new TipoDeComprobante[2];
+        TipoDeComprobante[] expResult = new TipoDeComprobante[3];
         expResult[0] = TipoDeComprobante.FACTURA_C;
         expResult[1] = TipoDeComprobante.FACTURA_X;
+        expResult[2] = TipoDeComprobante.PRESUPUESTO;
         TipoDeComprobante[] result = facturaService.getTipoFacturaCompra(empresa, proveedor);
         assertArrayEquals(expResult, result);
     }
@@ -85,9 +87,10 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
         when(proveedor.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
-        TipoDeComprobante[] expResult = new TipoDeComprobante[2];
+        TipoDeComprobante[] expResult = new TipoDeComprobante[3];
         expResult[0] = TipoDeComprobante.FACTURA_B;
         expResult[1] = TipoDeComprobante.FACTURA_X;
+        expResult[2] = TipoDeComprobante.PRESUPUESTO;
         empresa.getCondicionIVA().isDiscriminaIVA();
         TipoDeComprobante[] result = facturaService.getTipoFacturaCompra(empresa, proveedor);
         assertArrayEquals(expResult, result);
@@ -101,9 +104,10 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
         when(proveedor.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
-        TipoDeComprobante[] expResult = new TipoDeComprobante[2];
+        TipoDeComprobante[] expResult = new TipoDeComprobante[3];
         expResult[0] = TipoDeComprobante.FACTURA_C;
         expResult[1] = TipoDeComprobante.FACTURA_X;
+        expResult[2] = TipoDeComprobante.PRESUPUESTO;
         empresa.getCondicionIVA().isDiscriminaIVA();
         TipoDeComprobante[] result = facturaService.getTipoFacturaCompra(empresa, proveedor);
         assertArrayEquals(expResult, result);
@@ -117,7 +121,7 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.TRUE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
         when(cliente.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
-        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_A, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO};
+        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_A, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO, TipoDeComprobante.PRESUPUESTO};
         TipoDeComprobante[] result = facturaService.getTipoFacturaVenta(empresa, cliente);
         assertArrayEquals(expResult, result);
     }
@@ -132,7 +136,7 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
         when(cliente.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
-        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_B, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO};
+        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_B, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO, TipoDeComprobante.PRESUPUESTO};
         TipoDeComprobante[] result = facturaService.getTipoFacturaVenta(empresa, cliente);
         assertArrayEquals(expResult, result);
     }
@@ -147,7 +151,7 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
         when(cliente.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
-        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_C, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO};
+        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_C, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO, TipoDeComprobante.PRESUPUESTO};
         TipoDeComprobante[] result = facturaService.getTipoFacturaVenta(empresa, cliente);
         assertArrayEquals(expResult, result);
     }
@@ -161,7 +165,7 @@ public class FacturaServiceImplTest {
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
         when(cliente.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
-        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_C, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO};
+        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_C, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PEDIDO, TipoDeComprobante.PRESUPUESTO};
         TipoDeComprobante[] result = facturaService.getTipoFacturaVenta(empresa, cliente);
         assertArrayEquals(expResult, result);
     }
@@ -172,7 +176,7 @@ public class FacturaServiceImplTest {
         CondicionIVA condicionIVAqueDiscrimina = Mockito.mock(CondicionIVA.class);
         when(condicionIVAqueDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.TRUE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueDiscrimina);
-        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_A, TipoDeComprobante.FACTURA_B, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y};
+        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_A, TipoDeComprobante.FACTURA_B, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PRESUPUESTO};
         TipoDeComprobante[] result = facturaService.getTiposFacturaSegunEmpresa(empresa);
         assertArrayEquals(expResult, result);
     }
@@ -183,7 +187,7 @@ public class FacturaServiceImplTest {
         CondicionIVA condicionIVAqueNoDiscrimina = Mockito.mock(CondicionIVA.class);
         when(condicionIVAqueNoDiscrimina.isDiscriminaIVA()).thenReturn(Boolean.FALSE);
         when(empresa.getCondicionIVA()).thenReturn(condicionIVAqueNoDiscrimina);
-        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_C, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y};
+        TipoDeComprobante[] expResult = {TipoDeComprobante.FACTURA_C, TipoDeComprobante.FACTURA_X, TipoDeComprobante.FACTURA_Y, TipoDeComprobante.PRESUPUESTO};
         TipoDeComprobante[] result = facturaService.getTiposFacturaSegunEmpresa(empresa);
         assertArrayEquals(expResult, result);
     }
