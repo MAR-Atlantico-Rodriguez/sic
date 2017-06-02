@@ -302,7 +302,6 @@ public class FacturacionIntegrationTest {
         if (facturasRecuperadas.length != 1) {
             Assert.fail("Debería existir exactamente una factura");
         } 
-        assertEquals(facturaVentaB.getEmpresa(), facturasRecuperadas[0].getEmpresa());
         assertEquals(facturaVentaB.getTipoComprobante(), facturasRecuperadas[0].getTipoComprobante());
         assertEquals(facturaVentaB.getFecha(), facturasRecuperadas[0].getFecha());
         assertEquals(facturaVentaB.getSubTotal(), facturasRecuperadas[0].getSubTotal(), 0);
