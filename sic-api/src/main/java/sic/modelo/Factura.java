@@ -94,8 +94,7 @@ public abstract class Factura implements Serializable {
     private boolean pagada;
 
     @ManyToOne
-    @JoinColumn(name = "id_Empresa", referencedColumnName = "id_Empresa")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JoinColumn(name = "id_Empresa", referencedColumnName = "id_Empresa")    
     private Empresa empresa;
 
     private boolean eliminada;

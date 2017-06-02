@@ -57,7 +57,7 @@ public class DetallePagoGUI extends JDialog {
             pago.setNota(txt_Nota.getText().trim());
             pago.setFormaDePago((FormaDePago) cmb_FormaDePago.getSelectedItem());
             pago.setNota(txt_Nota.getText().trim());
-            pago.setEmpresa(EmpresaActiva.getInstance().getEmpresa());
+            pago.setEmpresa(facturaRelacionada.getEmpresa());
             RestClient.getRestTemplate().postForObject("/pagos/facturas/" + facturaRelacionada.getId_Factura(),
                     pago, Pago.class);
             this.dispose();
