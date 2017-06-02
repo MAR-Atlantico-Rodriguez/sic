@@ -301,7 +301,7 @@ public class FacturacionIntegrationTest {
         FacturaVenta[] facturasRecuperadas = restTemplate.getForObject(apiPrefix + "/facturas/venta/busqueda/criteria?idEmpresa=1&tipoFactura=B&nroSerie=0&nroFactura=1", FacturaVenta[].class);
         if (facturasRecuperadas.length != 1) {
             Assert.fail("Debería existir exactamente una factura");
-        } 
+        }
         assertEquals(facturaVentaB.getEmpresa(), facturasRecuperadas[0].getEmpresa());
         assertEquals(facturaVentaB.getTipoComprobante(), facturasRecuperadas[0].getTipoComprobante());
         assertEquals(facturaVentaB.getFecha(), facturasRecuperadas[0].getFecha());
