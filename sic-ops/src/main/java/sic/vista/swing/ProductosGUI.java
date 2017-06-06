@@ -4,6 +4,8 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.AdjustmentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +41,7 @@ public class ProductosGUI extends JInternalFrame {
     private final Dimension sizeInternalFrame = new Dimension(880, 600);
     private static int totalBusqueda;
     private static int NUMERO_PAGINA = 0;
+    private String CRITERIA_SORT = "descripcion";
     private static final int TAMANIO_PAGINA = 100;
 
     public ProductosGUI() {
@@ -53,6 +56,62 @@ public class ProductosGUI extends JInternalFrame {
                     buscar();
                     cargarResultadosAlTable();
                 }
+            }
+        });
+        tbl_Resultados.getTableHeader().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int numeroColumna = tbl_Resultados.columnAtPoint(e.getPoint());
+                switch(numeroColumna){
+                    case 0 : CRITERIA_SORT = "codigo";
+                    break;
+                    case 1 : CRITERIA_SORT = "descripcion";
+                    break;
+                    case 2 : CRITERIA_SORT = "cantidad";
+                    break;
+                    case 3 : CRITERIA_SORT = "cantMinima";
+                    break;
+                    case 4 : CRITERIA_SORT = "ilimitado";
+                    break;
+                    case 5 : CRITERIA_SORT = "medida.nombre";
+                    break;
+                    case 6 : CRITERIA_SORT = "precioCosto";
+                    break;
+                    case 7 : CRITERIA_SORT = "ganancia_porcentaje";
+                    break;
+                    case 8 : CRITERIA_SORT = "ganancia_neto";
+                    break;
+                    case 9 : CRITERIA_SORT = "precioVentaPublico";
+                    break;
+                    case 10 : CRITERIA_SORT = "iva_porcentaje";
+                    break;
+                    case 11 : CRITERIA_SORT = "iva_neto";
+                    break;
+                    case 12 : CRITERIA_SORT = "precioLista";
+                    break;
+                    case 13 : CRITERIA_SORT = "rubro.nombre";
+                    break;
+                    case 14 : CRITERIA_SORT = "fechaUltimaModificacion";
+                    break;
+                    case 15 : CRITERIA_SORT = "estanteria";
+                    break;
+                    case 16 : CRITERIA_SORT = "estante";
+                    break;
+                    case 17 : CRITERIA_SORT = "proveedor.razonSocial";
+                    break;
+                    case 18 : CRITERIA_SORT = "fechaAlta";
+                    break;
+                    case 19 : CRITERIA_SORT = "fechaVencimiento";
+                    break;
+                    case 20 : CRITERIA_SORT = "nota";
+                    break;
+                    default: CRITERIA_SORT = "descripcion";
+                    break;
+                }
+                resetScroll();
+                buscar();
+                limpiarJTable();
+                cargarResultadosAlTable();
             }
         });
     }
@@ -102,9 +161,8 @@ public class ProductosGUI extends JInternalFrame {
     }
 
     private void setColumnas() {
-        // Momentaneamente desactivado hasta terminar la paginacion.
         // sorting
-        // tbl_Resultados.setAutoCreateRowSorter(true);
+        tbl_Resultados.setAutoCreateRowSorter(true);
 
         //nombres de columnas
         String[] encabezados = new String[21];
@@ -258,7 +316,7 @@ public class ProductosGUI extends JInternalFrame {
                 criteriaBusqueda += "&soloFantantes=" + rb_Faltantes.isSelected();
                 criteriaCosto += "&soloFantantes=" + rb_Faltantes.isSelected();
             }
-            criteriaBusqueda += "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA;
+            criteriaBusqueda += "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA + "&criteriaSort=" + CRITERIA_SORT;
             PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()
                     .exchange(criteriaBusqueda, HttpMethod.GET, null,
                             new ParameterizedTypeReference<PaginaRespuestaRest<Producto>>() {})

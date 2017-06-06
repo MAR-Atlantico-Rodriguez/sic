@@ -3,6 +3,8 @@ package sic.vista.swing;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class BuscarProductosGUI extends JDialog {
     private final Movimiento tipoMovimiento;
     private final HotKeysHandler keyHandler = new HotKeysHandler();
     private int NUMERO_PAGINA = 0;
+    private String CRITERIA_SORT = "descripcion";
     private static final int TAMANIO_PAGINA = 100;
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
     
@@ -99,7 +102,36 @@ public class BuscarProductosGUI extends JDialog {
                     cargarResultadosAlTable();
                 }
             }
-        });       
+        });
+        tbl_Resultado.getTableHeader().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int numeroColumna = tbl_Resultado.columnAtPoint(e.getPoint());
+                String name = tbl_Resultado.getColumnName(numeroColumna);
+                switch(numeroColumna){
+                    case 0 : CRITERIA_SORT = "codigo";
+                    break;
+                    case 1 : CRITERIA_SORT = "descripcion";
+                    break;
+                    case 2 : CRITERIA_SORT = "cantidad";
+                    break;
+                    case 3 : CRITERIA_SORT = "ilimitado";
+                    break;
+                    case 4 : CRITERIA_SORT = "medida.nombre";
+                    break;
+                    case 5 : CRITERIA_SORT = "precioLista";
+                    break;
+                    default: CRITERIA_SORT = "descripcion";
+                    break;
+                }
+                NUMERO_PAGINA = 0;
+                productos.clear();
+                buscar();
+                actualizarProductosCargadosEnFactura();
+                limpiarJTable();
+                cargarResultadosAlTable();
+            }
+        });
     }
 
     private void setIcon() {
@@ -129,7 +161,7 @@ public class BuscarProductosGUI extends JDialog {
             String uri = "descripcion=" + txt_CampoBusqueda.getText().trim()
                     + "&codigo=" + txt_CampoBusqueda.getText().trim()
                     + "&idEmpresa=" + EmpresaActiva.getInstance().getEmpresa().getId_Empresa()
-                    + "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA;                        
+                    + "&pagina=" + NUMERO_PAGINA + "&tamanio=" + TAMANIO_PAGINA + "&criteriaSort=" + CRITERIA_SORT;                        
             PaginaRespuestaRest<Producto> response = RestClient.getRestTemplate()
                     .exchange("/productos/busqueda/criteria?" + uri, HttpMethod.GET, null,
                             new ParameterizedTypeReference<PaginaRespuestaRest<Producto>>() {})
@@ -244,6 +276,7 @@ public class BuscarProductosGUI extends JDialog {
     }
 
     private void setColumnas() {
+        tbl_Resultado.setAutoCreateRowSorter(true);
         //nombres de columnas
         String[] encabezados = new String[6];
         encabezados[0] = "Codigo";

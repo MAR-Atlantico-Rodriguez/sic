@@ -110,7 +110,8 @@ public class ProductoController {
                                 @RequestParam(required = false) Long idProveedor,
                                 @RequestParam(required = false) boolean soloFantantes,
                                 @RequestParam(required = false) Integer pagina,
-                                @RequestParam(required = false) Integer tamanio) {
+                                @RequestParam(required = false) Integer tamanio,
+                                @RequestParam(required = false) String criteriaSort) {
         Rubro rubro = null;
         if (idRubro != null) {
             rubro = rubroService.getRubroPorId(idRubro);
@@ -125,7 +126,10 @@ public class ProductoController {
         if (pagina == null || pagina < 0) {
             pagina = 0;
         }
-        Pageable pageable = new PageRequest(pagina, tamanio, new Sort(Sort.Direction.ASC, "descripcion"));
+        if (criteriaSort == null || criteriaSort.isEmpty()) {
+            criteriaSort = "descripcion";
+        }
+        Pageable pageable = new PageRequest(pagina, tamanio, new Sort(Sort.Direction.ASC, criteriaSort));
         BusquedaProductoCriteria criteria = BusquedaProductoCriteria.builder()
                                             .buscarPorCodigo((codigo!=null && !codigo.isEmpty()))
                                             .codigo(codigo)
