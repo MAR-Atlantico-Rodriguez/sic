@@ -438,7 +438,7 @@ public class ProductoServiceImpl implements IProductoService {
         InputStream isFileReport = classLoader.getResourceAsStream("sic/vista/reportes/ListaPreciosProductos.jasper");
         Map params = new HashMap();
         params.put("empresa", empresaService.getEmpresaPorId(idEmpresa));
-        params.put("logo", Utilidades.convertirByteArrayIntoImage(empresaService.getEmpresaPorId(idEmpresa).getLogo()));
+        // params.put("logo", Utilidades.convertirByteArrayIntoImage(empresaService.getEmpresaPorId(idEmpresa).getLogo()));
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(productos);
         try {
             return JasperExportManager.exportReportToPdf(JasperFillManager.fillReport(isFileReport, params, ds));

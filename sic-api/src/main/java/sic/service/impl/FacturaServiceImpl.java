@@ -972,7 +972,7 @@ public class FacturaServiceImpl implements IFacturaService {
         } else {
             params.put("nroComprobante", factura.getNumSerie() + " - " + factura.getNumFactura());
         }
-        params.put("logo", Utilidades.convertirByteArrayIntoImage(factura.getEmpresa().getLogo()));
+        // params.put("logo", Utilidades.convertirByteArrayIntoImage(factura.getEmpresa().getLogo()));
         List<RenglonFactura> renglones = this.getRenglonesDeLaFactura(factura.getId_Factura());
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(renglones);
          try {

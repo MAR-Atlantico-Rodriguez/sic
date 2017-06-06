@@ -295,7 +295,7 @@ public class PedidoServiceImpl implements IPedidoService {
         InputStream isFileReport = classLoader.getResourceAsStream("sic/vista/reportes/Pedido.jasper");
         Map params = new HashMap();
         params.put("pedido", pedido);
-        params.put("logo", Utilidades.convertirByteArrayIntoImage(pedido.getEmpresa().getLogo()));
+        // params.put("logo", Utilidades.convertirByteArrayIntoImage(pedido.getEmpresa().getLogo()));
         List<RenglonPedido> renglones = this.getRenglonesDelPedido(pedido.getId_Pedido());
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(renglones);
         try {
