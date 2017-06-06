@@ -1,3 +1,6 @@
 {
-	"root": "sic-com/dist"
+	"root": "sic-com/dist",
+	"routes": {
+    		"/**": "index.html"
+  	}
 }
