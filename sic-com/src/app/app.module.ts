@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {NgModule, Pipe, PipeTransform} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {MaterialModule} from '@angular/material';
@@ -19,6 +19,18 @@ import {HomeComponent} from './home/home.component';
 import {AuthModule} from './auth.module';
 import {SidenavService} from "./services/sidenav.service";
 
+@Pipe({name: 'miCurrency'})
+export class MiCurrencyPipe implements PipeTransform {
+  /**
+   *
+   * @param value
+   * @returns {number}
+   */
+  transform(value: number): string {
+      return '$'+value.toFixed(2).replace(".", ",").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+  }
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +38,8 @@ import {SidenavService} from "./services/sidenav.service";
     LoginComponent,
     NavbarComponent,
     SidenavComponent,
-    ProductosComponent
+    ProductosComponent,
+    MiCurrencyPipe
   ],
   imports: [
     BrowserModule,
