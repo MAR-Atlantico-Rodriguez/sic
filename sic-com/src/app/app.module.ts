@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {MaterialModule} from '@angular/material';
+/*import {MaterialModule} from '@angular/material';*/
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppComponent} from './app.component';
@@ -19,6 +19,7 @@ import {HomeComponent} from './home/home.component';
 import {AuthModule} from './auth.module';
 import {SidenavService} from './services/sidenav.service';
 import {MiCurrencyPipe} from './pipe/miCurrency';
+import {MiMaterialModule} from './miMaterial.module';
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import {MiCurrencyPipe} from './pipe/miCurrency';
     BrowserModule,
     FormsModule,
     HttpModule,
-    MaterialModule,
+    MiMaterialModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
     AuthModule,
