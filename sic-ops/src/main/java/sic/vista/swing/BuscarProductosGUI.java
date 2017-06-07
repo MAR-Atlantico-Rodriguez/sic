@@ -224,7 +224,7 @@ public class BuscarProductosGUI extends JDialog {
             fila[0] = p.getCodigo();
             fila[1] = p.getDescripcion();
             fila[2] = p.getCantidad();
-            fila[3] = p.isIlimitado();
+            fila[3] = p.getVentaMinima();
             fila[4] = p.getMedida();
             double precio = (tipoMovimiento == Movimiento.VENTA) ? p.getPrecioLista()
                     : (tipoMovimiento == Movimiento.PEDIDO) ? p.getPrecioLista()
@@ -249,7 +249,7 @@ public class BuscarProductosGUI extends JDialog {
         encabezados[0] = "Codigo";
         encabezados[1] = "Descripción";
         encabezados[2] = "Cantidad";
-        encabezados[3] = "Sin Límite";
+        encabezados[3] = "Venta Mínima";
         encabezados[4] = "Unidad";
         String encabezadoPrecio = (tipoMovimiento == Movimiento.VENTA) ? "P. Lista"
                 : (tipoMovimiento == Movimiento.PEDIDO) ? "P. Lista"
@@ -263,7 +263,7 @@ public class BuscarProductosGUI extends JDialog {
         tipos[0] = String.class;
         tipos[1] = String.class;
         tipos[2] = Double.class;
-        tipos[3] = Boolean.class;
+        tipos[3] = Double.class;
         tipos[4] = String.class;
         tipos[5] = Double.class;
         modeloTablaResultados.setClaseColumnas(tipos);
@@ -279,14 +279,14 @@ public class BuscarProductosGUI extends JDialog {
         tbl_Resultado.getColumnModel().getColumn(0).setMaxWidth(130);
 
         //Descripcion
-        tbl_Resultado.getColumnModel().getColumn(1).setPreferredWidth(380);
+        tbl_Resultado.getColumnModel().getColumn(1).setPreferredWidth(360);
         //Cantidad
         tbl_Resultado.getColumnModel().getColumn(2).setPreferredWidth(67);
         tbl_Resultado.getColumnModel().getColumn(2).setMaxWidth(67);
 
         //Sin limite
-        tbl_Resultado.getColumnModel().getColumn(3).setPreferredWidth(70);
-        tbl_Resultado.getColumnModel().getColumn(3).setMaxWidth(70);
+        tbl_Resultado.getColumnModel().getColumn(3).setPreferredWidth(87);
+        tbl_Resultado.getColumnModel().getColumn(3).setMaxWidth(87);
 
         //Medida
         tbl_Resultado.getColumnModel().getColumn(4).setPreferredWidth(70);

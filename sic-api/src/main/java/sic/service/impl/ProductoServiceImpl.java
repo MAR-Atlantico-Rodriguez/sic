@@ -63,6 +63,10 @@ public class ProductoServiceImpl implements IProductoService {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_producto_cantidadMinima_negativa"));
         }
+        if (producto.getVentaMinima() < 0) {
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_producto_cantidadVentaMinima_negativa"));
+        }
         if (producto.getPrecioCosto() < 0) {
             throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_producto_precioCosto_negativo"));

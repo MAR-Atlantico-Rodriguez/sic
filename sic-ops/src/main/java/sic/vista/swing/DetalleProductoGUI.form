@@ -101,9 +101,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="panel1" min="-2" max="-2" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="panel3" min="-2" max="-2" attributes="1"/>
-                          <Component id="panel2" min="-2" max="-2" attributes="3"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="panel2" max="32767" attributes="3"/>
+                          <Component id="panel3" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -510,7 +510,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
+                      <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="chk_Ilimitado" min="-2" max="-2" attributes="2"/>
@@ -614,7 +614,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="panel5" min="-2" max="-2" attributes="2"/>
-                      <EmptySpace pref="109" max="32767" attributes="0"/>
+                      <EmptySpace pref="132" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -669,14 +669,18 @@
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="lbl_FA" max="32767" attributes="1"/>
-                                      <Component id="lbl_FUM" alignment="1" min="-2" max="-2" attributes="1"/>
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="lbl_VentaMinima" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="lbl_FA" max="32767" attributes="1"/>
+                                          <Component id="lbl_FUM" alignment="1" min="-2" max="-2" attributes="1"/>
+                                      </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lbl_FechaAlta" min="-2" pref="284" max="-2" attributes="1"/>
-                                      <Component id="lbl_FechaUltimaModificacion" alignment="0" min="-2" pref="284" max="-2" attributes="1"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="lbl_FechaAlta" linkSize="6" pref="284" max="32767" attributes="1"/>
+                                      <Component id="lbl_FechaUltimaModificacion" alignment="0" max="32767" attributes="1"/>
+                                      <Component id="txt_VentaMinima" linkSize="6" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -715,7 +719,12 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="2" attributes="0">
                               <Component id="lbl_FA" alignment="2" min="-2" max="-2" attributes="1"/>
-                              <Component id="lbl_FechaAlta" alignment="2" min="-2" pref="23" max="-2" attributes="0"/>
+                              <Component id="lbl_FechaAlta" linkSize="7" alignment="2" min="-2" pref="23" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lbl_VentaMinima" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txt_VentaMinima" linkSize="7" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -802,6 +811,20 @@
                     </Component>
                   </SubComponents>
                 </Container>
+                <Component class="javax.swing.JFormattedTextField" name="txt_VentaMinima">
+                  <Properties>
+                    <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+                      <Format format="#,##0.##" subtype="-1" type="0"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="0"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lbl_VentaMinima">
+                  <Properties>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
+                    <Property name="text" type="java.lang.String" value="Venta M&#xed;nima:"/>
+                  </Properties>
+                </Component>
               </SubComponents>
             </Container>
           </SubComponents>

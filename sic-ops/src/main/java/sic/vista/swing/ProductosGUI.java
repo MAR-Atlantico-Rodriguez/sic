@@ -112,7 +112,7 @@ public class ProductosGUI extends JInternalFrame {
         encabezados[1] = "Descripcion";
         encabezados[2] = "Cantidad";
         encabezados[3] = "Cant. Minima";
-        encabezados[4] = "Sin Límite";
+        encabezados[4] = "Venta Mínima";
         encabezados[5] = "Medida";
         encabezados[6] = "Precio Costo";
         encabezados[7] = "% Ganancia";
@@ -138,7 +138,7 @@ public class ProductosGUI extends JInternalFrame {
         tipos[1] = String.class;
         tipos[2] = Double.class;
         tipos[3] = Double.class;
-        tipos[4] = Boolean.class;
+        tipos[4] = Double.class;
         tipos[5] = String.class;
         tipos[6] = Double.class;
         tipos[7] = Double.class;
@@ -167,7 +167,7 @@ public class ProductosGUI extends JInternalFrame {
         tbl_Resultados.getColumnModel().getColumn(1).setPreferredWidth(400);
         tbl_Resultados.getColumnModel().getColumn(2).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(3).setPreferredWidth(100);
-        tbl_Resultados.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tbl_Resultados.getColumnModel().getColumn(4).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(5).setPreferredWidth(150);
         tbl_Resultados.getColumnModel().getColumn(6).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(7).setPreferredWidth(100);
@@ -194,7 +194,7 @@ public class ProductosGUI extends JInternalFrame {
             fila[1] = producto.getDescripcion();
             fila[2] = producto.getCantidad();
             fila[3] = producto.getCantMinima();
-            fila[4] = producto.isIlimitado();
+            fila[4] = producto.getVentaMinima();
             fila[5] = producto.getMedida().getNombre();
             fila[6] = producto.getPrecioCosto();
             fila[7] = producto.getGanancia_porcentaje();
