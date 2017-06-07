@@ -27,7 +27,7 @@ html, body {
   margin: 0;
 }
 
-.app-ecom {
+.app-com {
   height: 100%;
 }
 
@@ -42,4 +42,12 @@ ng-component {
 
 .mat-sidenav-container {
   height: 100%;
+}
+
+.app-com-spinner {
+  margin: auto;
+  color: #ffffff;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 60%;
 }
