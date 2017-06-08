@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-06-07T06:34:03 -->
+<!-- 2017-06-08T10:16:59 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListaPreciosProductos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="608c624e-e655-4a3f-bb85-9c440082766b">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
@@ -118,26 +118,13 @@
 					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement verticalAlignment="Middle">
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="80" y="0" width="141" height="16" uuid="ed30d880-1bf1-4eb5-b02a-7e89ca2dca0a"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Descripción]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="379" y="0" width="100" height="16" uuid="312f8893-3250-455a-b9d3-d7cfb8ce21ac"/>
+				<reportElement x="80" y="0" width="200" height="16" uuid="ed30d880-1bf1-4eb5-b02a-7e89ca2dca0a"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -147,10 +134,23 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Precio (sin IVA)]]></text>
+				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="479" y="0" width="76" height="16" uuid="13c3db5f-c7d4-44df-a633-2b62ed216eea"/>
+				<reportElement x="410" y="0" width="70" height="16" uuid="312f8893-3250-455a-b9d3-d7cfb8ce21ac"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio s/IVA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="0" width="75" height="16" uuid="13c3db5f-c7d4-44df-a633-2b62ed216eea"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -163,7 +163,7 @@
 				<text><![CDATA[Precio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="300" y="0" width="79" height="16" uuid="241e3991-3e42-4a45-91a0-232d936071ec"/>
+				<reportElement x="350" y="0" width="60" height="16" uuid="241e3991-3e42-4a45-91a0-232d936071ec"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -176,7 +176,7 @@
 				<text><![CDATA[Medida]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="221" y="0" width="79" height="16" uuid="6e9b0802-f1cf-41bb-9c44-be21915727e0"/>
+				<reportElement x="280" y="0" width="70" height="16" uuid="6e9b0802-f1cf-41bb-9c44-be21915727e0"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -186,7 +186,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Vent. Mínima]]></text>
+				<text><![CDATA[Venta Min.]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -198,12 +198,12 @@
 				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="0" width="141" height="20" uuid="711ae2af-b035-46a2-a2e5-425295ca3e78"/>
+				<reportElement x="80" y="0" width="200" height="20" uuid="711ae2af-b035-46a2-a2e5-425295ca3e78"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="380" y="0" width="100" height="20" uuid="cfbeba3e-0903-4c40-9c26-8d13b98cfa1d"/>
+				<reportElement x="410" y="0" width="70" height="20" uuid="cfbeba3e-0903-4c40-9c26-8d13b98cfa1d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{precioVentaPublico}]]></textFieldExpression>
 			</textField>
@@ -213,12 +213,12 @@
 				<textFieldExpression><![CDATA[$F{precioLista}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="79" height="20" uuid="009f171c-19d7-4c35-a69b-3fe1a41fe09a"/>
+				<reportElement x="350" y="0" width="60" height="20" uuid="009f171c-19d7-4c35-a69b-3fe1a41fe09a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[""+$F{medida}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="221" y="0" width="79" height="20" uuid="6051dd90-cb6a-484c-9e8b-e95ebbff97f2"/>
+				<reportElement x="280" y="0" width="70" height="20" uuid="6051dd90-cb6a-484c-9e8b-e95ebbff97f2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ventaMinima}]]></textFieldExpression>
 			</textField>

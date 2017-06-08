@@ -273,26 +273,16 @@ public class BuscarProductosGUI extends JDialog {
         //render para los tipos de datos
         tbl_Resultado.setDefaultRenderer(Double.class, new RenderTabla());
 
-        //Size de columnas
-        //Codigo
+        //Size de columnas        
         tbl_Resultado.getColumnModel().getColumn(0).setPreferredWidth(130);
-        tbl_Resultado.getColumnModel().getColumn(0).setMaxWidth(130);
-
-        //Descripcion
-        tbl_Resultado.getColumnModel().getColumn(1).setPreferredWidth(380);
-        //Cantidad
-        tbl_Resultado.getColumnModel().getColumn(2).setPreferredWidth(67);
-        tbl_Resultado.getColumnModel().getColumn(2).setMaxWidth(67);
-
-        //Sin limite
-        tbl_Resultado.getColumnModel().getColumn(3).setPreferredWidth(77);
-        tbl_Resultado.getColumnModel().getColumn(3).setMaxWidth(77);
-
-        //Medida
+        tbl_Resultado.getColumnModel().getColumn(0).setMaxWidth(130);        
+        tbl_Resultado.getColumnModel().getColumn(1).setPreferredWidth(380);        
+        tbl_Resultado.getColumnModel().getColumn(2).setPreferredWidth(70);
+        tbl_Resultado.getColumnModel().getColumn(2).setMaxWidth(70);        
+        tbl_Resultado.getColumnModel().getColumn(3).setPreferredWidth(70);
+        tbl_Resultado.getColumnModel().getColumn(3).setMaxWidth(70);        
         tbl_Resultado.getColumnModel().getColumn(4).setPreferredWidth(70);
-        tbl_Resultado.getColumnModel().getColumn(4).setMaxWidth(70);
-
-        //Precio
+        tbl_Resultado.getColumnModel().getColumn(4).setMaxWidth(70);        
         tbl_Resultado.getColumnModel().getColumn(5).setPreferredWidth(80);
         tbl_Resultado.getColumnModel().getColumn(5).setMaxWidth(80);
     }
