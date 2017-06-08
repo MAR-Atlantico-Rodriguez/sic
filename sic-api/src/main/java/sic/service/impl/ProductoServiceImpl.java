@@ -19,6 +19,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sic.modelo.Empresa;
@@ -183,7 +186,8 @@ public class ProductoServiceImpl implements IProductoService {
         if (criteria.isListarSoloFaltantes() == true) {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
-        return productoRepository.findAll(builder, criteria.getPageable());
+        Pageable pageable = new PageRequest(0, Integer.MAX_VALUE, new Sort(Sort.Direction.ASC, "descripcion"));
+        return productoRepository.findAll(builder, pageable);
     }
     
     private BooleanBuilder buildPredicadoDescripcion(String descripcion, QProducto qproducto) {

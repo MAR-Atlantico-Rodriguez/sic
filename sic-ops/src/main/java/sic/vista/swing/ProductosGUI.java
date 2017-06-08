@@ -127,7 +127,7 @@ public class ProductosGUI extends JInternalFrame {
         encabezados[16] = "Estanteria";
         encabezados[17] = "Estante";
         encabezados[18] = "Proveedor";
-        encabezados[18] = "Fecha Alta";
+        encabezados[19] = "Fecha Alta";
         encabezados[20] = "Fecha Vencimiento";
         encabezados[21] = "Nota";
         modeloTablaResultados.setColumnIdentifiers(encabezados);
