@@ -528,9 +528,9 @@
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="lbl_VentaMinima1" linkSize="10" min="-2" pref="120" max="-2" attributes="0"/>
+                                  <Component id="lbl_VentaMinima" linkSize="10" min="-2" pref="120" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txt_VentaMinima1" linkSize="11" min="-2" pref="57" max="-2" attributes="0"/>
+                                  <Component id="txt_VentaMinima" linkSize="11" min="-2" pref="57" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -554,8 +554,8 @@
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lbl_VentaMinima1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txt_VentaMinima1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lbl_VentaMinima" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txt_VentaMinima" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
@@ -609,19 +609,22 @@
                     <Property name="text" type="java.lang.String" value="Cantidad M&#xed;nima:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="lbl_VentaMinima1">
+                <Component class="javax.swing.JLabel" name="lbl_VentaMinima">
                   <Properties>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" value="Venta M&#xed;nima:"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JFormattedTextField" name="txt_VentaMinima1">
+                <Component class="javax.swing.JFormattedTextField" name="txt_VentaMinima">
                   <Properties>
                     <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
                       <Format format="#,##0.##" subtype="-1" type="0"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="0"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txt_VentaMinimaFocusGained"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
