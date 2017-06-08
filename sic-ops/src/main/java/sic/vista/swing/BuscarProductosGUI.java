@@ -249,7 +249,7 @@ public class BuscarProductosGUI extends JDialog {
         encabezados[0] = "Codigo";
         encabezados[1] = "Descripción";
         encabezados[2] = "Cantidad";
-        encabezados[3] = "Venta Mínima";
+        encabezados[3] = "Venta Min.";
         encabezados[4] = "Unidad";
         String encabezadoPrecio = (tipoMovimiento == Movimiento.VENTA) ? "P. Lista"
                 : (tipoMovimiento == Movimiento.PEDIDO) ? "P. Lista"
@@ -279,14 +279,14 @@ public class BuscarProductosGUI extends JDialog {
         tbl_Resultado.getColumnModel().getColumn(0).setMaxWidth(130);
 
         //Descripcion
-        tbl_Resultado.getColumnModel().getColumn(1).setPreferredWidth(360);
+        tbl_Resultado.getColumnModel().getColumn(1).setPreferredWidth(380);
         //Cantidad
         tbl_Resultado.getColumnModel().getColumn(2).setPreferredWidth(67);
         tbl_Resultado.getColumnModel().getColumn(2).setMaxWidth(67);
 
         //Sin limite
-        tbl_Resultado.getColumnModel().getColumn(3).setPreferredWidth(87);
-        tbl_Resultado.getColumnModel().getColumn(3).setMaxWidth(87);
+        tbl_Resultado.getColumnModel().getColumn(3).setPreferredWidth(77);
+        tbl_Resultado.getColumnModel().getColumn(3).setMaxWidth(77);
 
         //Medida
         tbl_Resultado.getColumnModel().getColumn(4).setPreferredWidth(70);
