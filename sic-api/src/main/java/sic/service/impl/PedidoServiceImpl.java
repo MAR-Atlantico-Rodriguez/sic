@@ -13,12 +13,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.persistence.EntityNotFoundException;
+import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,6 @@ import sic.service.IPedidoService;
 import sic.service.BusinessServiceException;
 import sic.service.ServiceException;
 import sic.modelo.TipoDeOperacion;
-import sic.util.Utilidades;
 import sic.repository.PedidoRepository;
 import sic.util.FormatterFechaHora;
 
@@ -46,6 +47,9 @@ public class PedidoServiceImpl implements IPedidoService {
     private final PedidoRepository pedidoRepository;
     private final IFacturaService facturaService;    
     private static final Logger LOGGER = Logger.getLogger(PedidoServiceImpl.class.getPackage().getName());
+    
+    @Value("${SIC_STATIC_CONTENT}")
+    private String pathStaticContent;
 
     @Autowired
     public PedidoServiceImpl(IFacturaService facturaService, PedidoRepository pedidoRepository) {
@@ -295,12 +299,15 @@ public class PedidoServiceImpl implements IPedidoService {
         InputStream isFileReport = classLoader.getResourceAsStream("sic/vista/reportes/Pedido.jasper");
         Map params = new HashMap();
         params.put("pedido", pedido);
-        // params.put("logo", Utilidades.convertirByteArrayIntoImage(pedido.getEmpresa().getLogo()));
+        if (!pedido.getEmpresa().getLogo().isEmpty()) {
+            params.put("logo", new ImageIcon(pathStaticContent + pedido.getEmpresa().getLogo()).getImage());    
+        }
         List<RenglonPedido> renglones = this.getRenglonesDelPedido(pedido.getId_Pedido());
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(renglones);
         try {
             return JasperExportManager.exportReportToPdf(JasperFillManager.fillReport(isFileReport, params, ds));
         } catch (JRException ex) {
+            LOGGER.error(ex.getMessage());
             throw new ServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_error_reporte"), ex);
         }

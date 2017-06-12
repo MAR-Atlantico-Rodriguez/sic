@@ -3,14 +3,9 @@ package sic.service.impl;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javax.persistence.EntityNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,16 +155,20 @@ public class EmpresaServiceImpl implements IEmpresaService {
     
     @Override
     public String guardarLogoEnDisco(byte[] imagen) {
-        String filename = String.valueOf(new Date().getTime()) + ".png";
+        String filename = String.valueOf(new Date().getTime());
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(pathStaticContent + filename);
             fos.write(imagen);
             fos.close();
         } catch (FileNotFoundException ex) {
-            throw new BusinessServiceException(ex.getMessage());
+            LOGGER.error(ex.getMessage());            
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_empresa_error_logo"));
         } catch (IOException ex) {
-            throw new BusinessServiceException(ex.getMessage());
+            LOGGER.error(ex.getMessage());
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_empresa_error_logo"));
         }
         return filename;
     }

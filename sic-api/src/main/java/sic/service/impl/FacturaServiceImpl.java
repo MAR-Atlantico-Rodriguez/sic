@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.persistence.EntityNotFoundException;
+import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +58,9 @@ public class FacturaServiceImpl implements IFacturaService {
     private final IPagoService pagoService;
     private final Logger LOGGER = Logger.getLogger(this.getClass());
 
+    @Value("${SIC_STATIC_CONTENT}")
+    private String pathStaticContent;
+    
     @Autowired
     @Lazy
     public FacturaServiceImpl(FacturaRepository facturaRepository,
@@ -947,8 +952,7 @@ public class FacturaServiceImpl implements IFacturaService {
         ClassLoader classLoader = FacturaServiceImpl.class.getClassLoader();
         InputStream isFileReport = classLoader.getResourceAsStream("sic/vista/reportes/FacturaVenta.jasper");
         Map params = new HashMap();
-        ConfiguracionDelSistema cds = configuracionDelSistemaService
-                .getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa());
+        ConfiguracionDelSistema cds = configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(factura.getEmpresa());
         params.put("preImpresa", cds.isUsarFacturaVentaPreImpresa());
         String formasDePago = "";
         formasDePago = pagoService.getPagosDeLaFactura(factura.getId_Factura())
@@ -972,12 +976,15 @@ public class FacturaServiceImpl implements IFacturaService {
         } else {
             params.put("nroComprobante", factura.getNumSerie() + " - " + factura.getNumFactura());
         }
-        // params.put("logo", Utilidades.convertirByteArrayIntoImage(factura.getEmpresa().getLogo()));
+        if (!factura.getEmpresa().getLogo().isEmpty()) {
+            params.put("logo", new ImageIcon(pathStaticContent + factura.getEmpresa().getLogo()).getImage());    
+        }
         List<RenglonFactura> renglones = this.getRenglonesDeLaFactura(factura.getId_Factura());
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(renglones);
          try {
             return JasperExportManager.exportReportToPdf(JasperFillManager.fillReport(isFileReport, params, ds));
         } catch (JRException ex) {
+            LOGGER.error(ex.getMessage());
              throw new ServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_error_reporte"), ex);
         }
