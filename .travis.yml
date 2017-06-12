@@ -3,3 +3,5 @@ jdk: oraclejdk8
 cache:
   directories:
   - $HOME/.m2
+env:
+  - SIC_STATIC_CONTENT=""
