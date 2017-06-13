@@ -179,11 +179,11 @@ public class ProductosGUI extends JInternalFrame {
         tbl_Resultados.getColumnModel().getColumn(11).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(12).setPreferredWidth(100);
         tbl_Resultados.getColumnModel().getColumn(13).setPreferredWidth(100);
-        tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(100);
+        tbl_Resultados.getColumnModel().getColumn(14).setPreferredWidth(180);
         tbl_Resultados.getColumnModel().getColumn(15).setPreferredWidth(150);
         tbl_Resultados.getColumnModel().getColumn(16).setPreferredWidth(200);
         tbl_Resultados.getColumnModel().getColumn(17).setPreferredWidth(200);
-        tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(200);
+        tbl_Resultados.getColumnModel().getColumn(18).setPreferredWidth(220);
         tbl_Resultados.getColumnModel().getColumn(19).setPreferredWidth(125);
         tbl_Resultados.getColumnModel().getColumn(20).setPreferredWidth(125);
         tbl_Resultados.getColumnModel().getColumn(21).setPreferredWidth(400);
