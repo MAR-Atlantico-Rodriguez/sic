@@ -6,12 +6,15 @@ import {tokenNotExpired} from 'angular2-jwt';
 import {environment} from '../../environments/environment';
 import {HttpInterceptorService} from 'ng-http-interceptor';
 import {Router} from '@angular/router';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class AuthService {
 
   private url = environment.apiUrl + '/api/v1/login';
   private token: string;
+  private mensajeSubject = new Subject<string>();
+  public msjError = this.mensajeSubject.asObservable();
 
   constructor(private http: Http, private httpInterceptor: HttpInterceptorService, private router: Router) {
     this.httpInterceptor.response().addInterceptor(this.responseInterceptor);
@@ -23,21 +26,16 @@ export class AuthService {
       (r: Response) => {
         // console.log(r.status);
       },
-    (e: Response) => {
+      (e: Response) => {
         if (e.status === 401) {
           // redirect user to login screen here
-         console.log(e);
+          //console.log(e);
         }
-      this.router.navigate(['login']);
-    });
+        this.mensajeErrorFunction(e.text());
+        this.router.navigate(['login']);
+      });
     return o;
   }
-
-
-
-
-
-
 
   login(username: string, password: string): Observable<boolean> {
     return this.http.post(this.url, {username: username, password: password})
@@ -59,5 +57,9 @@ export class AuthService {
 
   loggedIn(): boolean {
     return tokenNotExpired();
+  }
+
+  mensajeErrorFunction(data: string) {
+    this.mensajeSubject.next(data);
   }
 }

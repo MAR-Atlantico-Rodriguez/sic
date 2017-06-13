@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
-import {MdSnackBar} from '@angular/material';
+import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
 
 @Component({
   templateUrl: 'login.component.html',
@@ -16,6 +16,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.authService.logout();
+    this.authService.msjError.subscribe(
+      ( data: string ) => { this.msjError = data;}
+    );
   }
 
   login() {
@@ -30,13 +33,14 @@ export class LoginComponent implements OnInit {
         },
         err => {
           this.loading = false;
-          this.openSnackBar(err.text(), 'ERROR');
+          this.openSnackBar(this.msjError, 'ERROR');
         });
   }
 
   openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 3500,
-    });
+    var config = new MdSnackBarConfig();
+    config.duration = 3500;
+    config.extraClasses = ['app-comSnackBar'];
+    this.snackBar.open(message, action, config);
   }
 }

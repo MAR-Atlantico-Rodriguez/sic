@@ -15,7 +15,6 @@
         <div *ngIf="f.submitted && !username.valid" class="error">
           Se requiere nombre de usuario
         </div>
-        <div class="error" *ngIf="msjError && username.valid">{{msjError}}</div>
       </div>
       <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
         <md-input-container class="example-full-width">
@@ -28,7 +27,6 @@
         <div *ngIf="f.submitted && !password.valid" class="error">
           Se requiere password
         </div>
-        <div class="error" *ngIf="msjError && password.valid">{{msjError}}</div>
       </div>
       <div class="form-group" fxLayoutAlign="center">
         <button [disabled]="loading"
