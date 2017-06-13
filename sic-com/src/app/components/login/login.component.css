@@ -53,3 +53,7 @@ md-spinner {
   color: red;
   font-size: 11px;
 }
+
+.app-comSpinnerLogin {
+  font-size: 100px;
+}
