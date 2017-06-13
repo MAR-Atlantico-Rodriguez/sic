@@ -37,6 +37,8 @@ public class Producto implements Serializable {
     private double cantidad;
 
     private double cantMinima;
+    
+    private double ventaMinima;
 
     @ManyToOne
     @JoinColumn(name = "id_Medida", referencedColumnName = "id_Medida")

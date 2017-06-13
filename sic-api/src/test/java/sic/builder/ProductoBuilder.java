@@ -14,6 +14,7 @@ public class ProductoBuilder {
     private String descripcion = "Cinta adhesiva doble faz 3M";
     private double cantidad = 10;
     private double cantMinima = 2;    
+    private double ventaMinima = 0;
     private Medida medida = new MedidaBuilder().build();
     private double precioCosto = 100;
     private double ganancia_porcentaje = 50;
@@ -37,7 +38,7 @@ public class ProductoBuilder {
     private boolean eliminado = false;
     
     public Producto build() {
-        return new Producto(id_Producto, codigo, descripcion, cantidad, cantMinima, medida,
+        return new Producto(id_Producto, codigo, descripcion, cantidad, cantMinima, ventaMinima,medida,
                 precioCosto, ganancia_porcentaje, ganancia_neto, precioVentaPublico,
                 iva_porcentaje, iva_neto, impuestoInterno_porcentaje, impuestoInterno_neto, precioLista,
                 rubro, ilimitado, fechaUltimaModificacion, estanteria, estante, proveedor, nota,
