@@ -14,6 +14,7 @@ public class Producto implements Serializable {
     private String descripcion;
     private double cantidad;
     private double cantMinima;
+    private double ventaMinima;
     private Medida medida;
     private double precioCosto;
     private double ganancia_porcentaje;
