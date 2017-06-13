@@ -4,6 +4,7 @@
   padding: 40px;
   box-shadow: 0 0 15px #5e1a03;
   max-width: 250px;
+  min-height: 330px;
 }
 
 .form-group {

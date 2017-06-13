@@ -1,4 +1,4 @@
-<div fxLayout="column">
+<div fxLayout="column" class="linea">
   <div fxFlex fxLayoutAlign="center" *ngIf="loadingProducts && (productos.length === 0)">
     <md-spinner></md-spinner>
   </div>
@@ -10,26 +10,29 @@
     <md-list>
       <md-nav-list>
         <div *ngFor="let p of productos">
-          <md-list-item class="listItemProductos">
+          <md-list-item class="listItemProductos" (click)="openDialog(p)">
             <img class="imgAvatar" md-list-avatar src="../../assets/placeholderProducto.png">
             <p md-line>{{p.codigo}}</p>
             <p md-line class="descripcion-producto">{{p.descripcion}}</p>
             <p md-line>{{p.cantidad}} / {{p.medida.nombre}}</p>
             <p md-line>
-              <strong>{{p.precioLista | miCurrency }}</strong>
+              <strong>{{p.precioLista | sicComCurrency }}</strong>
             </p>
           </md-list-item>
           <md-divider></md-divider>
         </div>
+        <md-list-item (click)="masProductos()"
+                      *ngIf="(productos.length>0) && (totalPaginas > (pagina + 1)) && !loadingProducts"
+                      class="sic-com-mas-resultados"
+                      fxLayoutAlign="center center">
+          <p md-line>
+            <strong class="masResultados">MAS RESULTADOS</strong>
+          </p>
+        </md-list-item>
+        <md-list-item *ngIf="loadingProducts && (productos.length > 0)">
+          <md-spinner class="spinnerProductos"></md-spinner>
+        </md-list-item>
       </md-nav-list>
     </md-list>
-  </div>
-  <div fxFlex fxFlexAlign="center" class="paginacion">
-    <button md-button (click)="masProductos()" color="primary" class="masResultados"
-            *ngIf="(productos.length>0) && (totalPaginas > (pagina + 1)) && !loadingProducts">
-      <strong>MAS RESULTADOS</strong>
-    </button>
-    <md-spinner *ngIf="loadingProducts && (productos.length > 0)"
-                class="spinnerProductos"></md-spinner>
   </div>
 </div>

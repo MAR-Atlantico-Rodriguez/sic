@@ -17,15 +17,27 @@ export class ProductosService {
   public totalPaginas: Number = 0;
   public totalElementos: Number = 0;
 
+  private spinnerProduct = new Subject<boolean>();
+  public loadingProducts = this.spinnerProduct.asObservable();
+
   constructor(private authHttp: AuthHttp, private authGuard: AuthGuard) {}
+
+  showHideSpinner(eventValue: boolean) {
+    this.spinnerProduct.next(eventValue);
+  }
 
   getProductos() {
     this.authGuard.canActivate();
     const url = this.url + this.getCriteria();
-    return this.authHttp.get(url).map(data => data.json());
+    this.showHideSpinner(true);
+    return this.authHttp.get(url).map(data => {
+      this.showHideSpinner(false);
+      return data.json();
+    });
   }
 
   getBuscador(palabraBuscar: string) {
+    this.productosService.next([]);
     this.busquedaDescripcion = palabraBuscar;
     this.getProductos().subscribe(
       data => {
@@ -37,8 +49,9 @@ export class ProductosService {
   }
 
   getRubro(rubroBuscar: string) {
+    this.productosService.next([]);
     this.busquedaRubro = (rubroBuscar !== this.busquedaRubro) ? rubroBuscar : '';
-    this.getProductos().subscribe(
+    return this.getProductos().subscribe(
       data => {
         this.totalPaginas = data.totalPages;
         this.totalElementos = data.totalElements;
