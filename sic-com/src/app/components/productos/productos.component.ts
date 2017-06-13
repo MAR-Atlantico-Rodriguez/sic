@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductosService} from '../../services/productos.service';
 import {AuthGuard} from '../../guards/auth.guard';
+import {MdDialog} from '@angular/material';
+import {DescripcionProductoComponent} from '../descripcion-producto/descripcion-producto.component';
+
 
 @Component({
   selector: 'app-products',
@@ -10,13 +13,15 @@ import {AuthGuard} from '../../guards/auth.guard';
 export class ProductosComponent implements OnInit {
 
   public productos = [];
-  public loadingProducts = false;
+  public loadingProducts = true;
   public totalPaginas: Number = 0;
   public totalElementos: Number = 0;
   public pagina = 0;
   public tamanioPagina = 10;
 
-  constructor(private productService: ProductosService, private authGuard: AuthGuard) {}
+  constructor(private productService: ProductosService,
+              private authGuard: AuthGuard,
+              public dialog: MdDialog) {}
 
   ngOnInit() {
     this.getProductos();
@@ -26,11 +31,14 @@ export class ProductosComponent implements OnInit {
         this.totalPaginas = this.productService.totalPaginas;
         this.pagina = this.productService.pagina;
       });
+
+    this.productService.loadingProducts.subscribe(
+      ( data: boolean ) => { this.loadingProducts = data; }
+    );
   }
 
   getProductos() {
     this.authGuard.canActivate();
-    this.loadingProducts = true;
     this.productService.pagina = this.pagina;
     this.productService.tamanioPagina = this.tamanioPagina;
     this.productService.getProductos()
@@ -38,7 +46,6 @@ export class ProductosComponent implements OnInit {
           data.content.forEach((v) => { this.productos.push(v); });
           this.totalPaginas = data.totalPages;
           this.totalElementos = data.totalElements;
-          this.loadingProducts = false;
         });
   }
 
@@ -47,5 +54,10 @@ export class ProductosComponent implements OnInit {
       this.pagina++;
       this.getProductos();
     }
+  }
+
+  openDialog(p) {
+    console.log(p);
+    this.dialog.open(DescripcionProductoComponent);
   }
 }

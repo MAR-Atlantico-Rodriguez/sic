@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {AuthGuard} from '../guards/auth.guard';
-import {SidenavService} from "../services/sidenav.service";
-import {MdSidenav} from "@angular/material";
+import {AuthGuard} from '../../guards/auth.guard';
+import {SidenavService} from '../../services/sidenav.service';
+import {MdSidenav} from '@angular/material';
 
 @Component({
   selector: 'app-home',

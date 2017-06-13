@@ -49,5 +49,11 @@ ng-component {
   color: #ffffff;
   text-align: center;
   vertical-align: middle;
-  margin-top: 60%;
+  margin-top: 20%;
+}
+
+@media (max-width: 500px) {
+  .app-com-spinner {
+    margin-top: 60%;
+  }
 }

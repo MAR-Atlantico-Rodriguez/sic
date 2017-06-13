@@ -2,19 +2,42 @@ import {Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {tokenNotExpired, JwtHelper} from 'angular2-jwt';
+import {tokenNotExpired} from 'angular2-jwt';
 import {environment} from '../../environments/environment';
+import {HttpInterceptorService} from 'ng-http-interceptor';
+import {Router} from '@angular/router';
 
 @Injectable()
 export class AuthService {
 
   private url = environment.apiUrl + '/api/v1/login';
   private token: string;
-  private jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private httpInterceptor: HttpInterceptorService, private router: Router) {
+    this.httpInterceptor.response().addInterceptor(this.responseInterceptor);
     const token = localStorage.getItem('token');
   }
+
+  private responseInterceptor = (o: Observable<Response>, method: string): Observable<Response> => {
+    o.subscribe(
+      (r: Response) => {
+        // console.log(r.status);
+      },
+    (e: Response) => {
+        if (e.status === 401) {
+          // redirect user to login screen here
+         console.log(e);
+        }
+      this.router.navigate(['login']);
+    });
+    return o;
+  }
+
+
+
+
+
+
 
   login(username: string, password: string): Observable<boolean> {
     return this.http.post(this.url, {username: username, password: password})

@@ -34,12 +34,18 @@ md-card {
   }
 }
 
+.sic-com-mas-resultados {
+  height: 90px;
+}
+
 .masResultados {
-  height: 50px;
-  width: 100%;
+  color: #f05724;
 }
 
 .paginacion {
   width: 100%;
-  margin-bottom:40px;
+}
+
+.linea {
+  border-right: 1px solid #ccc;
 }
