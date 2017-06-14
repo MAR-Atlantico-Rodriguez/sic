@@ -186,7 +186,11 @@ public class ProductoServiceImpl implements IProductoService {
         if (criteria.isListarSoloFaltantes() == true) {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
-        Pageable pageable = new PageRequest(0, Integer.MAX_VALUE, new Sort(Sort.Direction.ASC, "descripcion"));
+        int pageSize = Integer.MAX_VALUE;
+        if (criteria.getPageable() != null) {
+            pageSize = criteria.getPageable().getPageSize();
+        }
+        Pageable pageable = new PageRequest(0, pageSize, new Sort(Sort.Direction.ASC, "descripcion"));
         return productoRepository.findAll(builder, pageable);
     }
     

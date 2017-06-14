@@ -246,6 +246,7 @@ public class ProductoController {
                 .empresa(empresaService.getEmpresaPorId(idEmpresa))
                 .cantRegistros(0)
                 .listarSoloFaltantes(soloFantantes)
+                .pageable(null)
                 .build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);        
