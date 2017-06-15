@@ -35,7 +35,7 @@ public class NotaDeDebito implements Serializable {
     @Column(nullable = false)
     private long nroNotaDeDebito;
     
-    private double eliminada;
+    private boolean eliminada;
     
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
