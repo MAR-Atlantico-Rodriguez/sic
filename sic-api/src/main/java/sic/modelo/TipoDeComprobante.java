@@ -18,6 +18,22 @@ public enum TipoDeComprobante {
     
     PEDIDO, 
     
-    PRESUPUESTO;
+    PRESUPUESTO,
+    
+    NOTA_CREDITO_A,
+    
+    NOTA_CREDITO_B,
+    
+    NOTA_CREDITO_C,
+    
+    NOTA_CREDITO_X, 
+    
+    NOTA_DEBITO_A,
+    
+    NOTA_DEBITO_B,
+    
+    NOTA_DEBITO_C,
+    
+    NOTA_DEBITO_X;
     
 }
