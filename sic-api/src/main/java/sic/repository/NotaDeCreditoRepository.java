@@ -6,9 +6,9 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import sic.modelo.Cliente;
+import sic.modelo.Empresa;
 import sic.modelo.NotaDeCredito;
 import sic.modelo.TipoDeComprobante;
-import sic.modelo.Usuario;
 
 
 public interface NotaDeCreditoRepository extends PagingAndSortingRepository<NotaDeCredito, Long>, QueryDslPredicateExecutor<NotaDeCredito> {
@@ -18,8 +18,8 @@ public interface NotaDeCreditoRepository extends PagingAndSortingRepository<Nota
 
       NotaDeCredito findByTipoDeComprobanteAndNroNotaDeCreditoAndClienteAndEliminada(TipoDeComprobante tipoDeComprobante, long nroNotaDeCredito, Cliente cliente, boolean eliminada);
 
-      List<NotaDeCredito> findAllByClienteAndEliminada(Cliente cliente, boolean eliminada);
+      List<NotaDeCredito> findAllByClienteAndEmpresaAndEliminada(Cliente cliente, Empresa empresa, boolean eliminada);
 
-      NotaDeCredito findTopByClienteAndEliminadaOrderByNroNotaDeCredito(Cliente cliente, boolean eliminada);
+      NotaDeCredito findTopByClienteAndEmpresaAndEliminadaOrderByNroNotaDeCredito(Cliente cliente, Empresa empresa, boolean eliminada);
     
 }

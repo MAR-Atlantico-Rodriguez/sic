@@ -6,6 +6,7 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import sic.modelo.Cliente;
+import sic.modelo.Empresa;
 import sic.modelo.NotaDeDebito;
 import sic.modelo.TipoDeComprobante;
 
@@ -16,8 +17,8 @@ public interface NotaDeDebitoRepository extends PagingAndSortingRepository<NotaD
 
       NotaDeDebito findByTipoDeComprobanteAndNroNotaDeDebitoAndClienteAndEliminada(TipoDeComprobante tipoDeComprobante, long nroNotaDeDebito, Cliente cliente, boolean eliminada);
 
-      List<NotaDeDebito> findAllByClienteAndEliminada(Cliente cliente, boolean eliminada);
+      List<NotaDeDebito> findAllByClienteAndEmpresaAndEliminada(Cliente cliente, Empresa empresa, boolean eliminada);
 
-      NotaDeDebito findTopByClienteAndEliminadaOrderByNroNotaDeDebito(Cliente cliente, boolean eliminada);
+      NotaDeDebito findTopByClienteAndEmpresaAndEliminadaOrderByNroNotaDeDebito(Cliente cliente, Empresa empresa, boolean eliminada);
     
 }

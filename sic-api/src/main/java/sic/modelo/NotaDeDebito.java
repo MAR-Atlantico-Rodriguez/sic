@@ -46,6 +46,10 @@ public class NotaDeDebito implements Serializable {
     private Date fecha;
     
     @ManyToOne
+    @JoinColumn(name = "id_Empresa", referencedColumnName = "id_Empresa")    
+    private Empresa empresa;
+    
+    @ManyToOne
     @JoinColumn(name = "id_Cliente", referencedColumnName = "id_Cliente")
     private Cliente cliente;
     
@@ -59,10 +63,8 @@ public class NotaDeDebito implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_NotaDeDebito")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<RenglonNota> renglonNota;
+    private List<RenglonNota> renglonesNota;
     
-    @Column(nullable = false)
-    private double subTotal;
     
     @Column(nullable = false)
     private double ivaPorcentaje;

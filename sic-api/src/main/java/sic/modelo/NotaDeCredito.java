@@ -19,12 +19,14 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
     
 @Entity
 @Table(name = "notaDeCredito")
 @Data
+@EqualsAndHashCode(of = {"fecha", "tipoDeComprobante", "nroNotaDeCredito", "empresa", "cliente"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotaDeCredito implements Serializable {
@@ -47,6 +49,10 @@ public class NotaDeCredito implements Serializable {
     private Date fecha;
     
     @ManyToOne
+    @JoinColumn(name = "id_Empresa", referencedColumnName = "id_Empresa")    
+    private Empresa empresa;
+    
+    @ManyToOne
     @JoinColumn(name = "id_Cliente", referencedColumnName = "id_Cliente")
     private Cliente cliente;
 
@@ -60,10 +66,7 @@ public class NotaDeCredito implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_NotaDeCredito")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private List<RenglonNota> renglonNota;
-    
-    @Column(nullable = false)
-    private double subTotal;
+    private List<RenglonNota> renglonesNota;
     
     @Column(nullable = false)
     private double ivaPorcentaje;
