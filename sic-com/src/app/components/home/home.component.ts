@@ -16,7 +16,7 @@ export class HomeComponent implements AfterViewInit {
     this.authGuard.canActivate();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.sidenavService.setSidenav(this.sidenav);
   }
 }

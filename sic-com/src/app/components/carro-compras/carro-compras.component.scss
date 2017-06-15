@@ -1,0 +1,17 @@
+.product-image {
+  border: 1px solid #000;
+  height: 100px !important;
+  order: -1;
+  width: 100px !important;
+}
+
+.descripcion-producto {
+  color: #f05724 !important;
+  font-weight: bold !important;
+  white-space: normal !important;
+}
+
+.mat-list .mat-list-item .mat-list-avatar, .mat-nav-list .mat-list-item .mat-list-avatar {
+  height: 75px;
+  width: 75px;
+}

@@ -1,19 +1,20 @@
-<md-card class="example-card">
-  <md-card-header>
-    <div md-card-avatar class="example-header-image"></div>
-    <md-card-title>Shiba Inu</md-card-title>
-    <md-card-subtitle>Dog Breed</md-card-subtitle>
+<md-card fxLayout="column" fxLayoutAlign="center center">
+  <img md-card-image src="../../../assets/placeholderProducto.png">
+  <md-card-header fxLayout="column">
+    <md-card-title>{{producto.descripcion}}</md-card-title>
+    <md-card-subtitle>Codigo {{producto.codigo}}</md-card-subtitle>
   </md-card-header>
-  <!--img md-card-image src="assets/img/examples/shiba2.jpg"-->
-  <md-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
+  <md-card-content fxFlex>
+    <p> Precio Lista <strong>{{producto.precioLista | sicComCurrency }}</strong> </p>
+    <p> Precio Contado <strong>{{producto.precioVentaPublico | sicComCurrency }}</strong> </p>
+    <p> Stock {{producto.cantidad}} </p>
+    <p> Unidad de medida {{producto.medida.nombre}} </p>
   </md-card-content>
-  <md-card-actions>
-    <button md-button>LIKE</button>
-    <button md-button>SHARE</button>
+  <md-card-actions fxFlex>
+    Cantidad <input type="number" #cantidad class="cantidad"
+                    placeholder="cantidad" value="1" min="1" max="{{producto.cantidad}}">
+
+    <button md-button class="app-comComprar" (click)="cargarEnCarro(producto, cantidad.value)">Comprar</button>
+    <button md-button class="app-comCerrar">Cerrar</button>
   </md-card-actions>
 </md-card>

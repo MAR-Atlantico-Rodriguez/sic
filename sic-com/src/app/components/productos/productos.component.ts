@@ -57,7 +57,7 @@ export class ProductosComponent implements OnInit {
   }
 
   openDialog(p) {
-    console.log(p);
+    this.productService.descripcionProducto(p);
     this.dialog.open(DescripcionProductoComponent);
   }
 }

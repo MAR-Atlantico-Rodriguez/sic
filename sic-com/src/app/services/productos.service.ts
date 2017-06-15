@@ -19,11 +19,16 @@ export class ProductosService {
 
   private spinnerProduct = new Subject<boolean>();
   public loadingProducts = this.spinnerProduct.asObservable();
+  public prodDesc;
 
   constructor(private authHttp: AuthHttp, private authGuard: AuthGuard) {}
 
   showHideSpinner(eventValue: boolean) {
     this.spinnerProduct.next(eventValue);
+  }
+
+  descripcionProducto(producto) {
+    this.prodDesc = producto;
   }
 
   getProductos() {

@@ -21,6 +21,8 @@ import {SicComCurrencyPipe} from './pipes/sicComCurrency';
 import {SicComMaterialModule} from './sic.com.material.module';
 import { DescripcionProductoComponent } from './components/descripcion-producto/descripcion-producto.component';
 import {HttpInterceptorModule} from 'ng-http-interceptor';
+import { CarroComprasComponent } from './components/carro-compras/carro-compras.component';
+import { CarroService } from './services/carro.service';
 
 
 @NgModule({
@@ -32,7 +34,8 @@ import {HttpInterceptorModule} from 'ng-http-interceptor';
     SidenavComponent,
     ProductosComponent,
     SicComCurrencyPipe,
-    DescripcionProductoComponent
+    DescripcionProductoComponent,
+    CarroComprasComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,8 @@ import {HttpInterceptorModule} from 'ng-http-interceptor';
     AuthService,
     ProductosService,
     RubrosService,
-    SidenavService
+    SidenavService,
+    CarroService
   ],
   entryComponents: [DescripcionProductoComponent],
   bootstrap: [AppComponent]
