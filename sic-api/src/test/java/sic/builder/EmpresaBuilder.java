@@ -18,7 +18,7 @@ public class EmpresaBuilder {
     private String email = "support@globocorporation.com";
     private String telefono = "379 4895549";
     private Localidad localidad = new LocalidadBuilder().build();
-    private byte[] logo = null;
+    private String logo = "";
     private boolean eliminada = false;
     
     public Empresa build() {
@@ -81,7 +81,7 @@ public class EmpresaBuilder {
         return this;
     }
     
-    public EmpresaBuilder withLogo(byte[] logo) {
+    public EmpresaBuilder withLogo(String logo) {
         this.logo = logo;
         return this;
     }

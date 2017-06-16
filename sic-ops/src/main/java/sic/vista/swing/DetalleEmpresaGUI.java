@@ -34,15 +34,13 @@ public class DetalleEmpresaGUI extends JDialog {
 
     public DetalleEmpresaGUI() {
         this.initComponents();
-        this.setIcon();
-        this.setTitle("Nueva Empresa");
+        this.setIcon();        
         operacion = TipoDeOperacion.ALTA;
     }
 
     public DetalleEmpresaGUI(Empresa empresa) {
         this.initComponents();
-        this.setIcon();
-        this.setTitle("Modificar Empresa");
+        this.setIcon();        
         operacion = TipoDeOperacion.ACTUALIZACION;
         empresaModificar = empresa;
     }
@@ -129,35 +127,45 @@ public class DetalleEmpresaGUI extends JDialog {
         txt_Lema.setText(empresaModificar.getLema());
         txt_Direccion.setText(empresaModificar.getDireccion());
         cmb_CondicionIVA.setSelectedItem(empresaModificar.getCondicionIVA());
-
         if (empresaModificar.getCuip() == 0) {
             txt_CUIP.setText("");
         } else {
             txt_CUIP.setText(String.valueOf(empresaModificar.getCuip()));
         }
-
         if (empresaModificar.getIngresosBrutos() == 0) {
             txt_IngBrutos.setText("");
         } else {
             txt_IngBrutos.setText(String.valueOf(empresaModificar.getIngresosBrutos()));
         }
-
         dc_FechaInicioActividad.setDate(empresaModificar.getFechaInicioActividad());
         txt_Email.setText(empresaModificar.getEmail());
         txt_Telefono.setText(empresaModificar.getTelefono());
         cmb_Pais.setSelectedItem(empresaModificar.getLocalidad().getProvincia().getPais());
         cmb_Provincia.setSelectedItem(empresaModificar.getLocalidad().getProvincia());
         cmb_Localidad.setSelectedItem(empresaModificar.getLocalidad());
-
-        if (empresaModificar.getLogo() == null) {
+        if ("".equals(empresaModificar.getLogo())) {
             lbl_Logo.setText("SIN IMAGEN");
             logo = null;
         } else {
-            lbl_Logo.setText("");
-            logo = empresaModificar.getLogo();
-            ImageIcon imagenLogo = new ImageIcon(logo);
-            ImageIcon logoRedimensionado = new ImageIcon(imagenLogo.getImage().getScaledInstance(114, 114, Image.SCALE_SMOOTH));
-            lbl_Logo.setIcon(logoRedimensionado);
+            lbl_Logo.setText("");            
+            try {
+                logo = RestClient.getRestTemplate().getForObject("/static/" + empresaModificar.getLogo(), byte[].class);
+                ImageIcon imagenLogo = new ImageIcon(logo);
+                ImageIcon logoRedimensionado = new ImageIcon(imagenLogo.getImage().getScaledInstance(114, 114, Image.SCALE_SMOOTH));
+                lbl_Logo.setIcon(logoRedimensionado);
+            } catch (RestClientResponseException ex) {
+                LOGGER.error(ex.getMessage());
+                JOptionPane.showMessageDialog(this,
+                        ResourceBundle.getBundle("Mensajes").getString("mensaje_404_logo"),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                this.dispose();
+            } catch (ResourceAccessException ex) {
+                LOGGER.error(ex.getMessage());
+                JOptionPane.showMessageDialog(this,
+                        ResourceBundle.getBundle("Mensajes").getString("mensaje_error_conexion"),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                this.dispose();
+            }            
         }
     }
     
@@ -518,8 +526,12 @@ public class DetalleEmpresaGUI extends JDialog {
                 empresa.setFechaInicioActividad(dc_FechaInicioActividad.getDate());
                 empresa.setEmail(txt_Email.getText().trim());
                 empresa.setTelefono(txt_Telefono.getText().trim());
-                empresa.setLocalidad((Localidad) cmb_Localidad.getSelectedItem());
-                empresa.setLogo(logo);            
+                empresa.setLocalidad((Localidad) cmb_Localidad.getSelectedItem());                
+                if (logo == null) {
+                    empresa.setLogo("");
+                } else {
+                    empresa.setLogo(RestClient.getRestTemplate().postForObject("/empresas/logo", logo, String.class));
+                }
                 RestClient.getRestTemplate().postForObject("/empresas", empresa, Empresa.class);            
                 mensaje = "La Empresa " + txt_Nombre.getText().trim() + " se guardó correctamente.";
             }
@@ -533,8 +545,12 @@ public class DetalleEmpresaGUI extends JDialog {
                 empresaModificar.setFechaInicioActividad(dc_FechaInicioActividad.getDate());
                 empresaModificar.setEmail(txt_Email.getText().trim());
                 empresaModificar.setTelefono(txt_Telefono.getText().trim());
-                empresaModificar.setLocalidad((Localidad) cmb_Localidad.getSelectedItem());
-                empresaModificar.setLogo(logo);                        
+                empresaModificar.setLocalidad((Localidad) cmb_Localidad.getSelectedItem());                
+                if (logo == null) {
+                    empresaModificar.setLogo("");
+                } else {
+                    empresaModificar.setLogo(RestClient.getRestTemplate().postForObject("/empresas/logo", logo, String.class));
+                }
                 RestClient.getRestTemplate().put("/empresas", empresaModificar);            
                 mensaje = "La Empresa " + txt_Nombre.getText().trim() + " se modificó correctamente.";
             }
@@ -555,7 +571,10 @@ public class DetalleEmpresaGUI extends JDialog {
         this.cargarComboBoxCondicionesIVA();
         this.cargarComboBoxPaises();        
         if (operacion == TipoDeOperacion.ACTUALIZACION) {
+            this.setTitle("Modificar Empresa");
             this.cargarEmpresaParaModificar();
+        } else {
+            this.setTitle("Nueva Empresa");
         }
     }//GEN-LAST:event_formWindowOpened
 
@@ -569,7 +588,6 @@ public class DetalleEmpresaGUI extends JDialog {
         JFileChooser menuElegirLogo = new JFileChooser();
         menuElegirLogo.setAcceptAllFileFilterUsed(false);
         menuElegirLogo.addChoosableFileFilter(new FiltroImagenes());
-
         try {
             if (menuElegirLogo.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
                 if (Utilidades.esTamanioValido(menuElegirLogo.getSelectedFile(), 512000)) {
@@ -579,7 +597,6 @@ public class DetalleEmpresaGUI extends JDialog {
                     ImageIcon logoRedimensionado = new ImageIcon(logoProvisional.getImage().getScaledInstance(114, 114, Image.SCALE_SMOOTH));
                     lbl_Logo.setIcon(logoRedimensionado);
                     lbl_Logo.setText("");
-
                 } else {
                     JOptionPane.showMessageDialog(this, "El tamaño del archivo seleccionado, supera el límite de 512kb.",
                         "Error", JOptionPane.ERROR_MESSAGE);
@@ -588,7 +605,6 @@ public class DetalleEmpresaGUI extends JDialog {
             } else {
                 logo = null;
             }
-
         } catch (IOException ex) {
             String mensaje = ResourceBundle.getBundle("Mensajes").getString("mensaje_error_IOException");
             LOGGER.error(mensaje + " - " + ex.getMessage());

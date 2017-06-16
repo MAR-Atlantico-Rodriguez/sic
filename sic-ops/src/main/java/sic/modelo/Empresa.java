@@ -20,7 +20,7 @@ public class Empresa implements Serializable {
     private String email;
     private String telefono;
     private Localidad localidad;
-    private byte[] logo;
+    private String logo;
     private boolean eliminada;
 
     @Override
