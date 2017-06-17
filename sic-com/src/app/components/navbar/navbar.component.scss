@@ -59,3 +59,16 @@ md-toolbar-row {
 .active {
   color: #f05724;
 }
+
+.sic-comContadorCarro {
+  border-radius: 200px 200px 200px 200px;
+  -moz-border-radius: 200px 200px 200px 200px;
+  -webkit-border-radius: 200px 200px 200px 200px;
+  border: 1px solid #fff;
+  position: absolute;
+  background-color: red;
+  top: -8px;
+  right: -5px;
+  padding: 1px 3px;
+  line-height: 20px;
+}

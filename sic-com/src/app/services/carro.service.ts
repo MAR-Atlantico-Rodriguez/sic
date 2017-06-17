@@ -1,11 +1,18 @@
 import {Injectable} from '@angular/core';
 import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class CarroService {
   public carrito = [];
 
-  constructor(public snackBar: MdSnackBar) {
+  private carritoSubject = new Subject<any>();
+  public carritoCant = this.carritoSubject.asObservable();
+
+  constructor(public snackBar: MdSnackBar) {}
+
+  addCarrito(nro) {
+    this.carritoSubject.next(nro);
   }
 
   agregarAlCarro(prod, cant) {
@@ -25,6 +32,7 @@ export class CarroService {
         }
       } else {
         this.carrito.push({prod, cant});
+        this.addCarrito(this.carrito.length);
         prod.cantidad = prod.cantidad - cant;
         msj = 'Se agrego al presupuesto';
         action = '';
@@ -48,4 +56,5 @@ export class CarroService {
     config.extraClasses = ['app-comSnackBar'];
     this.snackBar.open(message, action, config);
   }
+
 }

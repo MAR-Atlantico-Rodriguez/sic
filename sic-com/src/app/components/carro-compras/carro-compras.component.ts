@@ -27,6 +27,7 @@ export class CarroComprasComponent implements OnInit {
   ngOnInit() {
     this.carrito = this.carroService.carrito;
     this.sumarTotales();
+    this.carroService.addCarrito(this.carrito.length);
   }
 
   sumarTotales() {

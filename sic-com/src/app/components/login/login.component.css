@@ -4,7 +4,7 @@
   padding: 40px;
   box-shadow: 0 0 15px #5e1a03;
   max-width: 250px;
-  min-height: 380px;
+  min-height: 318px;
 }
 
 .form-group {
@@ -31,8 +31,8 @@
 }
 
 md-spinner {
-  width: 100px;
-  height: 100px;
+  width: 55px;
+  height: 55px;
 }
 
 .msjError {

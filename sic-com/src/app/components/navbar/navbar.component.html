@@ -9,11 +9,12 @@
     <md-icon class="buscador" (click)="buscarProductos(buscador.value)">search</md-icon>
   </div>
   <div fxFlex="10" fxLayoutAlign="center">
-    <!--<div fxHide.lt-md>
-          <button md-icon-button (click)="sidenav.open()">
+    <div fxHide.lt-md>
+          <button md-icon-button [routerLink]="['/carro']">
             <md-icon>shopping_cart</md-icon>
+            <div class="sic-comContadorCarro" *ngIf="(cantidadItemsCarro > 0)">{{cantidadItemsCarro}}</div>
           </button>
-      </div>-->
+      </div>
     <div fxHide.gt-sm>
       <button md-icon-button (click)="toggleSidenav()">
         <md-icon>more_vert</md-icon>
