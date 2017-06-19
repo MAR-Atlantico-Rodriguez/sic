@@ -10,7 +10,6 @@ import {CarroService} from '../../services/carro.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-
   public rubros = [];
   public cantidadItemsCarro = 0;
 
@@ -20,10 +19,10 @@ export class NavbarComponent implements OnInit {
               private carroService: CarroService) {}
 
   ngOnInit() {
-    this.carroService.carritoCant.subscribe( data => {
-      this.cantidadItemsCarro = data;
-      console.log('si llega');
-    } );
+    this.carroService.carritoCant
+      .subscribe( data => {
+        this.cantidadItemsCarro = data;
+      });
     this.rubrosService.getRubros().subscribe( data => this.rubros = data );
   }
 
@@ -32,7 +31,7 @@ export class NavbarComponent implements OnInit {
     this.productosService.getBuscador(palabraBuscar);
   }
 
-  toggleSidenav(){
+  toggleSidenav() {
     this.sidenavService.toggle().then(() => {});
   }
 }

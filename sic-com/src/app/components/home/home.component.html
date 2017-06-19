@@ -1,12 +1,6 @@
-<md-sidenav-container>
-  <app-navbar></app-navbar>
-  <md-sidenav #sidenav mode="over" opened="false" align="end" class="app-sidenav" fxHide.gt-md>
-    <app-sidenav></app-sidenav>
-  </md-sidenav>
   <div fxLayout="column" fxLayoutAlign="space-between stretch" fxFlexFill>
     <div fxFlex fxFlexOffset.gt-md="18">
       <app-products class="container" fxFlex></app-products>
       <app-sidenav fxFlex="30" fxHide.lt-md ></app-sidenav>
     </div>
   </div>
-</md-sidenav-container>

@@ -1,1 +1,9 @@
-<router-outlet class="router"></router-outlet>
+<md-sidenav-container>
+  <app-navbar></app-navbar>
+  <md-sidenav #sidenav mode="over" opened="false" align="end" class="app-sidenav" fxHide.gt-md>
+    <app-sidenav></app-sidenav>
+  </md-sidenav>
+
+  <router-outlet class="router"></router-outlet>
+  
+</md-sidenav-container>

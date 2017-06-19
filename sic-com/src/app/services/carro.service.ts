@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MdSnackBar, MdSnackBarConfig} from '@angular/material';
-import {Subject} from "rxjs/Subject";
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class CarroService {
@@ -51,7 +51,7 @@ export class CarroService {
   }
 
   openSnackBar(message: string, action: string) {
-    var config = new MdSnackBarConfig();
+    const config = new MdSnackBarConfig();
     config.duration = 3500;
     config.extraClasses = ['app-comSnackBar'];
     this.snackBar.open(message, action, config);

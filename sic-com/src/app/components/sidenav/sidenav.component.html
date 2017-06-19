@@ -5,8 +5,11 @@
       <md-list-item [routerLink]="['/login']" fxFlex>
         <md-icon>power_settings_new</md-icon>
       </md-list-item>
-      <md-list-item [routerLink]="['/carro']" fxFlex>
+      <md-list-item [routerLink]="['/carro']" fxFlex (click)="toggleSidenav()">
         <md-icon>shopping_cart</md-icon>
+        <div class="sic-comContadorCarroSideBar" *ngIf="(cantidadItemsCarro > 0)">
+          {{cantidadItemsCarro}}
+        </div>
       </md-list-item>
       <md-divider></md-divider>
     </div>

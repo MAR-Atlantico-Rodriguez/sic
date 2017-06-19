@@ -8,15 +8,8 @@ import {MdSidenav} from '@angular/material';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements AfterViewInit {
-
-  @ViewChild('sidenav') public sidenav: MdSidenav;
-
-  constructor(private authGuard: AuthGuard, private sidenavService: SidenavService) {
+export class HomeComponent {
+  constructor(private authGuard: AuthGuard) {
     this.authGuard.canActivate();
-  }
-
-  ngAfterViewInit() {
-    this.sidenavService.setSidenav(this.sidenav);
   }
 }

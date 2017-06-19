@@ -1,3 +1,18 @@
 .rubroActivo {
 	color: #f05724;
 }
+
+.sic-comContadorCarroSideBar {
+  border-radius: 200px 200px 200px 200px;
+  -moz-border-radius: 200px 200px 200px 200px;
+  -webkit-border-radius: 200px 200px 200px 200px;
+  border: 1px solid #fff;
+  position: absolute;
+  background-color: red;
+  top: 15px;
+  right: 61px;
+  padding: 1px 6px;
+  line-height: 18px;
+  font-size: 13px;
+  color: white;
+}

@@ -16,7 +16,7 @@ export class DescripcionProductoComponent implements OnInit {
     this.producto = this.productoService.prodDesc;
   }
 
-  cargarEnCarro(prod, cant){
+  cargarEnCarro(prod, cant) {
     this.carroService.agregarAlCarro(prod, cant);
   }
 }

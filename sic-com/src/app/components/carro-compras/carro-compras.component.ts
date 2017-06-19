@@ -1,7 +1,6 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SidenavService} from '../../services/sidenav.service';
 import {AuthGuard} from '../../guards/auth.guard';
-import {MdSidenav} from '@angular/material';
 import {CarroService} from '../../services/carro.service';
 
 @Component({
@@ -10,30 +9,22 @@ import {CarroService} from '../../services/carro.service';
   styleUrls: ['./carro-compras.component.scss', '../home/home.component.scss']
 })
 export class CarroComprasComponent implements OnInit {
-  @ViewChild('sidenav') public sidenav: MdSidenav;
   public carrito = [];
-   public totalLista = 0;
-   public totalContado = 0;
-   public cantidadArticulos = 0;
+  public totalLista = 0;
+  public totalContado = 0;
+  public cantidadArticulos = 0;
 
   constructor(private authGuard: AuthGuard, private sidenavService: SidenavService, private carroService: CarroService) {
     this.authGuard.canActivate();
   }
 
-  ngAfterViewInit() {
-    this.sidenavService.setSidenav(this.sidenav);
-  }
-
   ngOnInit() {
     this.carrito = this.carroService.carrito;
     this.sumarTotales();
-    this.carroService.addCarrito(this.carrito.length);
   }
 
   sumarTotales() {
-    let TL = 0;
-    let TC = 0;
-    let CA = 0;
+    let TL = 0;    let TC = 0;    let CA = 0;
     this.carrito.forEach(function(prod) {
       TL += parseFloat(prod.prod.precioLista) * parseFloat(prod.cant);
       TC += parseFloat(prod.prod.precioVentaPublico) * parseFloat(prod.cant);
