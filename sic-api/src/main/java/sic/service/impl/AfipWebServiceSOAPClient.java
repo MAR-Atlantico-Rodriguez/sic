@@ -38,26 +38,44 @@ import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ws.WebServiceMessage;
 import org.springframework.ws.soap.SoapMessage;
 import sic.service.BusinessServiceException;
 import sic.util.Utilidades;
 
 public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
-
+    
     private final String WSAA_TESTING = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
     private final String WSAA_PRODUCTION = "https://wsaa.afip.gov.ar/ws/services/LoginCms";    
     private final String WSFE_TESTING = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";
     private final String WSFE_PRODUCTION = "https://servicios1.afip.gov.ar/wsfev1/service.asmx";
-    private final String WSAA_URI = WSAA_PRODUCTION;
-    private final String WSFE_URI = WSFE_PRODUCTION;
     private final Logger LOGGER = Logger.getLogger(this.getClass());
     private final String SOAP_ACTION_FECAESolicitar = "http://ar.gov.afip.dif.FEV1/FECAESolicitar";
     private final String SOAP_ACTION_FECompUltimoAutorizado = "http://ar.gov.afip.dif.FEV1/FECompUltimoAutorizado";
 
+    @Value("${SIC_AFIP_ENV}")
+    private String afipEnvironment;
+
+    public String getWSAA_URI() {
+        if (afipEnvironment.equals("production")) {
+            return WSAA_PRODUCTION;
+        } else {
+            return WSAA_TESTING;
+        }
+    }
+    
+    public String getWSFE_URI() {
+        if (afipEnvironment.equals("production")) {
+            return WSFE_PRODUCTION;
+        } else {
+            return WSFE_TESTING;
+        }
+    }
+    
     public String loginCMS(LoginCms loginCMS) {
         LoginCmsResponse response = (LoginCmsResponse) this.getWebServiceTemplate()
-                .marshalSendAndReceive(WSAA_URI, loginCMS);
+                .marshalSendAndReceive(this.getWSAA_URI(), loginCMS);
         return response.getLoginCmsReturn();
     }
 
@@ -129,7 +147,7 @@ public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
 
     public FERecuperaLastCbteResponse FECompUltimoAutorizado(FECompUltimoAutorizado solicitud) {
         FECompUltimoAutorizadoResponse response = (FECompUltimoAutorizadoResponse) this.getWebServiceTemplate()
-                .marshalSendAndReceive(WSFE_URI, solicitud, (WebServiceMessage message) -> {
+                .marshalSendAndReceive(this.getWSFE_URI(), solicitud, (WebServiceMessage message) -> {
                     ((SoapMessage) message).setSoapAction(SOAP_ACTION_FECompUltimoAutorizado);
         });        
         return response.getFECompUltimoAutorizadoResult();
@@ -137,7 +155,7 @@ public class AfipWebServiceSOAPClient extends WebServiceGatewaySupport {
     
     public FECAEResponse FECAESolicitar(FECAESolicitar solicitud) {
         FECAESolicitarResponse response = (FECAESolicitarResponse) this.getWebServiceTemplate()
-                .marshalSendAndReceive(WSFE_URI, solicitud, (WebServiceMessage message) -> {
+                .marshalSendAndReceive(this.getWSFE_URI(), solicitud, (WebServiceMessage message) -> {
                     ((SoapMessage) message).setSoapAction(SOAP_ACTION_FECAESolicitar);
         });        
         return response.getFECAESolicitarResult();
