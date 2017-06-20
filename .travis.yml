@@ -4,5 +4,5 @@ cache:
   directories:
   - $HOME/.m2
 env:
-  - SIC_STATIC_CONTENT=
+  - SIC_STATIC_CONTENT=""
   - SIC_AFIP_ENV=testing
