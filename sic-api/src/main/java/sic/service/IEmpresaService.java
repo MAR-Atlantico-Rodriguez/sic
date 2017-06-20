@@ -18,4 +18,6 @@ public interface IEmpresaService {
     List<Empresa> getEmpresas();
 
     Empresa guardar(Empresa empresa);    
+    
+    String guardarLogoEnDisco(byte[] imagen);
 }

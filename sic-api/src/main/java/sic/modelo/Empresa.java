@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -58,9 +57,8 @@ public class Empresa implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_Localidad", referencedColumnName = "id_Localidad")
     private Localidad localidad;
-
-    @Lob
-    private byte[] logo;
+    
+    private String logo;
 
     private boolean eliminada;
 

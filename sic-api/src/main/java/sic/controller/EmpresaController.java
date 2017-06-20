@@ -57,4 +57,10 @@ public class EmpresaController {
     public void eliminar(@PathVariable long idEmpresa) {
         empresaService.eliminar(idEmpresa);
     }
+    
+    @PostMapping("/empresas/logo")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String uploadLogo(@RequestBody byte[] imagen) {
+        return empresaService.guardarLogoEnDisco(imagen);
+    }
 }

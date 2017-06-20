@@ -1,10 +1,15 @@
 package sic.service.impl;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javax.persistence.EntityNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sic.modelo.ConfiguracionDelSistema;
@@ -23,6 +28,9 @@ public class EmpresaServiceImpl implements IEmpresaService {
     private final IConfiguracionDelSistemaService configuracionDelSistemaService;    
     private static final Logger LOGGER = Logger.getLogger(EmpresaServiceImpl.class.getPackage().getName());
 
+    @Value("${SIC_STATIC_CONTENT}")
+    private String pathStaticContent;
+    
     @Autowired
     public EmpresaServiceImpl(EmpresaRepository empresaRepository,
             IConfiguracionDelSistemaService configuracionDelSistemaService) {
@@ -143,5 +151,25 @@ public class EmpresaServiceImpl implements IEmpresaService {
         empresa.setEliminada(true);
         configuracionDelSistemaService.eliminar(configuracionDelSistemaService.getConfiguracionDelSistemaPorEmpresa(empresa));
         empresaRepository.save(empresa);
+    }
+    
+    @Override
+    public String guardarLogoEnDisco(byte[] imagen) {
+        String filename = String.valueOf(new Date().getTime());
+        FileOutputStream fos;
+        try {
+            fos = new FileOutputStream(pathStaticContent + filename);
+            fos.write(imagen);
+            fos.close();
+        } catch (FileNotFoundException ex) {
+            LOGGER.error(ex.getMessage());            
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_empresa_error_logo"));
+        } catch (IOException ex) {
+            LOGGER.error(ex.getMessage());
+            throw new BusinessServiceException(ResourceBundle.getBundle("Mensajes")
+                    .getString("mensaje_empresa_error_logo"));
+        }
+        return filename;
     }
 }

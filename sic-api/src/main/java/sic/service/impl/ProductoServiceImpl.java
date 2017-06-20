@@ -12,12 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javax.persistence.EntityNotFoundException;
+import javax.swing.ImageIcon;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +41,6 @@ import sic.service.IProductoService;
 import sic.service.BusinessServiceException;
 import sic.service.ServiceException;
 import sic.modelo.TipoDeOperacion;
-import sic.util.Utilidades;
 import sic.util.Validator;
 import sic.repository.ProductoRepository;
 
@@ -49,6 +50,9 @@ public class ProductoServiceImpl implements IProductoService {
     private final ProductoRepository productoRepository;
     private final IEmpresaService empresaService;
     private static final Logger LOGGER = Logger.getLogger(ProductoServiceImpl.class.getPackage().getName());
+    
+    @Value("${SIC_STATIC_CONTENT}")
+    private String pathStaticContent;
 
     @Autowired
     public ProductoServiceImpl(ProductoRepository productoRepository, IEmpresaService empresaService) {
@@ -186,7 +190,11 @@ public class ProductoServiceImpl implements IProductoService {
         if (criteria.isListarSoloFaltantes() == true) {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
-        Pageable pageable = new PageRequest(0, Integer.MAX_VALUE, new Sort(Sort.Direction.ASC, "descripcion"));
+        int pageSize = Integer.MAX_VALUE;
+        if (criteria.getPageable() != null) {
+            pageSize = criteria.getPageable().getPageSize();
+        }
+        Pageable pageable = new PageRequest(0, pageSize, new Sort(Sort.Direction.ASC, "descripcion"));
         return productoRepository.findAll(builder, pageable);
     }
     
@@ -443,14 +451,18 @@ public class ProductoServiceImpl implements IProductoService {
     @Override
     public byte[] getReporteListaDePreciosPorEmpresa(List<Producto> productos, long idEmpresa) {
         ClassLoader classLoader = FacturaServiceImpl.class.getClassLoader();
-        InputStream isFileReport = classLoader.getResourceAsStream("sic/vista/reportes/ListaPreciosProductos.jasper");
+        InputStream isFileReport = classLoader.getResourceAsStream("sic/vista/reportes/ListaPreciosProductos.jasper");        
         Map params = new HashMap();
-        params.put("empresa", empresaService.getEmpresaPorId(idEmpresa));
-        params.put("logo", Utilidades.convertirByteArrayIntoImage(empresaService.getEmpresaPorId(idEmpresa).getLogo()));
+        Empresa empresa = empresaService.getEmpresaPorId(idEmpresa);
+        params.put("empresa", empresa);
+        if (!empresa.getLogo().isEmpty()) {
+            params.put("logo", new ImageIcon(pathStaticContent + empresa.getLogo()).getImage());    
+        }
         JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(productos);
         try {
             return JasperExportManager.exportReportToPdf(JasperFillManager.fillReport(isFileReport, params, ds));
         } catch (JRException ex) {
+            LOGGER.error(ex.getMessage());
             throw new ServiceException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_error_reporte"), ex);
         }
