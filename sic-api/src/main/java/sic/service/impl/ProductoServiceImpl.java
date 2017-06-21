@@ -190,11 +190,13 @@ public class ProductoServiceImpl implements IProductoService {
         if (criteria.isListarSoloFaltantes() == true) {
             builder.and(qproducto.cantidad.loe(qproducto.cantMinima)).and(qproducto.ilimitado.eq(false));
         }
-        int pageSize = Integer.MAX_VALUE;
+        int pageNumber = 0;
+        int pageSize = Integer.MAX_VALUE;        
         if (criteria.getPageable() != null) {
+            pageNumber = criteria.getPageable().getPageNumber();
             pageSize = criteria.getPageable().getPageSize();
         }
-        Pageable pageable = new PageRequest(0, pageSize, new Sort(Sort.Direction.ASC, "descripcion"));
+        Pageable pageable = new PageRequest(pageNumber, pageSize, new Sort(Sort.Direction.ASC, "descripcion"));
         return productoRepository.findAll(builder, pageable);
     }
     
