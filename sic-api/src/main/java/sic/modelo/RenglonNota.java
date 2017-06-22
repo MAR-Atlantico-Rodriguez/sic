@@ -36,8 +36,6 @@ public class RenglonNota {
 
     private double descuentoPorcentaje;
     private double descuentoNeto;
-    private double impuestoPorcentaje;
-    private double impuestoNeto;
     private double gananciaPorcentaje;
     private double gananciaNeto;
     
@@ -53,12 +51,12 @@ public class RenglonNota {
     private double ivaPorcentaje;
     
     @Column(nullable = false)
-    private double subTotal;
+    private double subTotal; //sin nada
     
     @Column(nullable = false)
-    private double subTotalBruto;
-
+    private double subTotalBruto;  //con descuentos y recargos, sin iva
+    
     @Column(nullable = false)
-    private double importe;
+    private double importe; //con descuentos, recargos y con iva
 
 }

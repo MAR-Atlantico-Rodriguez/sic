@@ -72,7 +72,10 @@ public class NotaDeCredito implements Serializable {
     private double ivaPorcentaje;
 
     @Column(nullable = false)
-    private double ivaNeto;
+    private double iva21Neto;
+            
+    @Column(nullable = false)        
+    private double iva105Neto;
     
     @Column(nullable = false)
     private double total;

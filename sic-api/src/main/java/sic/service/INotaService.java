@@ -12,6 +12,10 @@ import sic.modelo.TipoDeComprobante;
 
 public interface INotaService {
     
+    NotaDeCredito guardarNotaCredito(NotaDeCredito  notaCredito);
+    
+    NotaDeDebito guardarNotaDebito(NotaDeDebito notaDebito);
+    
     NotaDeCredito getNotaDeCreditoPorID(Long id_NotaDeCredito);
     
     NotaDeDebito getNotaDeDebitoPorID(Long id_NotaDeDebito);
@@ -20,15 +24,17 @@ public interface INotaService {
     
     List<FacturaVenta> getFacturasDeNotaDeDebito(Long id_NotaDeDebito);
     
+    List<NotaDeCredito> getNotasDeCreditoPorClienteYEmpresa(Long idCliente, Long idEmpresa);
+    
+    List<NotaDeDebito> getNotasDeDebitoPorClienteYEmpresa(Long idCliente, Long idEmpresa);
+    
+    double getSaldoNotas(Long idCliente, Long idEmpresa);
+    
     TipoDeComprobante[] getTipoNota(Empresa empresa, Cliente cliente);
     
     List<RenglonNota> getRenglonesDeNotaCredito(Long id_NotaCredito);
     
     List<RenglonNota> getRenglonesDeNotaDebito(Long id_NotaDebito);
-    
-    void actualizarNotaDeCredito(NotaDeCredito notaDeCredito);
-    
-    void actualizarNotaDeDebito(NotaDeDebito notaDeDebito);
     
     void eliminarNotaDeCredito(long[] idNotaDeCredito);
     
@@ -38,9 +44,9 @@ public interface INotaService {
     
     double calcularIvaNetoNotaDeCredito(NotaDeCredito notaDeCredito);
     
-    double calcularTotalNotaDeDebito(NotaDeCredito notaDeCredito);
-    
-    double calcularIvaNetoNotaDeDebito(NotaDeCredito notaDeCredito);
+    double calcularTotalNotaDeDebito(NotaDeDebito notaDeDebito);
+ 
+    double calcularIvaNetoNotaDeDebito(NotaDeDebito notaDeDebito);
     
     RenglonNota calcularRenglon(TipoDeComprobante tipoDeComprobante, Movimiento movimiento, double cantidad, Long idProducto, double descuentoPorcentaje);
 

@@ -7,22 +7,34 @@ import javax.persistence.EntityNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sic.modelo.BusquedaFacturaVentaCriteria;
 import sic.modelo.CuentaCorriente;
+import sic.modelo.FacturaVenta;
 import sic.repository.CuentaCorrienteRepository;
 import sic.service.BusinessServiceException;
 import sic.service.ICuentaCorrienteService;
 import sic.service.IEmpresaService;
+import sic.service.IFacturaService;
+import sic.service.INotaService;
+import sic.service.IPagoService;
 
 @Service
 public class CuentaCorrienteServiceImpl implements ICuentaCorrienteService {
     
     private final CuentaCorrienteRepository cuentaCorrienteRepository;
     private final IEmpresaService empresaService;
+    private final IFacturaService facturaService;
+    private final IPagoService pagoService;
+    private final INotaService notaService;
     private static final Logger LOGGER = Logger.getLogger(CuentaCorrienteServiceImpl.class.getPackage().getName()); 
     
     @Autowired
-    public CuentaCorrienteServiceImpl(CuentaCorrienteRepository cuentaCorrienteRepository, IEmpresaService empresaService) {
+    public CuentaCorrienteServiceImpl(CuentaCorrienteRepository cuentaCorrienteRepository, IEmpresaService empresaService,
+                IFacturaService facturaService, IPagoService pagoService, INotaService notaService) {
                 this.cuentaCorrienteRepository = cuentaCorrienteRepository;
+                this.facturaService = facturaService;
+                this.pagoService = pagoService;
+                this.notaService = notaService;
                 this.empresaService = empresaService;
     }
 
@@ -49,12 +61,8 @@ public class CuentaCorrienteServiceImpl implements ICuentaCorrienteService {
             throw new EntityNotFoundException(ResourceBundle.getBundle("Mensajes")
                     .getString("mensaje_cuenta_corriente_no_existente"));
         }
-        cuentaCorriente.setSaldo(this.calcularSaldo(cuentaCorriente));
+        cuentaCorriente.setSaldo(this.getSaldoCuentaCorriente(cuentaCorriente));
         return cuentaCorriente;
-    }
-    
-    private double calcularSaldo(CuentaCorriente cuentaCorriente) {
-        return 0.0; //implementar
     }
 
     @Override
@@ -112,7 +120,19 @@ public class CuentaCorrienteServiceImpl implements ICuentaCorrienteService {
 
     @Override
     public double getSaldoCuentaCorriente(CuentaCorriente cuentaCorriente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        BusquedaFacturaVentaCriteria criteria = BusquedaFacturaVentaCriteria
+                .builder()
+                .buscaCliente(true)
+                .cliente(cuentaCorriente.getCliente())
+                .empresa(cuentaCorriente.getEmpresa())
+                .fechaDesde(cuentaCorriente.getFechaApertura())
+                .fechaHasta(new Date())
+                .buscaPorFecha(true)
+                .build();
+        List<FacturaVenta> facturasVenta = this.facturaService.buscarFacturaVenta(criteria);
+        double saldoFacturas = this.pagoService.calcularTotalAdeudadoFacturasVenta(facturasVenta);
+        double saldoNotas = this.notaService.getSaldoNotas(cuentaCorriente.getCliente().getId_Cliente(), cuentaCorriente.getEmpresa().getId_Empresa());
+        return saldoNotas - saldoFacturas;
     }
         
 }
