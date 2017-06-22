@@ -42,6 +42,6 @@ public interface INotaService {
     
     double calcularIvaNetoNotaDeDebito(NotaDeCredito notaDeCredito);
     
-    RenglonNota calcularRenglon(TipoDeComprobante tipoDeComprobante, Movimiento movimiento, double cantidad, Long idProducto);
+    RenglonNota calcularRenglon(TipoDeComprobante tipoDeComprobante, Movimiento movimiento, double cantidad, Long idProducto, double descuentoPorcentaje);
 
 }

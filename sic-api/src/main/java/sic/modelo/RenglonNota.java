@@ -53,9 +53,12 @@ public class RenglonNota {
     private double ivaPorcentaje;
     
     @Column(nullable = false)
-    private double ivaNeto;
-    
-    @Column(nullable = false)
     private double subTotal;
     
+    @Column(nullable = false)
+    private double subTotalBruto;
+
+    @Column(nullable = false)
+    private double importe;
+
 }
